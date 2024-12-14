@@ -2,7 +2,7 @@
  <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
       <label :for="id">{{ label }}</label>
       <input
-        :type="type"
+        :type="showPassword ? 'text' : type"
         :name="name"
         :id="id"
         :placeholder="placeholder"
@@ -11,58 +11,66 @@
         v-model="inputValue"
         autocomplete
       />
+      <div v-if="type === 'password'" class="relative">
+        <img @click="toggleVisibility" class="absolute cursor-pointer right-3 top-[-35px]" src="@/assets/icons/hidden.svg" alt="">
+      </div>
     </div>
   </template>
   
-  <script>
-  export default {
-    name: "AppInput",
-    props: {
-      label: {
-        type: String,
-        default: "",
-      },
-      type: {
-        type: String,
-        default: "text"
-      },
-      name: {
-        type: String,
-        default: "",
-      },
-      id: {
-        type: String,
-        default: "",
-      },
-      placeholder: {
-        type: String,
-        default: "",
-      },
-      required: {
-        type: Boolean,
-        default: false,
-      },
-      min: {
-        type: [String, Number],
-        default: 0,
-      },
-      modelValue: {
-        type: [String, Boolean],
-        default: "",
-      },
+  <script setup>
+  import { defineProps, defineEmits, computed, ref } from 'vue';
+  const props = defineProps({
+    label: {
+      type: String,
+      default: "",
+      required: true,
     },
-    computed: {
-      inputValue: {
-        get() {
-          return this.modelValue;
-        },
-        set(value) {
-          this.$emit("update:modelValue", value);
-        },
-      },
+    type: {
+      type: String,
+      default: "text",
     },
-  };
-  </script>
+    name: {
+      type: String,
+      default: "",
+      required: true,
+    },
+    id: {
+      type: String,
+      default: "",
+      required: true,
+    },
+    placeholder: {
+      type: String,
+      default: "",
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+    min: {
+      type: [String, Number],
+      default: 0,
+    },
+    modelValue: {
+      type: [String, Boolean],
+      default: "",
+      required: true,
+    },
+  });
+
+const showPassword = ref(false);
+
+const emit = defineEmits(["update:modelValue"]);
+
+const inputValue = computed({
+  get: () => props.modelValue,
+  set: (value) => emit("update:modelValue", value),
+});
+
+const toggleVisibility = () => {
+  showPassword.value = !showPassword.value
+}
+</script>
   
   <style scoped>
  input {

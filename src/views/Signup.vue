@@ -8,7 +8,7 @@
                   <h1 class="text-3xl font-bold">Get Started Now</h1>
                   <span>Enter your details to join us.</span>
               </div>
-                  <form class="flex flex-col gap-6" @submit.prevent="signIn">
+                  <form class="flex flex-col gap-6" @submit.prevent="signUp">
                       <AppInput label="User Name" type="text" required v-model="userName" name="userName" id="userName" placeholder="Enter a user name" />
                       <AppInput label="Email address" type="email" required v-model="email" name="email" id="email" placeholder="Enter a email address" />
                       <AppInput label="Password" type="password" required v-model="password" :min="8" name="password" id="password" placeholder="min 8 chars" />
@@ -19,40 +19,42 @@
                   Have an account? <a class="underline" href="/login">Log in</a>
               </div>
           </div>
-          <img class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit" src="../assets/images/auth-banner.png" alt="home-banner">
+          <img class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit" src="@/assets/images/auth-banner.png" alt="home-banner">
       </div>
     </div>
   </template>
   
-  <script>
-  import AppInput from '../components/Input.vue';
-  import AppBtn from '../components/Button.vue';
+  <script setup>
+  import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { useStore } from 'vuex';
+  import AppInput from "@/components/AppInput.vue";
+  import AppBtn from "@/components/AppBtn.vue";
   
-  export default {
-      components: {
-          AppInput, AppBtn
-      },
-      data() {
-      return {
-        userName: "",
-        email: "",
-        password: "",
-        checkbox: false
-      }
-    },
-    methods: {
-  async signIn() {
-    console.log({ userName: this.userName, email: this.email, password: this.password })
+  const userName = ref('');
+  const email = ref('');
+  const password = ref('');
+  const checkbox = ref(false);
+  const router = useRouter();
+  const store = useStore();
+  
+  // Sign-up function
+  const signUp = async () => {
+    console.log({ userName: userName.value, email: email.value, password: password.value });
     try {
-        const response = await this.store.dispatch('signup', { userName: this.userName, email: this.email, password: this.password });
-    if (response && response.data && response.data.token) {
-      this.router.push('/dashboard');
-    }} catch (error) {
+      const response = await store.dispatch('signup', {
+        userName: userName.value,
+        email: email.value,
+        password: password.value
+      });
+  
+      if (response && response.data && response.data.token) {
+        router.push('/dashboard');
+      }
+    } catch (error) {
       console.error('Login failed', error);
     }
-  }
-}
-  }
+  };
   </script>
   
   <style scoped>

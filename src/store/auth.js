@@ -2,7 +2,9 @@ import api from '../api/api';
 
 export default{
   state: {
-    user: null,
+    user: {
+      name: 'Olaitan Fatomi'
+    },
     token: localStorage.getItem('authToken') || null,
   },
   mutations: {

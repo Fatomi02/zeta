@@ -44,44 +44,37 @@
       </div>
       <img
         class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit"
-        src="../assets/images/auth-banner.png"
+        src="@/assets/images/auth-banner.png"
         alt="home-banner"
       />
     </div>
   </div>
 </template>
 
-<script>
-import AppInput from "../components/Input.vue";
-import AppBtn from "../components/Button.vue";
+<script setup>
+  import AppInput from "@/components/AppInput.vue";
+  import AppBtn from "@/components/AppBtn.vue";
+
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+const store = useStore();
+const router = useRouter();
 
-export default {
-  components: {
-    AppInput,
-    AppBtn,
-  },
-  data() {
-    return {
-      email: "",
-      password: "",
-      checkbox: false,
-      store: useStore(),
-      router: useRouter(),
-    };
-  },
-  methods: {
-  async login() {
-    try {
-        const response = await this.store.dispatch('login', { email: this.email, password: this.password });
+import { ref } from 'vue';
+const email = ref('');
+const password = ref('');
+const checkbox = ref(false);
+
+// Login method
+const login = async () => {
+  try {
+    const response = await store.dispatch('login', { email: email.value, password: password.value });
     if (response && response.data && response.data.token) {
-      this.router.push('/dashboard');
-    }} catch (error) {
-      console.error('Login failed', error);
+      router.push('/dashboard');
     }
+  } catch (error) {
+    console.error('Login failed', error);
   }
-}
 };
 </script>
 
