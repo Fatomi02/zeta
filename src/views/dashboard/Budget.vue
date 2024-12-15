@@ -1,7 +1,134 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div></div>
+    <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-2">
+            <h1 class="font-medium text-3xl">Budget Management</h1>
+            <span>Welcome! Easily create, edit, and delete budgets to manage your finances and keep track of your spending.</span>
+        </div>
+            <div class="flex flex-col mb-4 gap-6 lg:gap-10">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-semibold">Budget</h2>
+                    <AppBtn @click="toggleModal">
+                        <img src="@/assets/icons/Add.svg" alt="add">
+                        Add budget
+                    </AppBtn>
+                </div>
+                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ budgets.length }} total budget</h2>  
+                <div @click="closeMenu" class="flex flex-col gap-4">                 
+                    <div v-for="(budget, index) in budgets" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
+                        <div class="flex flex-col items-start gap-1 capitalize">
+                            <span class="text-[12px]">Title</span>
+                            {{ budget.title }}
+                        </div>
+                        <div class="flex flex-col items-start gap-1">
+                            <span class="text-[12px]">Total Amount</span>
+                            #{{ budget.amount.toLocaleString() }}
+                        </div>
+                        <div class="hidden lg:flex flex-col items-start gap-1">
+                            <span class="text-[12px]">Duration</span>
+                            {{ budget.duration }}
+                        </div>
+                        <div class="flex justify-end relative">
+                            <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
+                            <div v-if="budget.isOpen" class="item-menu w-[100px] lg:w-[200px] top-8 lg:top-10">
+                                <div class="px-4 py-2">View</div>
+                                <div class="px-4 py-2">Edit</div>
+                                <div @click.stop.prevent="deleteBudget(budget.id)" class="px-4 py-2 text-red-800">Delete</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <AppModal :isOpen="modalIsOpen" position="left">
+        <form class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+            <div class="flex flex-col gap-2">
+                <h1 class="text-3xl">Add New Budget</h1>
+                <span>Add new budget to keep track of your spending.</span>
+            </div>
+            <div class="flex flex-col gap-7">
+                <AppInput label="Title" name="title" id="title" v-model="formData.title" placeholder="Enter budget title"></AppInput>
+                <AppInput label="Amount" type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter budget amount"></AppInput>
+                <AppInput label="Duration" type="select" :selectArray="durationArray" v-model="formData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
+            </div>
+            <div class="flex justify-center gap-4">
+                <AppBtn variant="outline" @click="toggleModal">Cancel</AppBtn>
+                <AppBtn @click="addBudget">Add Budget</AppBtn>
+            </div>
+        </form>
+    </AppModal>
 </template>
 
 <script setup>
+import AppBtn from '@/components/AppBtn.vue';
+import AppInput from '@/components/AppInput.vue';
+import AppModal from '@/components/AppModal.vue';
+import { computed, ref } from 'vue';
+import { useStore } from 'vuex';
+
+const durationArray = ref(["Weekly", "Monthly"]);
+
+const store = useStore();
+const modalIsOpen = ref(false);
+const active = ref();
+const initialFormData = ref({
+    title: '',
+    amount: '',
+    duration: '',
+});
+let formData = ref({
+    title: '',
+    amount: '',
+    duration: '',
+});
+
+const budgets = computed(()=> store.state.budget.budgets);
+
+const toggleModal = () => {
+    formData.value = {...initialFormData}
+    modalIsOpen.value = !modalIsOpen.value
+}
+
+const addBudget = () => {
+    store.dispatch('addBudget', formData.value)
+    formData.value = {...initialFormData}
+    modalIsOpen.value = !modalIsOpen.value
+}
+
+const openMenu = (item) => {
+    active.value = budgets.value.filter((item) => item.isOpen)[0];
+    if(active.value) {
+        active.value.isOpen = false; 
+    }
+    item.isOpen = true
+}
+
+const closeMenu = () => {
+    active.value = budgets.value.filter((item) => item.isOpen)[0];
+    if(active.value) {
+        active.value.isOpen = false; 
+    }
+}
+
+const deleteBudget = (id) => {
+    store.dispatch('removeBudget', id)
+}
+
 </script>
+
+<style scoped>
+.item:hover {
+    cursor: pointer;
+}
+
+.item-menu {
+    position: absolute;
+    right: 0;
+  background-color: white;
+  padding: 8px 0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px -4px #14141410;
+  box-shadow: 0px 16px 32px -4px #14141430;
+  z-index: 99999;
+}
+</style>

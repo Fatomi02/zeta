@@ -24,7 +24,7 @@ export default{
   actions: {
     async login({ commit }, credentials) {
       try {
-        const response = await api.post('/auth/login', credentials);
+        const response = await api.post('/api/login', credentials);
         commit('SET_TOKEN', response.data.token);
         commit('SET_USER', response.data.user);
       } catch (error) {
@@ -32,7 +32,7 @@ export default{
       }
     },
     async signup({ commit }, userDetails) {
-      const response = await api.post('/auth/signup', userDetails);
+      const response = await api.post('/api/register', userDetails);
       commit('SET_TOKEN', response.data.token);
       commit('SET_USER', response.data.user);
     },

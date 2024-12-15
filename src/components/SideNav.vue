@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen hidden lg:block w-[300px] bg-white border-r border-r-[#E5E5E5]">
+    <div class="h-screen hidden lg:block w-[350px] bg-white border-r border-r-[#E5E5E5]">
         <div class="p-8 flex flex-col gap-10">
             <h1 class="text-4xl text-center font-extrabold">Zeta</h1>
             <div class="flex gap-4 items-center">
@@ -31,7 +31,7 @@
             </div>
         </div>
     </div>
-    <div class="py-3 lg:hidden px-4 flex items-center justify-between">
+    <div class="py-3 lg:hidden bg-white border-0 px-4 flex items-center justify-between sticky top-0">
         <h1 class="text-4xl text-center font-extrabold logo">Zeta</h1>
         <img @click="toggleMenu" class="w-8 h-8" src="@/assets/icons/hamburger.svg" alt="hamburger">
     </div>

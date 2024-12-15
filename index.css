@@ -24,5 +24,14 @@ span {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.6);
-    z-index: 9;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none;
+}
+
+@media only screen and (max-width: 640px) {
+    * {
+        font-size: 14px;
+    }
 }

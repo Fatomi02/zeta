@@ -2,7 +2,7 @@
   <div>
     <button
     :class="variant"
-      class="p-2 text-center font-medium w-full hover:opacity-90 rounded-[30px]"
+      class="p-2 px-3 flex items-center gap-1 text-center font-medium w-full hover:opacity-90 rounded-[30px]"
       :type="type"
       :disabled="disabled"
       @click="handleClick"
@@ -43,5 +43,9 @@ const handleClick = (event) => {
 .primary {
     background: #141414;
     color: white;
+}
+
+.outline {
+  outline-style: auto;
 }
 </style>
