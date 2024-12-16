@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen hidden lg:block w-[350px] bg-white border-r border-r-[#E5E5E5]">
+    <div class="h-screen hidden lg:block min-w-[350px] bg-white border-r border-r-[#E5E5E5]">
         <div class="p-8 flex flex-col gap-10">
             <h1 class="text-4xl text-center font-extrabold">Zeta</h1>
             <div class="flex gap-4 items-center">

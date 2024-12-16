@@ -20,10 +20,13 @@ const props = defineProps({
   }
 });
 
+
 </script>
 
 <style scoped>
 .center {
+    height: 100vh;
+    align-items: center;
     justify-content: center;
 }
 

@@ -4,11 +4,13 @@ import App from './App.vue'
 import router from './router'
 import authModule from './store/auth';
 import budgetModule from './store/budget';
+import transactionModule from './store/transaction';
 
 const store = createStore({
     modules: {
         auth: authModule,
-        budget: budgetModule
+        budget: budgetModule,
+        transaction: transactionModule
     }
 })
 
