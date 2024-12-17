@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="flex flex-col gap-6">
+    <div @click="closeMenu" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
             <h1 class="font-medium text-3xl">Budget Management</h1>
             <span>Welcome! Easily create, edit, and delete budgets to manage your finances and keep track of your spending.</span>
@@ -14,7 +14,7 @@
                     </AppBtn>
                 </div>
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ budgets.length }} total budget</h2>  
-                <div @click="closeMenu" class="flex flex-col gap-4">                 
+                <div class="flex flex-col gap-4">                 
                     <div v-for="(budget, index) in budgets" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
                             <span class="text-[12px]">Title</span>
