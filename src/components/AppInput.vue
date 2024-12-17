@@ -1,15 +1,17 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
     <label :for="id">{{ label }}</label>
-    <input v-if="type !== 'select'" :type="showPassword ? 'text' : type" :name="name" :id="id"
+    <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
     <div v-if="type === 'password'" class="relative">
       <img @click="toggleVisibility" class="absolute cursor-pointer right-3 top-[-35px]" src="@/assets/icons/hidden.svg"
         alt="">
     </div>
+    <textarea rows="4" :required="required" v-if="type === 'textarea'" :name="name" :id="id"
+      :placeholder="placeholder"></textarea>
     <div @click.prevent="toggleDropdown" ref="dropdownContainer" v-if="type === 'select'" class="relative">
-      <input :name="name" :id="id" :placeholder="placeholder" readonly v-model="inputValue">
+      <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
       <img class="absolute cursor-pointer top-3 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
         <div @click="selectItem('')" class="py-3 px-4 hover:bg-[#F5F5F5] cursor-pointer">--Select--</div>
@@ -92,7 +94,7 @@ const dropdownContainer = ref(null);
 
 const handleClickOutside = (event) => {
   if (dropdownContainer.value && !dropdownContainer.value.contains(event.target)) {
-  showDropdown.value = false;
+    showDropdown.value = false;
   }
 }
 
@@ -107,7 +109,8 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-input {
+input,
+textarea {
   width: 100%;
   padding: 8px 12px;
   border: 1px solid grey;

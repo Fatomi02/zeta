@@ -24,9 +24,9 @@
                             <span class="text-[12px]">Category</span>
                             {{ transaction.category }}
                         </div>
-                        <div class="hidden lg:flex flex-col items-start text-ellipsis overflow-hidden gap-1">
+                        <div class="hidden lg:flex flex-col items-start gap-1">
                             <span class="text-[12px]">Narration</span>
-                            {{ transaction.narration }}
+                            <div class="truncate w-full">{{ transaction.narration }}</div>
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
@@ -41,34 +41,36 @@
             </div>
     </div>
     <AppModal :isOpen="addModalIsOpen" position="left">
-        <form class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="addTransaction" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Transaction</h1>
                 <span>Add new transaction to keep track of your spending.</span>
             </div>
             <div class="flex flex-col gap-7">
-                <AppInput label="Transaction Amount" type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter transaction amount"></AppInput>
-                <AppInput label="Category" type="select" :selectArray="categoryArray" v-model="formData.category" name="category" id="category" placeholder="Select a category"></AppInput>
+                <AppInput label="Transaction Amount" required type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter transaction amount"></AppInput>
+                <AppInput label="Category" required type="select" :selectArray="categoryArray" v-model="formData.category" name="category" id="category" placeholder="Select a category"></AppInput>
+                <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="formData.narration" placeholder="Enter a narration"></AppInput>
             </div>
             <div class="flex justify-center gap-4">
                 <AppBtn variant="outline" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                <AppBtn @click="addTransaction">Add Transaction</AppBtn>
+                <AppBtn type="submit">Add Transaction</AppBtn>
             </div>
         </form>
     </AppModal>
     <AppModal :isOpen="editModalIsOpen" position="left">
-        <form class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
                 <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
             </div>
             <div class="flex flex-col gap-7">
-                <AppInput label="Amount" type="number" name="amount" id="amount" v-model="editTransactionData.amount" placeholder="Enter transaction amount"></AppInput>
-                <AppInput label="Duration" type="select" :selectArray="categoryArray" v-model="editTransactionData.category" name="category" id="category" placeholder="Select a category"></AppInput>
+                <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="editTransactionData.amount" placeholder="Enter transaction amount"></AppInput>
+                <AppInput label="Duration" required type="select" :selectArray="categoryArray" v-model="editTransactionData.category" name="category" id="category" placeholder="Select a category"></AppInput>
+                <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="editTransactionData.narration" placeholder="Enter a narration"></AppInput>
             </div>
             <div class="flex justify-center gap-4">
                 <AppBtn variant="outline" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
-                <AppBtn>Update</AppBtn>
+                <AppBtn type="submit">Update</AppBtn>
             </div>
         </form>
     </AppModal>

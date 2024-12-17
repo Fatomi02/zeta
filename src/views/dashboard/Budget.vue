@@ -18,7 +18,7 @@
                     <div v-for="(budget, index) in budgets" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
                             <span class="text-[12px]">Title</span>
-                            {{ budget.title }}
+                            <div class="w-full truncate">{{ budget.title }}</div>
                         </div>
                         <div class="flex flex-col items-start gap-1">
                             <span class="text-[12px]">Total Amount</span>
@@ -41,36 +41,36 @@
             </div>
     </div>
     <AppModal :isOpen="addModalIsOpen" position="left">
-        <form class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="addBudget" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Budget</h1>
                 <span>Add new budget to keep track of your spending.</span>
             </div>
             <div class="flex flex-col gap-7">
-                <AppInput label="Title" name="title" id="title" v-model="formData.title" placeholder="Enter budget title"></AppInput>
-                <AppInput label="Amount" type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter budget amount"></AppInput>
-                <AppInput label="Duration" type="select" :selectArray="durationArray" v-model="formData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
+                <AppInput label="Title" required name="title" id="title" v-model="formData.title" placeholder="Enter budget title"></AppInput>
+                <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter budget amount"></AppInput>
+                <AppInput label="Duration" required type="select" :selectArray="durationArray" v-model="formData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
             </div>
             <div class="flex justify-center gap-4">
                 <AppBtn variant="outline" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                <AppBtn @click="addBudget">Add Budget</AppBtn>
+                <AppBtn type="submit">Add Budget</AppBtn>
             </div>
         </form>
     </AppModal>
     <AppModal :isOpen="editModalIsOpen" position="left">
-        <form class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
                 <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
             </div>
             <div class="flex flex-col gap-7">
-                <AppInput label="Title" name="title" id="title" v-model="editBudgetData.title" placeholder="Enter budget title"></AppInput>
-                <AppInput label="Amount" type="number" name="amount" id="amount" v-model="editBudgetData.amount" placeholder="Enter budget amount"></AppInput>
-                <AppInput label="Duration" type="select" :selectArray="durationArray" v-model="editBudgetData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
+                <AppInput label="Title" required name="title" id="title" v-model="editBudgetData.title" placeholder="Enter budget title"></AppInput>
+                <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="editBudgetData.amount" placeholder="Enter budget amount"></AppInput>
+                <AppInput label="Duration" required type="select" :selectArray="durationArray" v-model="editBudgetData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
             </div>
             <div class="flex justify-center gap-4">
                 <AppBtn variant="outline" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
-                <AppBtn>Update</AppBtn>
+                <AppBtn type="submit">Update</AppBtn>
             </div>
         </form>
     </AppModal>
