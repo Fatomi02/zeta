@@ -69,6 +69,7 @@ const checkbox = ref(false);
 const login = async () => {
   try {
     const response = await store.dispatch('login', { email: email.value, password: password.value });
+    router.push('/dashboard');
     if (response && response.data && response.data.token) {
       router.push('/dashboard');
     }

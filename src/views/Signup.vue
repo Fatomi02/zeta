@@ -47,6 +47,7 @@
         email: email.value,
         password: password.value
       });
+      router.push('/dashboard');
   
       if (response && response.data && response.data.token) {
         router.push('/dashboard');
