@@ -5,37 +5,81 @@
 @tailwind utilities;
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    list-style: none;
-    color: #141414;
-    font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  list-style: none;
+  color: #141414;
+  font-family: "Montserrat", sans-serif;
 }
 
 span {
-    color: rgb(58, 58, 58);
+  color: rgb(58, 58, 58);
 }
 
 .modal_overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .scroll-container::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+
+.fade-right-enter-active,
+.fade-right-leave-active {
+  transition: all 1s;
+}
+
+.fade-right-enter-from,
+.fade-right-leave-to {
+  transform: translateX(20px);
+  opacity: 0;
+}
+
+.fade-right-enter-to,
+.fade-right-leave-from {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.fade-left-enter-active,
+.fade-left-leave-active {
+  transition: all 1s;
+}
+
+.fade-left-enter-from,
+.fade-left-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.fade-left-enter-to,
+.fade-left-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-enter-active,
+.fade-in-leave-active {
+  transition: opacity 1.5s;
+}
+
+.fade-in-enter-from,
+.fade-in-leave-to {
+  opacity: 0;
 }
 
 @media only screen and (max-width: 640px) {
-    * {
-        font-size: 14px;
-    }
+  * {
+    font-size: 14px;
+  }
 
-    input {
-        font-size: 16px;
-    }
+  input {
+    font-size: 16px;
+  }
 }

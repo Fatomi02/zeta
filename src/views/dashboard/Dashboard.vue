@@ -1,13 +1,22 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="flex flex-col lg:flex-row">
+    <transition name="fade-in">
+        <div v-if="isVisible" class="flex flex-col lg:flex-row">
         <SideNav></SideNav>
         <div class="lg:px-8 lg:py-12 py-6 px-4 w-full bg-[#F5F5F5] lg:h-screen overflow-auto scroll-container">
             <RouterView></RouterView>
         </div>
     </div>
+    </transition>
 </template>
 
 <script setup>
-import SideNav from '@/components/SideNav.vue';
+import { onMounted, ref } from "vue";
+import SideNav from "@/components/SideNav.vue";
+
+const isVisible = ref(false);
+
+onMounted(()=> {
+    isVisible.value = true;
+})
 </script>

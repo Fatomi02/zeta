@@ -35,7 +35,8 @@
         <h1 class="text-4xl text-center font-extrabold logo">Zeta</h1>
         <img @click="toggleMenu" class="w-8 h-8" src="@/assets/icons/hamburger.svg" alt="hamburger">
     </div>
-    <div v-if="isOpen" @click="toggleMenu" class="modal_overlay lg:hidden">
+    <transition name="fade-left">
+        <div v-if="isOpen" @click="toggleMenu" class="modal_overlay lg:hidden">
         <div @click.stop.prevent class="h-screen relative w-[78%] bg-white">
         <div class="p-6 flex flex-col gap-10">
             <h1 class="text-4xl text-center font-extrabold">Zeta</h1>
@@ -72,6 +73,7 @@
         </div>
         </div>
     </div>
+    </transition>
 
 </template>
 

@@ -3,7 +3,8 @@
     <div class="w-screen h-screen p-6 lg:p-10  flex flex-col gap-2 lg:gap-8">
       <h1 class="text-4xl logo">Zeta</h1>
       <div class="flex gap-10 justify-center">
-          <div class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
+        <transition name="fade-left">
+          <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
               <div class="flex flex-col gap-2">
                   <h1 class="text-3xl font-bold">Get Started Now</h1>
                   <span>Enter your details to join us.</span>
@@ -19,13 +20,16 @@
                   Have an account? <a class="underline" href="/login">Log in</a>
               </div>
           </div>
-          <img class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit" src="@/assets/images/auth-banner.png" alt="home-banner">
+        </transition>
+          <transition name="fade-right">
+            <img v-if="isVisible" class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit" src="@/assets/images/auth-banner.png" alt="home-banner">
+          </transition>
       </div>
     </div>
   </template>
   
   <script setup>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { useStore } from 'vuex';
   import AppInput from "@/components/AppInput.vue";
@@ -37,7 +41,13 @@
   const checkbox = ref(false);
   const router = useRouter();
   const store = useStore();
-  
+
+  const isVisible = ref(false);
+
+  onMounted(()=> {
+    isVisible.value = true;
+  })
+
   // Sign-up function
   const signUp = async () => {
     console.log({ userName: userName.value, email: email.value, password: password.value });

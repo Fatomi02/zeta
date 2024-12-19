@@ -20,11 +20,11 @@
                             <span class="text-[12px]">Title</span>
                             <div class="w-full truncate">{{ budget.title }}</div>
                         </div>
-                        <div class="flex flex-col items-start gap-1">
+                        <div class="flex flex-col items-start truncate gap-1">
                             <span class="text-[12px]">Total Amount</span>
                             #{{ budget.amount.toLocaleString() }}
                         </div>
-                        <div class="hidden lg:flex flex-col items-start gap-1">
+                        <div class="hidden lg:flex flex-col items-start truncate gap-1">
                             <span class="text-[12px]">Duration</span>
                             {{ budget.duration }}
                         </div>
@@ -40,7 +40,8 @@
                 </div>
             </div>
     </div>
-    <AppModal :isOpen="addModalIsOpen" position="left">
+    <transition name="fade-right">
+        <AppModal :isOpen="addModalIsOpen" position="left">
         <form @submit.prevent="addBudget" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Budget</h1>
@@ -57,7 +58,9 @@
             </div>
         </form>
     </AppModal>
-    <AppModal :isOpen="editModalIsOpen" position="left">
+    </transition>
+    <transition name="fade-right">
+        <AppModal :isOpen="editModalIsOpen" position="left">
         <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
@@ -73,8 +76,10 @@
                 <AppBtn type="submit">Update</AppBtn>
             </div>
         </form>
-    </AppModal>
-    <AppModal :isOpen="viewModalIsOpen">
+        </AppModal>
+    </transition>
+    <transition name="fade-right">
+        <AppModal :isOpen="viewModalIsOpen">
         <div class="w-[100%] lg:w-[600px] rounded-3xl bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-7">
                 <div class="flex flex-col gap-2">
@@ -95,6 +100,7 @@
             </div>
         </div>
     </AppModal>
+    </transition>
 </template>
 
 <script setup>
@@ -181,6 +187,6 @@ const deleteBudget = (id) => {
   border-radius: 8px;
   box-shadow: 0px 4px 4px -4px #14141410;
   box-shadow: 0px 16px 32px -4px #14141430;
-  z-index: 99999;
+  z-index: 9;
 }
 </style>

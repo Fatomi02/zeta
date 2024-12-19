@@ -16,11 +16,11 @@
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
                 <div class="flex flex-col gap-4">                 
                     <div v-for="(transaction, index) in transactions" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
-                        <div class="flex flex-col items-start gap-1">
+                        <div class="flex truncate flex-col items-start gap-1">
                             <span class="text-[12px]">Transaction Amount</span>
                             #{{ transaction.amount.toLocaleString() }}
                         </div>
-                        <div class="flex flex-col items-start gap-1 capitalize">
+                        <div class="flex truncate flex-col items-start gap-1 capitalize">
                             <span class="text-[12px]">Category</span>
                             {{ transaction.category }}
                         </div>
@@ -40,7 +40,8 @@
                 </div>
             </div>
     </div>
-    <AppModal :isOpen="addModalIsOpen" position="left">
+    <transition name="fade-right">
+        <AppModal :isOpen="addModalIsOpen" position="left">
         <form @submit.prevent="addTransaction" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Transaction</h1>
@@ -57,7 +58,9 @@
             </div>
         </form>
     </AppModal>
-    <AppModal :isOpen="editModalIsOpen" position="left">
+    </transition>
+    <transition name="fade-right">
+        <AppModal :isOpen="editModalIsOpen" position="left">
         <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
@@ -74,7 +77,9 @@
             </div>
         </form>
     </AppModal>
-    <AppModal :isOpen="viewModalIsOpen">
+    </transition>
+    <transition name="fade-right">
+        <AppModal :isOpen="viewModalIsOpen">
         <div class="w-[100%] lg:w-[600px] rounded-3xl bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-7">
                 <div class="flex flex-col gap-2">
@@ -95,6 +100,7 @@
             </div>
         </div>
     </AppModal>
+    </transition>
 </template>
 
 <script setup>

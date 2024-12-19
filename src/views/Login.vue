@@ -3,7 +3,8 @@
   <div class="w-screen h-screen p-6 lg:p-10 flex flex-col gap-4 lg:gap-8">
     <h1 class="text-4xl logo">Zeta</h1>
     <div class="flex gap-10 justify-center">
-      <div class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
+      <transition name="fade-left">
+        <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
         <div class="flex flex-col gap-2">
           <h1 class="text-3xl font-bold">Get Started Now</h1>
           <span>Enter your details to access your account</span>
@@ -42,11 +43,14 @@
           Don't have an account? <a class="underline" href="/signup">Sign up</a>
         </div>
       </div>
-      <img
+      </transition>
+      <transition name="fade-right">
+        <img v-if="isVisible"
         class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit"
         src="@/assets/images/auth-banner.png"
         alt="home-banner"
       />
+      </transition>
     </div>
   </div>
 </template>
@@ -60,10 +64,15 @@ import { useRouter } from 'vue-router';
 const store = useStore();
 const router = useRouter();
 
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 const email = ref('');
 const password = ref('');
 const checkbox = ref(false);
+const isVisible = ref(false);
+
+onMounted(()=> {
+  isVisible.value = true;
+})
 
 // Login method
 const login = async () => {

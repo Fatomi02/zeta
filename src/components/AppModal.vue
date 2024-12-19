@@ -1,9 +1,9 @@
 <template>
-    <div v-if="isOpen" class="modal_overlay">
-        <div class="flex" :class="position">
-            <slot></slot>
-        </div>
+  <div v-if="isOpen" class="modal_overlay">
+    <div class="flex modal_container" :class="position">
+      <slot></slot>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -25,18 +25,19 @@ const props = defineProps({
 
 <style scoped>
 .center {
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
 }
 
 .left {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
+
 
 @media only screen and (max-width: 640px) {
   .left {
     width: 100%;
-}
+  }
 }
 </style>
