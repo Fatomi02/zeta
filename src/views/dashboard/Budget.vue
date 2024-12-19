@@ -20,11 +20,11 @@
                             <span class="text-[12px]">Title</span>
                             <div class="w-full truncate">{{ budget.title }}</div>
                         </div>
-                        <div class="flex flex-col items-start truncate gap-1">
+                        <div class="flex flex-col items-start gap-1">
                             <span class="text-[12px]">Total Amount</span>
                             #{{ budget.amount.toLocaleString() }}
                         </div>
-                        <div class="hidden lg:flex flex-col items-start truncate gap-1">
+                        <div class="hidden lg:flex flex-col items-start w-full truncate gap-1">
                             <span class="text-[12px]">Duration</span>
                             {{ budget.duration }}
                         </div>

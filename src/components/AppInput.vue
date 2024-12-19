@@ -9,7 +9,7 @@
         alt="">
     </div>
     <textarea rows="4" :required="required" v-if="type === 'textarea'" :name="name" :id="id"
-      :placeholder="placeholder"></textarea>
+      :placeholder="placeholder" v-model="inputValue"></textarea>
     <div @click.prevent="toggleDropdown" ref="dropdownContainer" v-if="type === 'select'" class="relative">
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
       <img class="absolute cursor-pointer top-3 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
@@ -59,7 +59,7 @@ const props = defineProps({
     default: 0,
   },
   modelValue: {
-    type: [String, Boolean],
+    type: [String, Boolean, Number],
     default: "",
     required: true,
   },

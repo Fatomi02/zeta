@@ -16,11 +16,11 @@
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
                 <div class="flex flex-col gap-4">                 
                     <div v-for="(transaction, index) in transactions" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
-                        <div class="flex truncate flex-col items-start gap-1">
-                            <span class="text-[12px]">Transaction Amount</span>
+                        <div class="flex truncate w-full flex-col items-start gap-1">
+                            <span class="text-[12px]">Amount</span>
                             #{{ transaction.amount.toLocaleString() }}
                         </div>
-                        <div class="flex truncate flex-col items-start gap-1 capitalize">
+                        <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
                             <span class="text-[12px]">Category</span>
                             {{ transaction.category }}
                         </div>
