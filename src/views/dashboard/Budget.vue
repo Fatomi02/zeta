@@ -30,10 +30,10 @@
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
-                            <div v-if="budget.isOpen" class="item-menu w-[100px] lg:w-[200px] top-8 lg:top-10">
-                                <div @click="toggleModal(budget, 'view')" class="px-6 py-2 text-[#34495E]">View</div>
-                                <div @click="toggleModal(budget, 'edit')" class="px-6 py-2 text-[#34495E]">Edit</div>
-                                <div @click.stop.prevent="deleteBudget(budget.id)" class="px-6 py-2 text-red-800">Delete</div>
+                            <div v-if="budget.isOpen" class="item-menu w-[150px] lg:w-[200px] lg:top-10">
+                                <div @click="toggleModal(budget, 'view')" class="px-6 py-2 text-[#34495E] hover:bg-[#3498DB]">View</div>
+                                <div @click="toggleModal(budget, 'edit')" class="px-6 py-2 text-[#34495E] hover:bg-[#3498DB]">Edit</div>
+                                <div @click.stop.prevent="deleteBudget(budget.id)" class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
                             </div>
                         </div>
                     </div>
@@ -177,6 +177,7 @@ const deleteBudget = (id) => {
 <style scoped>
 .item:hover {
     cursor: pointer;
+    box-shadow: 0 2px 4px #34495E;
     /* opacity: 0.9; */
 }
 
