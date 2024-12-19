@@ -2,7 +2,7 @@
 <template>
     <div @click="closeMenu" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-            <h1 class="font-medium text-3xl">Budget Management</h1>
+            <h1 class="font-medium text-2xl md:text-3xl">Budget Management</h1>
             <span>Welcome! Easily create, edit, and delete budgets to manage your finances and keep track of your spending.</span>
         </div>
             <div class="flex flex-col mb-4 gap-6 lg:gap-10">
@@ -15,25 +15,25 @@
                 </div>
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ budgets.length }} total budget</h2>  
                 <div class="flex flex-col gap-4">                 
-                    <div v-for="(budget, index) in budgets" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
+                    <div v-for="(budget, index) in budgets" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-[#34495E] border border-[#A6DDEF] rounded-2xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
-                            <span class="text-[12px]">Title</span>
+                            <div class="text-[12px] text-[#A6DDEF]">Title</div>
                             <div class="w-full truncate">{{ budget.title }}</div>
                         </div>
                         <div class="flex flex-col items-start gap-1">
-                            <span class="text-[12px]">Total Amount</span>
+                            <div class="text-[12px] text-[#A6DDEF]">Total Amount</div>
                             #{{ budget.amount.toLocaleString() }}
                         </div>
                         <div class="hidden lg:flex flex-col items-start w-full truncate gap-1">
-                            <span class="text-[12px]">Duration</span>
+                            <div class="text-[12px] text-[#A6DDEF]">Duration</div>
                             {{ budget.duration }}
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
                             <div v-if="budget.isOpen" class="item-menu w-[100px] lg:w-[200px] top-8 lg:top-10">
-                                <div @click="toggleModal(budget, 'view')" class="px-4 py-2">View</div>
-                                <div @click="toggleModal(budget, 'edit')" class="px-4 py-2">Edit</div>
-                                <div @click.stop.prevent="deleteBudget(budget.id)" class="px-4 py-2 text-red-800">Delete</div>
+                                <div @click="toggleModal(budget, 'view')" class="px-6 py-2 text-[#34495E]">View</div>
+                                <div @click="toggleModal(budget, 'edit')" class="px-6 py-2 text-[#34495E]">Edit</div>
+                                <div @click.stop.prevent="deleteBudget(budget.id)" class="px-6 py-2 text-red-800">Delete</div>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
     </div>
     <transition name="fade-right">
         <AppModal :isOpen="addModalIsOpen" position="left">
-        <form @submit.prevent="addBudget" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="addBudget" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Budget</h1>
                 <span>Add new budget to keep track of your spending.</span>
@@ -52,8 +52,8 @@
                 <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter budget amount"></AppInput>
                 <AppInput label="Duration" required type="select" :selectArray="durationArray" v-model="formData.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
             </div>
-            <div class="flex justify-center gap-4">
-                <AppBtn variant="outline" @click="toggleModal(null, 'add')">Cancel</AppBtn>
+            <div class="flex justify-end gap-6 mt-4">
+                <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
                 <AppBtn type="submit">Add Budget</AppBtn>
             </div>
         </form>
@@ -61,7 +61,7 @@
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="editModalIsOpen" position="left">
-        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
                 <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
@@ -80,18 +80,18 @@
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
-        <div class="w-[100%] lg:w-[600px] rounded-3xl bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <div class="w-[100%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-7">
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Title</h4>
+                    <h2 class="text-xl">Title</h2>
                     <span>{{ viewBudgetData.title }}</span>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Budget Amount</h4>
+                    <h2 class="text-xl">Budget Amount</h2>
                     <span>{{ viewBudgetData.amount.toLocaleString() }}</span>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Duration</h4>
+                    <h2 class="text-xl">Duration</h2>
                     <span>{{ viewBudgetData.duration }}</span>
                 </div>
             </div>
@@ -177,6 +177,7 @@ const deleteBudget = (id) => {
 <style scoped>
 .item:hover {
     cursor: pointer;
+    /* opacity: 0.9; */
 }
 
 .item-menu {

@@ -2,7 +2,7 @@
 <template>
     <div @click="closeMenu" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
-            <h1 class="font-medium text-3xl">Transaction Management</h1>
+            <h1 class="font-medium text-2xl md:text-3xl">Transaction Management</h1>
             <span>Welcome! Easily create, edit, and delete transactions to manage your finances and keep track of your spending.</span>
         </div>
             <div class="flex flex-col mb-4 gap-6 lg:gap-10">
@@ -15,25 +15,25 @@
                 </div>
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
                 <div class="flex flex-col gap-4">                 
-                    <div v-for="(transaction, index) in transactions" :key="index" class="w-full p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-white rounded-3xl">
+                    <div v-for="(transaction, index) in transactions" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-[#34495E] rounded-2xl">
                         <div class="flex truncate w-full flex-col items-start gap-1">
-                            <span class="text-[12px]">Amount</span>
+                            <h4 class="text-[12px]">Amount</h4>
                             #{{ transaction.amount.toLocaleString() }}
                         </div>
                         <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
-                            <span class="text-[12px]">Category</span>
+                            <h4 class="text-[12px]">Category</h4>
                             {{ transaction.category }}
                         </div>
                         <div class="hidden lg:flex flex-col items-start gap-1">
-                            <span class="text-[12px]">Narration</span>
+                            <h4 class="text-[12px]">Narration</h4>
                             <div class="truncate w-full">{{ transaction.narration }}</div>
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
                             <div v-if="transaction.isOpen" class="item-menu w-[100px] lg:w-[200px] top-8 lg:top-10">
-                                <div @click="toggleModal(transaction, 'view')" class="px-4 py-2">View</div>
-                                <div @click="toggleModal(transaction, 'edit')" class="px-4 py-2">Edit</div>
-                                <div @click.stop.prevent="deleteTransaction(transaction.id)" class="px-4 py-2 text-red-800">Delete</div>
+                                <div @click="toggleModal(transaction, 'view')" class="px-6 py-2 text-[#34495E]">View</div>
+                                <div @click="toggleModal(transaction, 'edit')" class="px-6 py-2 text-[#34495E]">Edit</div>
+                                <div @click.stop.prevent="deleteTransaction(transaction.id)" class="px-6 py-2 text-red-800">Delete</div>
                             </div>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
     </div>
     <transition name="fade-right">
         <AppModal :isOpen="addModalIsOpen" position="left">
-        <form @submit.prevent="addTransaction" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="addTransaction" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Add New Transaction</h1>
                 <span>Add new transaction to keep track of your spending.</span>
@@ -52,8 +52,8 @@
                 <AppInput label="Category" required type="select" :selectArray="categoryArray" v-model="formData.category" name="category" id="category" placeholder="Select a category"></AppInput>
                 <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="formData.narration" placeholder="Enter a narration"></AppInput>
             </div>
-            <div class="flex justify-center gap-4">
-                <AppBtn variant="outline" @click="toggleModal(null, 'add')">Cancel</AppBtn>
+            <div class="flex justify-end gap-6">
+                <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
                 <AppBtn type="submit">Add Transaction</AppBtn>
             </div>
         </form>
@@ -61,7 +61,7 @@
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="editModalIsOpen" position="left">
-        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-2">
                 <h1 class="text-3xl">Edit Your Budget</h1>
                 <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
@@ -80,18 +80,18 @@
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
-        <div class="w-[100%] lg:w-[600px] rounded-3xl bg-[#fafafa] py-10 px-8 flex flex-col gap-10">
+        <div class="w-[100%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
             <div class="flex flex-col gap-7">
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Budget Amount</h4>
+                    <h2 class="text-xl">Budget Amount</h2>
                     <span>{{ viewTransactionData.amount.toLocaleString() }}</span>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Duration</h4>
+                    <h2 class="text-xl">Duration</h2>
                     <span>{{ viewTransactionData.category }}</span>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <h4 class="text-xl">Narration</h4>
+                    <h2 class="text-xl">Narration</h2>
                     <span>{{ viewTransactionData.narration }}</span>
                 </div>
             </div>

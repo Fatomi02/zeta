@@ -1,77 +1,82 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div class="w-screen h-screen p-6 lg:p-10  flex flex-col gap-2 lg:gap-8">
-      <h1 class="text-4xl logo">Zeta</h1>
-      <div class="flex gap-10 justify-center">
-        <transition name="fade-left">
-          <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
-              <div class="flex flex-col gap-2">
-                  <h1 class="text-3xl font-bold">Get Started Now</h1>
-                  <span>Enter your details to join us.</span>
-              </div>
-                  <form class="flex flex-col gap-6" @submit.prevent="signUp">
-                      <AppInput label="User Name" type="text" required v-model="userName" name="userName" id="userName" placeholder="Enter a user name" />
-                      <AppInput label="Email address" type="email" required v-model="email" name="email" id="email" placeholder="Enter a email address" />
-                      <AppInput label="Password" type="password" required v-model="password" :min="8" name="password" id="password" placeholder="min 8 chars" />
-                      <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox" id="checkbox" placeholder="min 8 chars" />
-                        <AppBtn type="submit" variant="primary" >Sign up</AppBtn>
-                  </form>
-              <div>
-                  Have an account? <a class="underline" href="/login">Log in</a>
-              </div>
+  <div class="w-screen h-screen p-6 lg:p-10 flex flex-col justify-center lg:justify-start gap-4 lg:gap-8">
+    <transition name="fade-left">
+      <h1 v-if="isVisible" class="lg:text-4xl text-center lg:text-start text-[40px] logo">FinCore</h1>
+    </transition>
+    <div class="flex gap-10 justify-center">
+      <transition name="fade-left">
+        <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
+          <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold">Get Started Now</h1>
+            <span>Enter your details to join us.</span>
           </div>
-        </transition>
-          <transition name="fade-right">
-            <img v-if="isVisible" class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit" src="@/assets/images/auth-banner.png" alt="home-banner">
-          </transition>
-      </div>
+          <form class="flex flex-col gap-6" @submit.prevent="signUp">
+            <AppInput label="User Name" type="text" required v-model="userName" name="userName" id="userName"
+              placeholder="Enter a user name" />
+            <AppInput label="Email address" type="email" required v-model="email" name="email" id="email"
+              placeholder="Enter a email address" />
+            <AppInput label="Password" type="password" required v-model="password" :min="8" name="password"
+              id="password" placeholder="min 8 chars" />
+            <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox"
+              id="checkbox" placeholder="min 8 chars" />
+            <AppBtn type="submit" variant="primary">Sign up</AppBtn>
+          </form>
+          <div class="text-[#333333]">
+            Have an account? <a class="underline" href="/login">Log in</a>
+          </div>
+        </div>
+      </transition>
+      <transition name="fade-right">
+        <img v-if="isVisible" class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit"
+          src="@/assets/images/auth-banner.png" alt="home-banner">
+      </transition>
     </div>
-  </template>
-  
-  <script setup>
-  import { onMounted, ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { useStore } from 'vuex';
-  import AppInput from "@/components/AppInput.vue";
-  import AppBtn from "@/components/AppBtn.vue";
-  
-  const userName = ref('');
-  const email = ref('');
-  const password = ref('');
-  const checkbox = ref(false);
-  const router = useRouter();
-  const store = useStore();
+  </div>
+</template>
 
-  const isVisible = ref(false);
+<script setup>
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
+import AppInput from "@/components/AppInput.vue";
+import AppBtn from "@/components/AppBtn.vue";
 
-  onMounted(()=> {
-    isVisible.value = true;
-  })
+const userName = ref('');
+const email = ref('');
+const password = ref('');
+const checkbox = ref(false);
+const router = useRouter();
+const store = useStore();
 
-  // Sign-up function
-  const signUp = async () => {
-    console.log({ userName: userName.value, email: email.value, password: password.value });
-    try {
-      const response = await store.dispatch('signup', {
-        userName: userName.value,
-        email: email.value,
-        password: password.value
-      });
+const isVisible = ref(false);
+
+onMounted(() => {
+  isVisible.value = true;
+})
+
+// Sign-up function
+const signUp = async () => {
+  console.log({ userName: userName.value, email: email.value, password: password.value });
+  try {
+    const response = await store.dispatch('signup', {
+      userName: userName.value,
+      email: email.value,
+      password: password.value
+    });
+    router.push('/dashboard');
+
+    if (response && response.data && response.data.token) {
       router.push('/dashboard');
-  
-      if (response && response.data && response.data.token) {
-        router.push('/dashboard');
-      }
-    } catch (error) {
-      console.error('Login failed', error);
     }
-  };
-  </script>
-  
-  <style scoped>
-  .logo {
-      font-weight: 800;
+  } catch (error) {
+    console.error('Login failed', error);
   }
-  
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.logo {
+  font-weight: 800;
+}
+</style>

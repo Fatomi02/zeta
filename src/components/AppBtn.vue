@@ -2,7 +2,7 @@
   <div>
     <button
     :class="variant"
-      class="p-2 px-3 flex items-center gap-1 justify-center text-center font-medium w-full hover:opacity-90 rounded-[30px]"
+      class="p-2 px-4 flex items-center gap-1 justify-center text-center font-medium w-full rounded-[8px]"
       :type="type"
       :disabled="disabled"
       @click="handleClick"
@@ -41,11 +41,21 @@ const handleClick = (event) => {
 
 <style scoped>
 .primary {
-    background: #141414;
+    background: #3498DB;
     color: white;
 }
 
-.outline {
-  outline-style: auto;
+.primary:hover {
+  background-color: #2C81BA;
+  box-shadow: 0 2px 4px #3498DB;
+}
+
+.danger {
+  background-color: rgb(184, 22, 22);
+  color: white;
+}
+
+.danger:hover {
+  box-shadow: 0 2px 4px rgb(184, 22, 22);
 }
 </style>

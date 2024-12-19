@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
-    <label :for="id">{{ label }}</label>
+    <label class="text-[#333333]" :for="id">{{ label }}</label>
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
@@ -14,8 +14,8 @@
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
       <img class="absolute cursor-pointer top-3 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
-        <div @click="selectItem('')" class="py-3 px-4 hover:bg-[#F5F5F5] cursor-pointer">--Select--</div>
-        <div v-for="(item, index) in selectArray" :key="index" class="py-3 px-4 hover:bg-[#F5F5F5] cursor-pointer"
+        <div @click="selectItem('')" class="py-3 px-4 hover:bg-[#F5F5F5] cursor-pointer text-[#333333]">--Select--</div>
+        <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-[#333333] px-4 hover:bg-[#F5F5F5] cursor-pointer"
           @click="selectItem(item)">
           {{ item }}
         </div>
@@ -113,14 +113,16 @@ input,
 textarea {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid grey;
-  border-radius: 20px;
+  border: 1px solid #3498DB;
+  border-radius: 8px;
   outline: none;
+  background-color: #FFFFFF;
+  color: #333333;
 }
 
 input:hover {
-  box-shadow: 0 4px 8px rgb(226, 226, 104, 0.2);
-  border: 1px solid rgb(226, 226, 104);
+  box-shadow: 0 2px 4px #3498DB;
+  border: 1px solid #2C81BA;
   cursor: pointer;
 }
 
@@ -137,8 +139,8 @@ input[type="checkbox"] {
 }
 
 input[type="checkbox"]:checked {
-  background-color: #141414;
-  border-color: #141414;
+  background-color: #3498DB;
+  border-color: #3498DB;
 }
 
 input[type="checkbox"]:checked::after {
@@ -160,6 +162,7 @@ input[type="checkbox"]:checked::after {
 .dropdown_box {
   position: absolute;
   width: 100%;
+  margin-top: 8px;
   background-color: white;
   padding: 8px 0;
   border-radius: 8px;
