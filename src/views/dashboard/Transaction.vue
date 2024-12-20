@@ -1,11 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div @click="closeMenu" class="flex flex-col gap-6">
+    <div @click="closeMenu" class="flex flex-col h-full gap-6">
         <div class="flex flex-col gap-2">
             <h1 class="font-medium text-2xl md:text-3xl">Transaction Management</h1>
             <span>Welcome! Easily create, edit, and delete transactions to manage your finances and keep track of your spending.</span>
         </div>
-            <div class="flex flex-col mb-4 gap-6 lg:gap-10">
+            <div class="flex flex-col mb-4 gap-6 h-full lg:gap-10">
                 <div class="flex justify-between items-center">
                     <h2 class="text-2xl font-semibold">Transaction</h2>
                     <AppBtn @click="toggleModal(null, 'add')">
@@ -14,11 +14,11 @@
                     </AppBtn>
                 </div>
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
-                <div class="flex flex-col gap-4">                 
+                <div v-if="transactions.length > 0" class="flex flex-col gap-4">                 
                     <div v-for="(transaction, index) in transactions" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-[#34495E] rounded-2xl">
-                        <div class="flex truncate w-full flex-col items-start gap-1">
+                        <div class="flex w-full flex-col items-start gap-1">
                             <h4 class="text-[12px]">Amount</h4>
-                            #{{ transaction.amount.toLocaleString() }}
+                            <div class="w-full truncate">#{{ transaction.amount.toLocaleString() }}</div>
                         </div>
                         <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
                             <h4 class="text-[12px]">Category</h4>
@@ -38,6 +38,13 @@
                         </div>
                     </div>
                 </div>
+                <div v-else class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-[#3498DB] text-xl rounded-md">
+                    No transaction
+                    <AppBtn @click="toggleModal(null, 'add')">
+                        <img src="@/assets/icons/Add.svg" alt="add">
+                        Add transaction
+                    </AppBtn>
+                </div>
             </div>
     </div>
     <transition name="fade-right">
@@ -52,7 +59,7 @@
                 <AppInput label="Category" required type="select" :selectArray="categoryArray" v-model="formData.category" name="category" id="category" placeholder="Select a category"></AppInput>
                 <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="formData.narration" placeholder="Enter a narration"></AppInput>
             </div>
-            <div class="flex justify-end gap-6">
+            <div class="flex justify-between gap-6">
                 <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
                 <AppBtn type="submit">Add Transaction</AppBtn>
             </div>
@@ -71,8 +78,8 @@
                 <AppInput label="Duration" required type="select" :selectArray="categoryArray" v-model="editTransactionData.category" name="category" id="category" placeholder="Select a category"></AppInput>
                 <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="editTransactionData.narration" placeholder="Enter a narration"></AppInput>
             </div>
-            <div class="flex justify-center gap-4">
-                <AppBtn variant="outline" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
+            <div class="flex justify-between gap-4">
+                <AppBtn variant="danger" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
                 <AppBtn type="submit">Update</AppBtn>
             </div>
         </form>
