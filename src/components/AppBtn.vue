@@ -2,7 +2,7 @@
   <div>
     <button
     :class="variant"
-      class="p-2 px-4 flex items-center gap-1 justify-center text-center font-medium w-full rounded-[8px]"
+      class="py-3 px-4 flex items-center gap-1 justify-center text-center font-medium w-full rounded-[8px]"
       :type="type"
       :disabled="disabled"
       @click="handleClick"
@@ -53,6 +53,11 @@ const handleClick = (event) => {
 .danger {
   background-color: rgb(184, 22, 22);
   color: white;
+}
+
+.primary:disabled {
+  cursor: not-allowed;
+  background-color: #e5e5e5;
 }
 
 .danger:hover {

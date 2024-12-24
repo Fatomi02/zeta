@@ -11,6 +11,7 @@ const routes = [
   { path: '/login', name: 'Login', component: Login },
   { path: '/signup', name: 'Signin', component: Signin },
   { path: '/dashboard', 
+    meta: { requiresAuth: true },
     redirect: '/dashboard/budget',
     name: 'DashboardHome', 
     component: DashboardHome,

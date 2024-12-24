@@ -3,7 +3,7 @@
     <transition name="fade-in">
         <div v-if="isVisible" class="flex flex-col h-screen w-full lg:flex-row">
         <SideNav></SideNav>
-        <div class="lg:px-8 lg:py-12 py-6 px-4 w-full bg-[#F0F8FF] h-full overflow-auto scroll-container">
+        <div class="lg:px-8 lg:py-12 py-6 px-4 w-full bg-partial-white h-full overflow-auto scroll-container">
             <RouterView></RouterView>
         </div>
     </div>

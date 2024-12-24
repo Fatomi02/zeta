@@ -15,7 +15,7 @@
                 </div>
                 <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
                 <div v-if="transactions.length > 0" class="flex flex-col gap-4">                 
-                    <div v-for="(transaction, index) in transactions" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-[#34495E] rounded-2xl">
+                    <div v-for="(transaction, index) in transactions" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
                         <div class="flex w-full flex-col items-start gap-1">
                             <h4 class="text-[12px]">Amount</h4>
                             <div class="w-full truncate">#{{ transaction.amount.toLocaleString() }}</div>
@@ -31,14 +31,14 @@
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
                             <div v-if="transaction.isOpen" class="item-menu w-[150px] lg:w-[200px] top-10">
-                                <div @click="toggleModal(transaction, 'view')" class="px-6 py-2 text-[#34495E] hover:bg-[#3498DB]">View</div>
-                                <div @click="toggleModal(transaction, 'edit')" class="px-6 py-2 text-[#34495E] hover:bg-[#3498DB]">Edit</div>
+                                <div @click="toggleModal(transaction, 'view')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
+                                <div @click="toggleModal(transaction, 'edit')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
                                 <div @click.stop.prevent="deleteTransaction(transaction.id)" class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div v-else class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-[#3498DB] text-xl rounded-md">
+                <div v-else class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
                     No transaction
                     <AppBtn @click="toggleModal(null, 'add')">
                         <img src="@/assets/icons/Add.svg" alt="add">

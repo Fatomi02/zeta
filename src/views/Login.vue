@@ -1,15 +1,19 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="w-screen h-screen p-6 lg:p-10 flex flex-col justify-center lg:justify-start gap-4 lg:gap-8">
+  <div class="w-full h-screen flex justify-center items-center">
     <transition name="fade-left">
-      <h1 v-if="isVisible" class="lg:text-4xl text-center lg:text-start text-[40px] logo">FinCore</h1>
-    </transition>
-    <div class="flex gap-10 justify-center">
-      <transition name="fade-left">
-        <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
-          <div class="flex flex-col gap-2 text-center xl:text-left">
-            <h1 class="text-3xl font-bold">Get Started Now</h1>
-            <span>Enter your details to access your account</span>
+      <div v-if="isVisible" class="bg-primary hidden w-1/2 lg:flex h-screen justify-center items-center">
+        <img class="xl:h-[60vh] xl:w-[550px] rounded-2xl" src="@/assets/images/encryption.jpg" alt="home-banner" />
+      </div>
+      </transition>
+    <div class="flex justify-center lg:w-1/2 w-[90%] h-screen items-center">
+      <transition name="fade-right">
+        <div v-if="isVisible" class="flex flex-col gap-8 w-full lg:w-auto">
+          <h1 class="lg:text-[50px] text-[40px] logo">FinCore</h1>
+        <div  class="flex flex-col gap-6 w-full lg:w-[400px] xl:w-[500px]">
+          <div class="flex flex-col gap-2">
+            <h1 class="text-3xl font-bold">Log In</h1>
+            <span>Enter your email & password to login</span>
           </div>
           <form class="flex flex-col gap-6" @submit.prevent="login">
             <AppInput label="Email address" required type="email" v-model="email" name="email" id="email"
@@ -18,16 +22,13 @@
               id="password" placeholder="min 8 chars" />
             <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox"
               id="checkbox" placeholder="min 8 chars" />
-            <AppBtn type="submit" variant="primary">Log in</AppBtn>
+            <AppBtn :disabled=!isFormValid type="submit" variant="primary">Log in</AppBtn>
           </form>
-          <div class="text-[#333333]">
-            Don't have an account? <a class="underline" href="/signup">Sign up</a>
+          <div class="text-dark-grey w-full">
+            Don't have an account? <a class="underline text-light-blue" href="/signup">Sign up</a>
           </div>
         </div>
-      </transition>
-      <transition name="fade-right">
-        <img v-if="isVisible" class="rounded-2xl hidden lg:flex h-[80vh] w-[490px] xl:w-fit"
-          src="@/assets/images/auth-banner.png" alt="home-banner" />
+        </div>
       </transition>
     </div>
   </div>
@@ -39,7 +40,7 @@ import AppBtn from "@/components/AppBtn.vue";
 
 import { useStore } from 'vuex';
 const store = useStore();
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 const email = ref('');
 const password = ref('');
 const checkbox = ref(false);
@@ -49,6 +50,19 @@ onMounted(() => {
   isVisible.value = true;
 })
 
+const isFormValid = computed(() => {
+  return (
+    emailValidation(email.value) && 
+    password.value.length >= 8
+  );
+})
+
+const emailValidation = (email) => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+  }
+
+
 // Login method
 const login = () => {
   store.dispatch('login', { email: email.value, password: password.value });
@@ -57,6 +71,6 @@ const login = () => {
 
 <style scoped>
 .logo {
-  font-weight: 800;
+  font-weight: 900;
 }
 </style>

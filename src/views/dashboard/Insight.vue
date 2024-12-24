@@ -6,37 +6,37 @@
             <span>Keep track of your budget and transaction history.</span>
         </div>
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-            <div class="bg-[#34495E] min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
+            <div class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
                 <div class="p-4 flex lg:justify-center">
-                    <div class="flex flex-col gap-4 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-4 text-cyan">
                         Total Budget Amount
                         <h3 class="text-4xl font-bold">#100, 000</h3>
                     </div>
                 </div>
                 <div class="p-4 flex flex-col gap-4">
-                    <div class="flex flex-col gap-2 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-2 text-cyan">
                         Total Weekly Budget Amount
                         <h3 class="text-2xl font-bold">#50, 000</h3>
                     </div>
-                    <div class="flex flex-col gap-2 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-2 text-cyan">
                         Total Monthly Budget Amount
                         <h3 class="text-2xl font-bold">#50, 000</h3>
                     </div>
                 </div>
             </div>
-            <div class="bg-[#34495E] min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
+            <div class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
                 <div class="p-4 flex lg:justify-center">
-                    <div class="flex flex-col gap-4 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-4 text-cyan">
                         Total Balance
                         <h3 class="text-4xl font-bold">#20, 000</h3>
                     </div>
                 </div>
                 <div class="p-4 flex flex-col gap-4">
-                    <div class="flex flex-col gap-2 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-2 text-cyan">
                         Total Income
                         <h3 class="text-2xl font-bold">#60, 000</h3>
                     </div>
-                    <div class="flex flex-col gap-2 text-[#A6DDEF]">
+                    <div class="flex flex-col gap-2 text-cyan">
                         Total Money Spent
                         <h3 class="text-2xl font-bold">#40, 000</h3>
                     </div>

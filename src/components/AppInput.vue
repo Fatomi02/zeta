@@ -1,11 +1,13 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
-    <label class="text-[#333333]" :for="id">{{ label }}</label>
+    <label class="text-dark-grey" :for="id">{{ label }}</label>
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
     <div v-if="type === 'password'" class="relative">
-      <img @click="toggleVisibility" class="absolute cursor-pointer right-3 top-[-35px]" src="@/assets/icons/hidden.svg"
+      <img v-if="showPassword" @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px]" src="@/assets/icons/hidden.svg"
+        alt="">
+      <img v-else @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px] w-[20px] h-[20px]" src="@/assets/icons/open eye.svg"
         alt="">
     </div>
     <textarea rows="4" :required="required" v-if="type === 'textarea'" :name="name" :id="id"
@@ -14,8 +16,8 @@
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
       <img class="absolute cursor-pointer top-3 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
-        <div @click="selectItem('')" class="py-3 px-4 hover:bg-[#F5F5F5] cursor-pointer text-[#333333]">--Select--</div>
-        <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-[#333333] px-4 hover:bg-[#F5F5F5] cursor-pointer"
+        <div @click="selectItem('')" class="py-3 px-4 hover:bg-light-grey cursor-pointer text-dark-grey">--Select--</div>
+        <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-dark-grey px-4 hover:bg-light-grey cursor-pointer"
           @click="selectItem(item)">
           {{ item }}
         </div>
@@ -112,7 +114,7 @@ onBeforeUnmount(() => {
 input,
 textarea {
   width: 100%;
-  padding: 8px 12px;
+  padding: 12px 16px;
   border: 1px solid #3498DB;
   border-radius: 8px;
   outline: none;
