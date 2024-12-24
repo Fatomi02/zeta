@@ -5,6 +5,13 @@
     </div>
     <router-view></router-view>
 </div>
+<div v-if="response.message" class="flag w-[80%] lg:w-[500px]">
+      <div class="flex gap-2 items-center">
+        <img src="@/assets/icons/Success.svg" alt="successful">
+        {{ response.message }}
+      </div>
+      <img class="cursor-pointer" src="@/assets/icons/Close.svg" alt="Close">
+    </div>
 </template>
 
 <script setup>
@@ -13,6 +20,7 @@ import { useStore } from 'vuex';
 const store = useStore();
 
 const isLoading = computed(()=> store.state.auth.isLoading)
+const response = computed(()=> store.state.auth.response)
 </script>
 
 <style scoped>
@@ -47,6 +55,18 @@ const isLoading = computed(()=> store.state.auth.isLoading)
           transform: rotate(360deg)
         }
       }
+
+  .flag {
+    position: fixed;
+    right: 5px;
+    top: 30px;
+    padding: 16px;
+    background-color: #039754;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+  }
     
 </style>
 

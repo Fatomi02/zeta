@@ -17,20 +17,20 @@
                 <div v-if="budgets.length > 0" class="flex flex-col gap-4">                 
                     <div v-for="(budget, index) in budgets" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
-                            <div class="text-[12px] text-cyan">Title</div>
+                            <h4 class="text-[12px]">Title</h4>
                             <div class="w-full truncate">{{ budget.title }}</div>
                         </div>
                         <div class="flex flex-col items-start gap-1">
-                            <div class="text-[12px] text-cyan">Total Amount</div>
+                            <h4 class="text-[12px]">Total Amount</h4>
                             <div class="w-full truncate">  #{{ budget.amount.toLocaleString() }}</div>
                         </div>
                         <div class="hidden lg:flex flex-col items-start w-full truncate gap-1">
-                            <div class="text-[12px] text-cyan">Duration</div>
+                            <h4 class="text-[12px]">Duration</h4>
                             {{ budget.duration }}
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
-                            <div v-if="budget.isOpen" class="item-menu w-[150px] lg:w-[200px] lg:top-10">
+                            <div v-if="budget.isOpen" class="item-menu w-[150px] lg:w-[200px] top-10">
                                 <div @click="toggleModal(budget, 'view')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
                                 <div @click="toggleModal(budget, 'edit')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
                                 <div @click.stop.prevent="deleteBudget(budget.id)" class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
@@ -126,13 +126,11 @@ const initialFormData = ref({
     title: '',
     amount: '',
     duration: '',
-    isOpen: false
 });
 let formData = ref({
     title: '',
     amount: '',
     duration: '',
-    isOpen: false
 });
 const viewBudgetData = ref();
 const editBudgetData = ref();

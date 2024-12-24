@@ -1,7 +1,8 @@
-import Budget from '@/views/dashboard/Budget.vue';
-import DashboardHome from '@/views/dashboard/Dashboard.vue';
-import Insight from '@/views/dashboard/Insight.vue';
-import Transaction from '@/views/dashboard/Transaction.vue';
+import Budget from '@/views/home/Budget.vue';
+import Home from '@/views/home/home.vue';
+import Dashboard from '@/views/home/Dashboard.vue';
+import Insight from '@/views/home/Insight.vue';
+import Transaction from '@/views/home/Transaction.vue';
 import Login from '@/views/Login.vue'
 import Signin from '@/views/Signup.vue';
 import { createRouter, createWebHistory } from 'vue-router'
@@ -12,20 +13,24 @@ const routes = [
   { path: '/signup', name: 'Signin', component: Signin },
   { path: '/dashboard', 
     meta: { requiresAuth: true },
-    redirect: '/dashboard/budget',
-    name: 'DashboardHome', 
-    component: DashboardHome,
+    redirect: '/dashboard/home',
+    name: 'Dashboard', 
+    component: Dashboard,
     children: [
       {
-        path: '/dashboard/budget',
+        path: '/dashboard/home',
+        component: Home,
+      },
+      {
+        path: '/dashboard/budgets',
         component: Budget,
       },
       {
-        path: '/dashboard/transaction',
+        path: '/dashboard/transactions',
         component: Transaction,
       },
       {
-        path: '/dashboard/financial-insight',
+        path: '/dashboard/financial-insights',
         component: Insight,
       },
     ]
