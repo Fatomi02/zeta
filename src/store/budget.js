@@ -57,7 +57,12 @@ export default {
       },
       actions: {
         addBudget({ commit }, budget) {
-          commit('addBudget', budget);
+          const payload = {
+            title: budget.title,
+            amount: budget.amount,
+            duration: budget.duration
+          }
+          commit('addBudget', payload);
         },
         removeBudget({ commit }, id) {
           commit('removeBudget', id);

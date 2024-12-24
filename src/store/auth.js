@@ -1,19 +1,24 @@
 import api from '../api/api';
+import router from '@/router';
 
 export default{
   state: {
     user: {
-      name: 'Olaitan Fatomi'
+      name: ''
     },
     token: localStorage.getItem('authToken') || null,
+    isLoading: null
   },
   mutations: {
     SET_USER(state, user) {
-      state.user = user;
+      state.user.name = user;
     },
     SET_TOKEN(state, token) {
       state.token = token;
       localStorage.setItem('authToken', token);
+    },
+    SET_LOADING(state, value) {
+      state.isLoading = value
     },
     LOGOUT(state) {
       state.user = null;
@@ -24,20 +29,37 @@ export default{
   actions: {
     async login({ commit }, credentials) {
       try {
+        commit('SET_LOADING', true)
         const response = await api.post('/api/login', credentials);
-        commit('SET_TOKEN', response.data.token);
-        commit('SET_USER', response.data.user);
+        if (response && response.data && response.data.token) {
+          commit('SET_LOADING', false)
+          commit('SET_TOKEN', response.data.token);
+          commit('SET_USER', response.data.user.username);
+          router.push('/dashboard');
+        }
       } catch (error) {
+        commit('SET_LOADING', false)
         console.error("Login error:", error);
       }
     },
     async signup({ commit }, userDetails) {
-      const response = await api.post('/api/register', userDetails);
-      commit('SET_TOKEN', response.data.token);
-      commit('SET_USER', response.data.user);
+      try {
+        const response = await api.post('/api/register', userDetails);
+        if (response && response.data && response.data.token) {
+          commit('SET_LOADING', false)
+          commit('SET_TOKEN', response.data.token);
+          commit('SET_USER', response.data.user.username);
+          router.push('/dashboard');
+        }
+      }
+    catch (error) {
+      commit('SET_LOADING', false)
+      console.error('Signup failed', error);
+    }
     },
     logout({ commit }) {
       commit('LOGOUT');
+      window.location.href = '/login'
     },
   },
 };

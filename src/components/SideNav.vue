@@ -5,7 +5,7 @@
             <div class="flex gap-4 items-center">
                 <div class="w-[60px] h-[60px] rounded-full bg-[#3498DB]"></div>
                 <div class="flex flex-col gap-1">
-                    <h2 class="font-medium text-[#FFFFFF]">{{ user?.name }}</h2>
+                    <h2 class="font-medium text-[#FFFFFF]">{{ user?.name ? user?.name : 'Unknown User' }}</h2>
                     <span class="text-sm cursor-pointer text-[#FFFFFF]">Edit Profile</span>
                 </div>
             </div>
@@ -29,6 +29,7 @@
                     Financial Insights
                 </router-link>
             </div>
+            <AppBtn variant="danger" @click="logout">Log Out</AppBtn>
         </div>
     </div>
     <div class="py-3 lg:hidden bg-[#2C3E50] border-0 px-4 flex items-center justify-between sticky top-0">
@@ -70,6 +71,7 @@
                     Financial Insights
                 </router-link>
             </div>
+            <AppBtn variant="danger" @click="logout">Log Out</AppBtn>
         </div>
         </div>
     </div>
@@ -80,12 +82,18 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
+import AppBtn from './AppBtn.vue';
 const store = useStore();
 
 const isOpen = ref(false);
 const user = computed(() => store.state.auth.user)
 const toggleMenu = () => {
     isOpen.value = !isOpen.value
+}
+
+
+const logout = () => {
+    store.dispatch('logout')
 }
 </script>
 

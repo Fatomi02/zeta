@@ -17,6 +17,10 @@ import SideNav from "@/components/SideNav.vue";
 const isVisible = ref(false);
 
 onMounted(()=> {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     isVisible.value = true;
 })
 </script>

@@ -7,7 +7,7 @@
     <div class="flex gap-10 justify-center">
       <transition name="fade-left">
         <div v-if="isVisible" class="flex flex-col gap-6 lg:gap-10 w-[100%] xl:w-[500px] mt-10">
-          <div class="flex flex-col gap-2">
+          <div class="flex flex-col gap-2 text-center xl:text-left">
             <h1 class="text-3xl font-bold">Get Started Now</h1>
             <span>Enter your details to access your account</span>
           </div>
@@ -38,10 +38,7 @@ import AppInput from "@/components/AppInput.vue";
 import AppBtn from "@/components/AppBtn.vue";
 
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 const store = useStore();
-const router = useRouter();
-
 import { onMounted, ref } from 'vue';
 const email = ref('');
 const password = ref('');
@@ -53,16 +50,8 @@ onMounted(() => {
 })
 
 // Login method
-const login = async () => {
-  try {
-    const response = await store.dispatch('login', { email: email.value, password: password.value });
-    router.push('/dashboard');
-    if (response && response.data && response.data.token) {
-      router.push('/dashboard');
-    }
-  } catch (error) {
-    console.error('Login failed', error);
-  }
+const login = () => {
+  store.dispatch('login', { email: email.value, password: password.value });
 };
 </script>
 
