@@ -13,9 +13,17 @@
                         Add budget
                     </AppBtn>
                 </div>
-                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ budgets.length }} total budget</h2>  
-                <div v-if="budgets.length > 0" class="flex flex-col gap-4">                 
-                    <div v-for="(budget, index) in budgets" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
+                    <div class="w-full">
+                        <AppInput type="search" name="budgetSearch" id="budgetSearch" v-model="search.title" placeholder="Search through the budget"></AppInput>
+                    </div>
+                    <div class="w-full">
+                        <AppInput type="select" :selectArray="durationArray" v-model="search.duration" name="duration" id="duration" placeholder="Select a duration"></AppInput>
+                    </div>
+                </div>
+                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ filteredBudget.length }} total budget</h2>  
+                <div v-if="budgets.length > 0" class="flex flex-col gap-4 pb-6">                 
+                    <div v-for="(budget, index) in filteredBudget" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
                             <h4 class="text-[12px]">Title</h4>
                             <div class="w-full truncate">{{ budget.title }}</div>
@@ -61,7 +69,7 @@
             </div>
             <div class="flex justify-between gap-6 mt-4">
                 <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                <AppBtn type="submit">Add Budget</AppBtn>
+                <AppBtn :disabled="!isFormValid" type="submit">Add Budget</AppBtn>
             </div>
         </form>
     </AppModal>
@@ -114,7 +122,7 @@
 import AppBtn from '@/components/AppBtn.vue';
 import AppInput from '@/components/AppInput.vue';
 import AppModal from '@/components/AppModal.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
 const durationArray = ref(["Weekly", "Monthly"]);
@@ -132,12 +140,29 @@ let formData = ref({
     amount: '',
     duration: '',
 });
+
+const isFormValid = computed(() => {
+  return (
+    formData.value.title && 
+    formData.value.amount && formData.value.duration
+  );
+})
+
+const search = ref({
+    title: '',
+    duration: ''
+});
+
+const filteredBudget = computed(()=> {
+    return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) && item.duration.toLowerCase().includes(search.value.duration.toLowerCase())))
+})
+
 const viewBudgetData = ref();
 const editBudgetData = ref();
 const viewModalIsOpen = ref(false);
 const editModalIsOpen = ref(false);
 
-const budgets = computed(()=> store.state.budget.budgets);
+const budgets = computed(()=> store.getters['allBudgets']);
 
 const toggleModal = (data, modal) => {
     if(modal === 'edit') {
@@ -176,6 +201,13 @@ const closeMenu = () => {
 const deleteBudget = (id) => {
     store.dispatch('removeBudget', id)
 }
+
+onMounted(()=> {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+})
 
 </script>
 

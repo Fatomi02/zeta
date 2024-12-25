@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="bg-partial-white">
     <div v-if="isLoading" class="loader_overlay">
         <span class="loader"></span>
     </div>
@@ -10,8 +10,8 @@
         <img src="@/assets/icons/Success.svg" alt="successful">
         {{ response.message }}
       </div>
-      <img class="cursor-pointer" src="@/assets/icons/Close.svg" alt="Close">
-    </div>
+      <img @click="hideFlag" class="cursor-pointer" src="@/assets/icons/Close.svg" alt="Close">
+</div>
 </template>
 
 <script setup>
@@ -21,6 +21,10 @@ const store = useStore();
 
 const isLoading = computed(()=> store.state.auth.isLoading)
 const response = computed(()=> store.state.auth.response)
+
+const hideFlag = () => {
+  store.commit('CLEAR_RESPONSE');
+}
 </script>
 
 <style scoped>

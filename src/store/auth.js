@@ -55,7 +55,7 @@ export default{
           commit('SET_RESPONSE', response);
           setTimeout(()=> {
             commit('CLEAR_RESPONSE')
-          }, 5000)
+          }, 8000)
           router.push('/dashboard');
         }
       } catch (error) {

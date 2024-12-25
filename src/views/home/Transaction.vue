@@ -13,12 +13,23 @@
                         Add transaction
                     </AppBtn>
                 </div>
-                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ transactions.length }} total transaction</h2>  
-                <div v-if="transactions.length > 0" class="flex flex-col gap-4">                 
-                    <div v-for="(transaction, index) in transactions" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
+                    <div class="w-full">
+                        <AppInput type="search" name="titleSearch" id="titleSearch" v-model="search.narration" placeholder="Search through the transaction with narration"></AppInput>
+                    </div>
+                    <div class="w-full">
+                        <AppInput type="select" :selectArray="categoryArray" v-model="search.category" name="categorySearch" id="categorySearch" placeholder="Select a category"></AppInput>
+                    </div>
+                </div>
+                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ filteredTransaction.length }} total transaction</h2>  
+                <div v-if="filteredTransaction.length > 0" class="flex flex-col gap-4">                 
+                    <div v-for="(transaction, index) in filteredTransaction" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
                         <div class="flex w-full flex-col items-start gap-1">
                             <h4 class="text-[12px]">Amount</h4>
-                            <div class="w-full truncate">#{{ transaction.amount.toLocaleString() }}</div>
+                            <div class="w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
+                                    ? 'text-red-400'
+                                    : 'text-green-400'
+                                ">#{{ transaction.amount.toLocaleString() }}</div>
                         </div>
                         <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
                             <h4 class="text-[12px]">Category</h4>
@@ -61,7 +72,7 @@
             </div>
             <div class="flex justify-between gap-6">
                 <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                <AppBtn type="submit">Add Transaction</AppBtn>
+                <AppBtn :disabled="!isFormValid" type="submit">Add Transaction</AppBtn>
             </div>
         </form>
     </AppModal>
@@ -114,7 +125,7 @@
 import AppBtn from '@/components/AppBtn.vue';
 import AppInput from '@/components/AppInput.vue';
 import AppModal from '@/components/AppModal.vue';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
 const categoryArray = ref(["Income", "Spending"]);
@@ -126,20 +137,35 @@ const initialFormData = ref({
     amount: '',
     category: '',
     narration: '',
-    isOpen: false
 });
 let formData = ref({
     amount: '',
     category: '',
     narration: '',
-    isOpen: false
 });
 const viewTransactionData = ref();
 const editTransactionData = ref();
 const viewModalIsOpen = ref(false);
 const editModalIsOpen = ref(false);
 
-const transactions = computed(()=> store.state.transaction.transactions);
+const transactions = computed(()=> store.getters['allTransactions']);
+
+const search = ref({
+    narration: '',
+    category: ''
+});
+
+const isFormValid = computed(() => {
+  return (
+    formData.value.category && 
+    formData.value.amount && formData.value.narration
+  );
+})
+
+const filteredTransaction = computed(()=> {
+    return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) && item.category.toLowerCase().includes(search.value.category.toLowerCase())))
+})
+
 
 const toggleModal = (data, modal) => {
     if(modal === 'edit') {
@@ -178,6 +204,13 @@ const closeMenu = () => {
 const deleteTransaction = (id) => {
     store.dispatch('removeTransaction', id)
 }
+
+onMounted(()=> {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+})
 
 </script>
 

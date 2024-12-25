@@ -1,8 +1,8 @@
 <template>
     <div class="h-screen hidden lg:block min-w-[350px] bg-navy-blue border-r border-r-grey">
-        <div class="p-8 flex flex-col gap-10">
+        <div class="p-8 flex flex-col mt-[50px] gap-10">
             <h1 class="text-4xl text-white text-center font-extrabold">FinCore</h1>
-            <div class="flex gap-4 items-center">
+            <!-- <div class="flex gap-4 items-center">
                 <div class="w-[60px] h-[60px] rounded-full flex justify-center items-center text-xl bg-light-blue">
                     {{ user?.name.slice(0, 1) }}
                 </div>
@@ -10,12 +10,12 @@
                     <h2 class="font-medium text-white">{{ user?.name ? user?.name : 'Unknown User' }}</h2>
                     <span class="text-sm cursor-pointer text-white">Edit Profile</span>
                 </div>
-            </div>
+            </div> -->
             <div class="flex flex-col gap-5">
                 <router-link to="/dashboard/home"
                     class="py-4 px-5 w-full flex font-medium items-center gap-2 text-white"
                     exact-active-class="active_link">
-                    <img class="h-6 w-6" src="@/assets/icons/budget.svg" alt="">
+                    <img class="h-6 w-6" src="@/assets/icons/Home.svg" alt="">
                     Dashboard
                 </router-link>
                 <router-link to="/dashboard/budgets"
@@ -37,7 +37,7 @@
                     Financial Insights
                 </router-link>
             </div>
-            <AppBtn variant="danger" @click="logout">Log Out</AppBtn>
+            <!-- <AppBtn variant="danger" @click="logout">Log Out</AppBtn> -->
         </div>
     </div>
     <div class="py-3 lg:hidden bg-navy-blue border-0 px-4 flex items-center justify-between sticky top-0">
@@ -50,9 +50,11 @@
         <div class="p-6 flex flex-col gap-10">
             <h1 class="text-4xl text-center text-white font-extrabold">FinCore</h1>
             <div class="flex gap-4 items-center">
-                <div class="w-[60px] h-[60px] rounded-full bg-light-blue"></div>
+                <div class="w-[60px] h-[60px] rounded-full bg-light-blue flex justify-center items-center">
+                    {{ user?.name.slice(0, 1) }}
+                </div>
                 <div class="flex flex-col gap-1">
-                    <h2 class="font-medium text-white">{{ user?.name }}</h2>
+                    <h2 class="font-medium text-white capitalize">{{ user?.name }}</h2>
                     <span class="text-sm cursor-pointer text-white">Edit Profile</span>
                 </div>
             </div>
@@ -61,7 +63,7 @@
                     class="py-4 px-5 w-full flex font-medium items-center gap-2 rounded-[30px] text-white"
                     exact-active-class="active_link"
                     @click="toggleMenu">
-                    <img class="h-6 w-6" src="@/assets/icons/budget.svg" alt="">
+                    <img class="h-6 w-6" src="@/assets/icons/Home.svg" alt="">
                     Dashboard
                 </router-link>
                 <router-link to="/dashboard/budgets"

@@ -64,10 +64,10 @@ export default {
       },
       getters: {
         allBudgets(state) {
-          return state.budgets;
+          return state.budgets.slice().reverse();
         },
         recentBudgets(state) {
-          return state.budgets.slice(0, 5)
+          return state.budgets.slice().reverse().slice(0, 5);
         }
       }
 }

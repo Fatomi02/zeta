@@ -4,6 +4,9 @@
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
+      <div v-if="type === 'search' && !inputValue" class="relative">
+        <img class="absolute cursor-pointer top-[-38px] right-4" src="@/assets/icons/Search o.svg" alt="search">
+      </div>
     <div v-if="type === 'password'" class="relative">
       <img v-if="showPassword" @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px]" src="@/assets/icons/hidden.svg"
         alt="">
@@ -12,9 +15,9 @@
     </div>
     <textarea rows="4" :required="required" v-if="type === 'textarea'" :name="name" :id="id"
       :placeholder="placeholder" v-model="inputValue"></textarea>
-    <div @click.prevent="toggleDropdown" ref="dropdownContainer" v-if="type === 'select'" class="relative">
+    <div @click.prevent="toggleDropdown" ref="dropdownContainer" v-if="type === 'select'" class="relative m-0 p-0">
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
-      <img class="absolute cursor-pointer top-3 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
+      <img class="absolute cursor-pointer top-4 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
         <div @click="selectItem('')" class="py-3 px-4 hover:bg-light-grey cursor-pointer text-dark-grey">--Select--</div>
         <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-dark-grey px-4 hover:bg-light-grey cursor-pointer"
@@ -32,7 +35,6 @@ const props = defineProps({
   label: {
     type: String,
     default: "",
-    required: true,
   },
   type: {
     type: String,
@@ -114,7 +116,7 @@ onBeforeUnmount(() => {
 input,
 textarea {
   width: 100%;
-  padding: 12px 16px;
+  padding: 12px 18px 12px 16px;
   border: 1px solid #3498DB;
   border-radius: 8px;
   outline: none;

@@ -8,7 +8,7 @@ import Signin from '@/views/Signup.vue';
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
-  {path: '/', redirect: '/login' },
+  {path: '/', redirect: '/dashboard' },
   { path: '/login', name: 'Login', component: Login },
   { path: '/signup', name: 'Signin', component: Signin },
   { path: '/dashboard', 

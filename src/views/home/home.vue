@@ -42,30 +42,31 @@
                 </div>
                 <div v-if="recentTransactions.length > 0" class="flex flex-col gap-4">
                     <div class="grid grid-cols-3 md:grid-cols-4 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
-                        <div class="pr-4 lg:pr-6 w-full">Narration</div>
-                        <div class="pr-4 lg:pr-6 w-full">Amount</div>
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Category</div>
+                        <div class="w-full">Narration</div>
+                        <div class="w-full">Amount</div>
+                        <div class="w-full hidden md:block">Category</div>
                         <button class="text-light-blue text-right hover:opacity-80">
                             View
                         </button>
                     </div>
                     <div v-for="(transaction, index) in recentTransactions" :key="index">
                         <div class="grid grid-cols-3 md:grid-cols-4 gap-4 py-3 items-center px-4 rounded-lg">
-                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate">
+                            <div class="text-deep-blue pr-4 w-full truncate">
                                 {{ transaction.narration }}
                             </div>
-                            <div class="text-green-400 pr-4 lg:pr-6 w-full truncate" :class="transaction.category !== 'Income'
+                            <div class="text-green-400 pr-4 w-full truncate" :class="transaction.category !== 'Income'
                                     ? 'text-red-500'
                                     : 'text-green-400'
                                 ">
                                 #{{ transaction.amount.toLocaleString() }}
                             </div>
-                            <div class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate hidden">
-                                <div class="h-3 w-3 rounded-full" :class="transaction.category !== 'Income'
+                            <div class="md:flex gap-2 items-center text-deep-blue hidden">
+                                <div class="h-[12px] w-[12px] rounded-full" :class="transaction.category !== 'Income'
                                         ? 'bg-red-500'
                                         : 'bg-green-400'
                                     "></div>
-                                {{ transaction.category }}
+                                    <span class="truncate">{{ transaction.category }}</span>
+                                
                             </div>
                             <button class="text-light-blue text-right hover:opacity-80">
                                 View
@@ -123,7 +124,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 const store = useStore();
@@ -138,6 +139,14 @@ const goToTransactions = () => {
 const goToBudgets = () => {
     router.push("/dashboard/budgets");
 };
+
+onMounted(()=> {
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      console.log(recentTransactions.value)
+})
 </script>
 
 <style scoped>

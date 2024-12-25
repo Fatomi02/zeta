@@ -59,10 +59,10 @@ export default {
       },
       getters: {
         allTransactions(state) {
-          return state.transactions;
+          return state.transactions.slice().reverse();
         },
         recentTransactions(state) {
-          return state.transactions.slice(0, 5)
+          return state.transactions.slice().reverse().slice(0, 5);
         }
       }
 }
