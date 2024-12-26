@@ -3,9 +3,9 @@
         <button @click="showDropdown = !showDropdown" ref="showDropdownBox" class="border p-2 cursor-pointer flex items-center gap-3 rounded-lg relative border-light-blue">
             <div class="flex gap-2 items-center capitalize">
                 <div class="bg-light-blue h-7 w-7 flex justify-center items-center uppercase rounded-md">
-                    {{ user?.name.slice(0, 1) }}
+                    {{ user?.name ? user?.name?.slice(0, 1) :  'U'}}
                 </div>
-                {{ user?.name }}
+                {{ user?.name ? user?.name : 'Unknown User' }}
             </div>
             <img src="@/assets/icons/dropWhite.svg" alt="dropdown">
 
@@ -40,15 +40,16 @@ const toggleDropdown = (event) => {
     if(showDropdownBox.value && !showDropdownBox.value.contains(event.target)) {
         showDropdown.value = false;
     }
+}
 
-    onMounted(()=> {
+
+onMounted(()=> {
         document.addEventListener('click', toggleDropdown)
     })
 
     onBeforeUnmount(() => {
   document.removeEventListener('click', toggleDropdown);
 });
-}
 </script>
 
 <style scoped>

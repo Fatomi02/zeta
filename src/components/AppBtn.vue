@@ -2,7 +2,7 @@
   <div>
     <button
     :class="variant"
-      class="py-3 px-4 flex items-center gap-1 justify-center text-center font-medium w-full rounded-[8px]"
+      class="py-3 px-4 flex items-center gap-2 justify-center text-center font-medium w-full rounded-[8px]"
       :type="type"
       :disabled="disabled"
       @click="handleClick"

@@ -1,57 +1,51 @@
-// import api from "@/api/api";
+import api from "@/api/api";
 
 export default {
     state: {
         transactions: [
-            {
-                id: 1,
-                amount: 50000,
-                category: 'Income',
-                narration: 'Income from work',
-            },
-            {
-                id: 2,
-                amount: 200000000,
-                category: 'Spending',
-                narration: 'For housing',
-            },
-            {
-                id: 3,
-                amount: 50000,
-                category: 'Spending',
-                narration: 'For data subscription',
-            },
-            {
-                id: 4,
-                amount: 100000,
-                category: 'Income',
-                narration: 'Income from investment',
-            },
-            {
-                id: 5,
-                amount: 20000,
-                category: 'Income',
-                narration: 'Income from event',
-            },
-            {
-                id: 6,
-                amount: 200000,
-                category: 'Spending',
-                narration: 'Spending on transport huygkfwkfwg,hyukfyugw,hfgyukgw,ykf,hbgyklw,fbhgywl,fhebigywlefhhkwiglyer',
-            },
         ]
     },
     mutations: {
-        addTransaction(state, transaction) {
-          state.transactions.push(transaction);
-        },
+      setTransactions(state, budgets) {
+        state.transactions = budgets;
+      },
         removeTransaction(state, id) {
-          state.transactions = state.transactions.filter(transaction => transaction.id !== id);
+          state.transactions = state.transactions.filter(transaction => transaction._id !== id);
         }
       },
       actions: {
-        addTransaction({ commit }, transaction) {
-          commit('addTransaction', transaction);
+        async getAllTransactions({commit}) {
+          commit('SET_FETCH_LOADING', true)
+          try {
+            const response = await api.get('/transactions');
+            if(response && response.data) {
+              commit('setTransactions', response.data);
+              commit('SET_FETCH_LOADING', false)
+            }
+          }
+          catch (error) {
+            commit('SET_FETCH_LOADING', false)
+            console.error("Login error:", error);
+          }
+        },
+        async addTransaction({ commit, dispatch }, transaction) {
+          const payload = {
+            narration: transaction.narration,
+            amount: transaction.amount,
+            category: transaction.category,
+          }
+          commit('SET_LOADING', true);
+          try {
+            const response = await api.post('/transactions', payload);
+            if(response && response.data) {
+              commit('SET_LOADING', false);
+              dispatch('getAllTransactions', transaction);
+            }
+          } catch(error) {
+            commit('SET_LOADING', false);
+            console.error(error);
+          }
+
         },
         removeTransaction({ commit }, id) {
           commit('removeTransaction', id);

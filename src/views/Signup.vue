@@ -24,7 +24,7 @@
               id="password" placeholder="min 8 chars" />
             <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox"
               id="checkbox" placeholder="min 8 chars" />
-            <AppBtn :disabled=!isFormValid type="submit" variant="primary">Log in</AppBtn>
+            <AppBtn :disabled=!isFormValid type="submit" variant="primary">Join us</AppBtn>
           </form>
           <div class="text-dark-grey w-full">
             Don't have an account? <a class="underline text-light-blue" href="/login">Log in</a>

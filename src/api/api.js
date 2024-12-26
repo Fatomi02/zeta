@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://personal-finance-management-final.onrender.com',
+  baseURL: 'https://personal-finance-manager-i41i.onrender.com/api',
 });
 
 api.interceptors.request.use((config) => {
@@ -15,10 +15,10 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
-      localStorage.removeItem('authToken');
-      window.location.href = '/login';
-    }
+    // if (error.response && error.response.status === 401) {
+    //   localStorage.removeItem('authToken');
+    //   window.location.href = '/login';
+    // }
     return Promise.reject(error);
   }
 );

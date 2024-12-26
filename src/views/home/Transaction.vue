@@ -3,121 +3,180 @@
     <div @click="closeMenu" class="flex flex-col h-full gap-6">
         <div class="flex flex-col gap-2">
             <h1 class="font-medium text-2xl md:text-3xl">Transaction Management</h1>
-            <span>Welcome! Easily create, edit, and delete transactions to manage your finances and keep track of your spending.</span>
+            <span>Welcome! Easily create, edit, and delete transactions to manage your finances and keep track of your
+                spending.</span>
         </div>
-            <div class="flex flex-col mb-4 gap-6 h-full lg:gap-10">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-semibold">Transaction</h2>
-                    <AppBtn @click="toggleModal(null, 'add')">
-                        <img src="@/assets/icons/Add.svg" alt="add">
-                        Add transaction
-                    </AppBtn>
+        <div class="flex flex-col mb-4 gap-6 h-full lg:gap-10">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-semibold">Transaction</h2>
+                <AppBtn @click="toggleModal(null, 'add')">
+                    <img src="@/assets/icons/Add.svg" alt="add">
+                    Add transaction
+                </AppBtn>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
+                <div class="w-full">
+                    <AppInput type="search" name="titleSearch" id="titleSearch" v-model="search.narration"
+                        placeholder="Search through the transaction with narration"></AppInput>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
-                    <div class="w-full">
-                        <AppInput type="search" name="titleSearch" id="titleSearch" v-model="search.narration" placeholder="Search through the transaction with narration"></AppInput>
-                    </div>
-                    <div class="w-full">
-                        <AppInput type="select" :selectArray="categoryArray" v-model="search.category" name="categorySearch" id="categorySearch" placeholder="Select a category"></AppInput>
-                    </div>
-                </div>
-                <h2 class="font-medium pl-2 lg:my-[-20px]">{{ filteredTransaction.length }} total transaction</h2>  
-                <div v-if="filteredTransaction.length > 0" class="flex flex-col gap-4">                 
-                    <div v-for="(transaction, index) in filteredTransaction" :key="index" class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
-                        <div class="flex w-full flex-col items-start gap-1">
-                            <h4 class="text-[12px]">Amount</h4>
-                            <div class="w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
-                                    ? 'text-red-400'
-                                    : 'text-green-400'
-                                ">#{{ transaction.amount.toLocaleString() }}</div>
-                        </div>
-                        <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
-                            <h4 class="text-[12px]">Category</h4>
-                            {{ transaction.category }}
-                        </div>
-                        <div class="hidden lg:flex flex-col items-start gap-1">
-                            <h4 class="text-[12px]">Narration</h4>
-                            <div class="truncate w-full">{{ transaction.narration }}</div>
-                        </div>
-                        <div class="flex justify-end relative">
-                            <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer" src="@/assets/icons/action.svg" alt="action">
-                            <div v-if="transaction.isOpen" class="item-menu w-[150px] lg:w-[200px] top-10">
-                                <div @click="toggleModal(transaction, 'view')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
-                                <div @click="toggleModal(transaction, 'edit')" class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
-                                <div @click.stop.prevent="deleteTransaction(transaction.id)" class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div v-else class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
-                    No transaction
-                    <AppBtn @click="toggleModal(null, 'add')">
-                        <img src="@/assets/icons/Add.svg" alt="add">
-                        Add transaction
-                    </AppBtn>
+                <div class="w-full">
+                    <AppInput type="select" :selectArray="categoryArray" v-model="search.category" name="categorySearch"
+                        id="categorySearch" placeholder="Select a category"></AppInput>
                 </div>
             </div>
+            <h2 class="font-medium pl-2 lg:my-[-20px]">{{ filteredTransaction.length }} total transaction</h2>
+            <div v-if="filteredTransaction.length > 0 && !isLoading" class="flex flex-col pb-4 gap-4">
+                <div v-for="(transaction, index) in filteredTransaction" :key="index"
+                    class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
+                    <div class="flex w-full flex-col items-start gap-1">
+                        <h4 class="text-[12px]">Amount</h4>
+                        <div class="w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
+                            ? 'text-red-400'
+                            : 'text-green-400'
+                            ">#{{ transaction.amount.toLocaleString() }}</div>
+                    </div>
+                    <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
+                        <h4 class="text-[12px]">Category</h4>
+                        {{ transaction.category }}
+                    </div>
+                    <div class="hidden lg:flex flex-col items-start gap-1 capitalize">
+                        <h4 class="text-[12px]">Narration</h4>
+                        <div class="truncate w-full">{{ transaction.narration }}</div>
+                    </div>
+                    <div class="flex justify-end relative">
+                        <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer"
+                            src="@/assets/icons/action.svg" alt="action">
+                        <div v-if="transaction.isOpen" :class="index === transactions.length - 1 && index > 2 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
+                            <div @click="toggleModal(transaction, 'view')"
+                                class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
+                            <div @click="toggleModal(transaction, 'edit')"
+                                class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
+                            <div @click.stop.prevent="toggleModal(transaction._id, 'delete')"
+                                class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div v-else-if="filteredTransaction.length === 0 && !isLoading"
+                class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                No transaction
+                <AppBtn @click="toggleModal(null, 'add')">
+                    <img src="@/assets/icons/Add.svg" alt="add">
+                    Add transaction
+                </AppBtn>
+            </div>
+            <div v-if="isLoading"
+                class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                <span class="loader"></span>
+            </div>
+        </div>
     </div>
     <transition name="fade-right">
         <AppModal :isOpen="addModalIsOpen" position="left">
-        <form @submit.prevent="addTransaction" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
-            <div class="flex flex-col gap-2">
-                <h1 class="text-3xl">Add New Transaction</h1>
-                <span>Add new transaction to keep track of your spending.</span>
-            </div>
-            <div class="flex flex-col gap-7">
-                <AppInput label="Transaction Amount" required type="number" name="amount" id="amount" v-model="formData.amount" placeholder="Enter transaction amount"></AppInput>
-                <AppInput label="Category" required type="select" :selectArray="categoryArray" v-model="formData.category" name="category" id="category" placeholder="Select a category"></AppInput>
-                <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="formData.narration" placeholder="Enter a narration"></AppInput>
-            </div>
-            <div class="flex justify-between gap-6">
-                <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                <AppBtn :disabled="!isFormValid" type="submit">Add Transaction</AppBtn>
-            </div>
-        </form>
-    </AppModal>
+            <form @submit.prevent="addTransaction"
+                class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
+                <div class="flex flex-col gap-2">
+                    <h1 class="text-3xl">Add New Transaction</h1>
+                    <span>Add new transaction to keep track of your spending.</span>
+                </div>
+                <div class="flex flex-col gap-7">
+                    <AppInput label="Transaction Amount" required type="number" name="amount" id="amount"
+                        v-model="formData.amount" placeholder="Enter transaction amount"></AppInput>
+                    <AppInput label="Category" required type="select" :selectArray="categoryArray"
+                        v-model="formData.category" name="category" id="category" placeholder="Select a category">
+                    </AppInput>
+                    <AppInput label="Narration" required type="textarea" name="narration" id="narration"
+                        v-model="formData.narration" placeholder="Enter a narration"></AppInput>
+                </div>
+                <div class="flex justify-between gap-6">
+                    <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
+                    <AppBtn :disabled="!isFormValid" type="submit">Add Transaction</AppBtn>
+                </div>
+            </form>
+        </AppModal>
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="editModalIsOpen" position="left">
-        <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
-            <div class="flex flex-col gap-2">
-                <h1 class="text-3xl">Edit Your Budget</h1>
-                <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
-            </div>
-            <div class="flex flex-col gap-7">
-                <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="editTransactionData.amount" placeholder="Enter transaction amount"></AppInput>
-                <AppInput label="Duration" required type="select" :selectArray="categoryArray" v-model="editTransactionData.category" name="category" id="category" placeholder="Select a category"></AppInput>
-                <AppInput label="Narration" required type="textarea" name="narration" id="narration" v-model="editTransactionData.narration" placeholder="Enter a narration"></AppInput>
-            </div>
-            <div class="flex justify-between gap-4">
-                <AppBtn variant="danger" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
-                <AppBtn type="submit">Update</AppBtn>
-            </div>
-        </form>
-    </AppModal>
+            <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
+                <div class="flex flex-col gap-2">
+                    <h1 class="text-3xl">Edit Your Budget</h1>
+                    <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
+                </div>
+                <div class="flex flex-col gap-7">
+                    <AppInput label="Amount" required type="number" name="amount" id="amount"
+                        v-model="editTransactionData.amount" placeholder="Enter transaction amount"></AppInput>
+                    <AppInput label="Duration" required type="select" :selectArray="categoryArray"
+                        v-model="editTransactionData.category" name="category" id="category"
+                        placeholder="Select a category"></AppInput>
+                    <AppInput label="Narration" required type="textarea" name="narration" id="narration"
+                        v-model="editTransactionData.narration" placeholder="Enter a narration"></AppInput>
+                </div>
+                <div class="flex justify-between gap-4">
+                    <AppBtn variant="danger" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
+                    <AppBtn type="submit">Update</AppBtn>
+                </div>
+            </form>
+        </AppModal>
     </transition>
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
-        <div class="w-[100%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
-            <div class="flex flex-col gap-7">
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-xl">Budget Amount</h2>
-                    <span>{{ viewTransactionData.amount.toLocaleString() }}</span>
+            <div class="w-[90%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2">
+                    <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Budget Amount</h2>
+                            <span>{{ viewTransactionData.amount.toLocaleString() }}</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Duration</h2>
+                            <span class="capitalize">{{ viewTransactionData.category }}</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Narration</h2>
+                            <span class="capitalize">{{ viewTransactionData.narration }}</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col mt-4 lg:mt-0 gap-4">
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Time Created</h2>
+                            <span>{{ new Date(viewTransactionData.createdAt).toLocaleString("en-US", {
+                                month: "long",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                                }) }}</span>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Last Time Updated</h2>
+                            <span>{{ new Date(viewTransactionData.updatedAt).toLocaleString("en-US", {
+                                month: "long",
+                                day: "2-digit",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                                }) }}</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-xl">Duration</h2>
-                    <span>{{ viewTransactionData.category }}</span>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <h2 class="text-xl">Narration</h2>
-                    <span>{{ viewTransactionData.narration }}</span>
+                <div class="flex justify-center gap-4">
+                    <AppBtn @click="toggleModal(null, 'view')">Close</AppBtn>
                 </div>
             </div>
-            <div class="flex justify-center gap-4">
-                <AppBtn @click="toggleModal(null, 'view')">Close</AppBtn>
+        </AppModal>
+    </transition>
+    <transition name="fade-right">
+        <AppModal :isOpen="deleteModalIsOpen">
+            <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex text-dark-grey flex-col gap-4">
+                Are you sure you want to delete this transaction?
+                <div class="flex justify-end items-center gap-4">
+                    <AppBtn @click="toggleModal(null, 'delete')">Cancel</AppBtn>
+                    <AppBtn variant="danger" @click="deleteTransaction">Delete</AppBtn>
+                </div>
             </div>
-        </div>
-    </AppModal>
+        </AppModal>
     </transition>
 </template>
 
@@ -147,8 +206,10 @@ const viewTransactionData = ref();
 const editTransactionData = ref();
 const viewModalIsOpen = ref(false);
 const editModalIsOpen = ref(false);
+const deleteId = ref();
+const deleteModalIsOpen = ref(false);
 
-const transactions = computed(()=> store.getters['allTransactions']);
+const transactions = computed(() => store.getters['allTransactions']);
 
 const search = ref({
     narration: '',
@@ -156,60 +217,67 @@ const search = ref({
 });
 
 const isFormValid = computed(() => {
-  return (
-    formData.value.category && 
-    formData.value.amount && formData.value.narration
-  );
+    return (
+        formData.value.category &&
+        formData.value.amount && formData.value.narration
+    );
 })
 
-const filteredTransaction = computed(()=> {
+const filteredTransaction = computed(() => {
     return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) && item.category.toLowerCase().includes(search.value.category.toLowerCase())))
 })
 
 
 const toggleModal = (data, modal) => {
-    if(modal === 'edit') {
+    if (modal === 'edit') {
         editTransactionData.value = data;
         editModalIsOpen.value = !editModalIsOpen.value;
     } else if (modal === 'view') {
         viewTransactionData.value = data;
         viewModalIsOpen.value = !viewModalIsOpen.value;
     } else if (modal === 'add') {
-        formData.value = {...initialFormData}
+        formData.value = { ...initialFormData }
         addModalIsOpen.value = !addModalIsOpen.value
+    } else if (modal === 'delete') {
+        deleteId.value = data;
+        deleteModalIsOpen.value = !deleteModalIsOpen.value
     }
 }
 
 const addTransaction = () => {
     store.dispatch('addTransaction', formData.value)
-    formData.value = {...initialFormData}
+    formData.value = { ...initialFormData }
     addModalIsOpen.value = !addModalIsOpen.value
 }
 
+const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
+
 const openMenu = (item) => {
     active.value = transactions.value.filter((item) => item.isOpen)[0];
-    if(active.value) {
-        active.value.isOpen = false; 
+    if (active.value) {
+        active.value.isOpen = false;
     }
     item.isOpen = true
 }
 
 const closeMenu = () => {
     active.value = transactions.value.filter((item) => item.isOpen)[0];
-    if(active.value) {
-        active.value.isOpen = false; 
+    if (active.value) {
+        active.value.isOpen = false;
     }
 }
 
-const deleteTransaction = (id) => {
-    store.dispatch('removeTransaction', id)
+const deleteTransaction = () => {
+    deleteModalIsOpen.value = !deleteModalIsOpen.value
+    store.dispatch('removeTransaction', deleteId.value)
 }
 
-onMounted(()=> {
+onMounted(() => {
+    store.dispatch('getAllTransactions');
     window.scrollTo({
         top: 0,
         behavior: "smooth",
-      });
+    });
 })
 
 </script>
@@ -223,11 +291,11 @@ onMounted(()=> {
 .item-menu {
     position: absolute;
     right: 0;
-  background-color: white;
-  padding: 8px 0;
-  border-radius: 8px;
-  box-shadow: 0px 4px 4px -4px #14141410;
-  box-shadow: 0px 16px 32px -4px #14141430;
-  z-index: 99999;
+    background-color: white;
+    padding: 8px 0;
+    border-radius: 8px;
+    box-shadow: 0px 4px 4px -4px #14141410;
+    box-shadow: 0px 16px 32px -4px #14141430;
+    z-index: 99999;
 }
 </style>

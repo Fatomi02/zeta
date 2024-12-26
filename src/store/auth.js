@@ -8,9 +8,10 @@ export default{
     },
     token: localStorage.getItem('authToken') || null,
     isLoading: null,
+    fetchAllIsLoading: null,
     response: {
       message: '',
-      status: ''
+      status: null
     }
   },
   mutations: {
@@ -25,6 +26,9 @@ export default{
     SET_LOADING(state, value) {
       state.isLoading = value
     },
+    SET_FETCH_LOADING(state, value) {
+      state.fetchAllIsLoading = value
+    },
     LOGOUT(state) {
       state.user = null;
       state.token = null;
@@ -32,13 +36,13 @@ export default{
       localStorage.removeItem('user');
     },
     SET_RESPONSE(state, data) {
-      state.response.message = data.data.message;
+      state.response.message = data.message;
       state.response.status = data.status;
     },
     CLEAR_RESPONSE(state) {
       state.response = {
               message: '',
-              status: ''
+              status: null
       }
     }
   },
@@ -46,13 +50,13 @@ export default{
     async login({ commit }, credentials) {
       try {
         commit('SET_LOADING', true)
-        const response = await api.post('/api/login', credentials);
-        console.log(response);
+        const response = await api.post('/login', credentials);
+        const res = {...response.data, status: true};
         if (response && response.data && response.data.token) {
           commit('SET_LOADING', false)
           commit('SET_TOKEN', response.data.token);
-          commit('SET_USER', response.data.user.username);
-          commit('SET_RESPONSE', response);
+          // commit('SET_USER', response.data.user.username);
+          commit('SET_RESPONSE', res);
           setTimeout(()=> {
             commit('CLEAR_RESPONSE')
           }, 8000)
@@ -60,22 +64,37 @@ export default{
         }
       } catch (error) {
         commit('SET_LOADING', false)
+        const res = {...error.response.data, status: false};
+        commit('SET_RESPONSE', res);
+        setTimeout(()=> {
+          commit('CLEAR_RESPONSE')
+        }, 8000)
         console.error("Login error:", error);
       }
     },
     async signup({ commit }, userDetails) {
       try {
         commit('SET_LOADING', true)
-        const response = await api.post('/api/register', userDetails);
-        if (response && response.data && response.data.token) {
+        const response = await api.post('/register', userDetails);
+        const res = {...response.data, status: true};
+        if (response && response.data) {
           commit('SET_LOADING', false)
+          commit('SET_RESPONSE', res);
           commit('SET_TOKEN', response.data.token);
-          commit('SET_USER', response.data.user.username);
+          // commit('SET_USER', response.data.user.username);
+          setTimeout(()=> {
+            commit('CLEAR_RESPONSE')
+          }, 8000)
           router.push('/dashboard');
         }
       }
     catch (error) {
       commit('SET_LOADING', false)
+      const res = {...error.response.data, status: false};
+      commit('SET_RESPONSE', res);
+      setTimeout(()=> {
+        commit('CLEAR_RESPONSE')
+      }, 8000)
       console.error('Signup failed', error);
     }
     },

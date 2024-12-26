@@ -1,64 +1,52 @@
-// import api from "@/api/api";
+import api from "@/api/api";
 
 export default {
     state: {
-        budgets: [
-            {
-                id: 1,
-                title: 'Food',
-                amount: 50000,
-                duration: 'Weekly',
-            },
-            {
-                id: 2,
-                title: 'House',
-                amount: 200000000,
-                duration: 'Monthly',
-            },
-            {
-                id: 3,
-                title: 'Dstv',
-                amount: 50000,
-                duration: 'Monthly',
-            },
-            {
-                id: 4,
-                title: 'Fuel',
-                amount: 100000,
-                duration: 'Monthly',
-            },
-            {
-                id: 5,
-                title: 'Data',
-                amount: 20000,
-                duration: 'Monthly',
-            },
-            {
-                id: 6,
-                title: 'Entertainment',
-                amount: 200000,
-                duration: 'Monthly',
-            },
-        ],
+        budgets: []
     },
     mutations: {
-        addBudget(state, budget) {
-          state.budgets.push(budget);
-        },
         removeBudget(state, id) {
-          state.budgets = state.budgets.filter(budget => budget.id !== id);
+          state.budgets = state.budgets.filter(budget => budget._id !== id);
+        },
+        setBudgets(state, budgets) {
+          state.budgets = budgets;
         }
       },
       actions: {
-        addBudget({ commit }, budget) {
+        async getAllBudget({commit}) {
+          commit('SET_FETCH_LOADING', true)
+          try {
+            const response = await api.get('/budgets');
+            if(response && response.data) {
+              commit('setBudgets', response.data);
+              commit('SET_FETCH_LOADING', false)
+            }
+          }
+          catch (error) {
+            commit('SET_FETCH_LOADING', false)
+            console.error("Login error:", error);
+          }
+        },
+        async addBudget({ commit, dispatch }, budget) {
           const payload = {
             title: budget.title,
-            amount: budget.amount,
-            duration: budget.duration
+            total_amount: budget.amount,
+            duration: budget.duration.toLowerCase()
           }
-          commit('addBudget', payload);
+          commit('SET_LOADING', true)
+          try {
+            const response = await api.post('/budgets', payload);
+            if (response && response.data) {
+              dispatch('getAllBudget');
+              commit('SET_LOADING', false);
+            }
+          } catch (error) {
+            console.error(error);
+            commit('SET_LOADING', false);
+          }
         },
         removeBudget({ commit }, id) {
+          console.log(id)
           commit('removeBudget', id);
         },
       },

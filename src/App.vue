@@ -1,11 +1,11 @@
 <template>
-<div class="bg-partial-white">
+<div class="bg-partial-white h-screen overflow-auto scroll-container">
     <div v-if="isLoading" class="loader_overlay">
         <span class="loader"></span>
     </div>
     <router-view></router-view>
 </div>
-<div v-if="response.message" class="flag w-[80%] lg:w-[500px]">
+<div v-if="response.message" :class="response.status ? 'bg-green-500' : 'bg-red-500'" class="flag w-[80%] lg:w-[500px] top-[60px] lg:top-[90px]">
       <div class="flex gap-2 items-center">
         <img src="@/assets/icons/Success.svg" alt="successful">
         {{ response.message }}
@@ -28,44 +28,10 @@ const hideFlag = () => {
 </script>
 
 <style scoped>
-.loader {
-        width: 64px;
-        height: 64px;
-        position: relative;
-        background-image:
-          linear-gradient(#3498DB 16px, transparent 0) ,
-          linear-gradient(#2C3E50 16px, transparent 0) ,
-          linear-gradient(#2C3E50 16px, transparent 0) ,
-          linear-gradient(#3498DB 16px, transparent 0);
-        background-repeat: no-repeat;
-        background-size: 16px 16px;
-        background-position: left top , left bottom , right top , right bottom;
-        animation: rotate 1s linear infinite;
-      }
-      @keyframes rotate {
-        0% {
-          width: 64px;
-          height: 64px;
-          transform: rotate(0deg)
-        }
-        50% {
-          width: 30px;
-          height: 30px;
-          transform: rotate(180deg)
-        }
-        100% {
-          width: 64px;
-          height: 64px;
-          transform: rotate(360deg)
-        }
-      }
-
   .flag {
     position: fixed;
-    right: 5px;
-    top: 30px;
+    right: 2px;
     padding: 16px;
-    background-color: #039754;
     display: flex;
     justify-content: space-between;
     align-items: center;

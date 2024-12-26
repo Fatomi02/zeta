@@ -5,8 +5,9 @@
             <h1 class="font-medium text-2xl md:text-3xl">Financial Insight</h1>
             <span>Keep track of your budget and transaction history.</span>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10">
-            <div class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-10 pb-4">
+            <div
+                class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
                 <div class="p-4 flex lg:justify-center">
                     <div class="flex flex-col gap-4 text-cyan">
                         Total Budget Amount
@@ -24,7 +25,8 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
+            <div
+                class="bg-deep-blue min-h-[200px] grid grid-cols-1 md:grid-cols-2  justify-center items-center rounded-[20px]">
                 <div class="p-4 flex lg:justify-center">
                     <div class="flex flex-col gap-4 text-cyan">
                         Total Balance
@@ -57,11 +59,11 @@
 <script setup>
 import AppChart from '@/components/AppChart.vue';
 import { onMounted } from 'vue';
-onMounted(()=> {
+onMounted(() => {
     window.scrollTo({
         top: 0,
         behavior: "smooth",
-      });
+    });
 })
 
 const chartBudgetData = {
