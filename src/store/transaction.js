@@ -1,4 +1,7 @@
 import api from "@/api/api";
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 export default {
     state: {
@@ -16,73 +19,80 @@ export default {
           commit('SET_FETCH_LOADING', true)
           try {
             const response = await api.get('/transactions');
-            if(response && response.data) {
+            if(response && response.data && response.status == 200) {
               commit('setTransactions', response.data);
               commit('SET_FETCH_LOADING', false)
             }
           }
           catch (error) {
-            const errRes = { message: error.message, status: false }
-            commit('SET_FETCH_LOADING', false)
-            commit('SET_RESPONSE', errRes);
-            setTimeout(()=> {
-              commit('CLEAR_RESPONSE')
-            }, 8000);
+            const message = error.response.data.message ? error.response.data.message : error.message;
+            commit('SET_FETCH_LOADING', false);
+            toast.error(message);
             console.error("Login error:", error);
           }
         },
+
         async addTransaction({ commit, dispatch }, transaction) {
           const payload = {
             narration: transaction.narration,
             amount: transaction.amount,
             category: transaction.category,
+            budget_id: transaction.budget_id
           }
           commit('SET_LOADING', true);
           try {
             const response = await api.post('/transactions', payload);
-            const res = {...response.data, status: true};
-            if(response && response.data) {
+            if(response && response.data && response.status === 201) {
+              const message = response.data.message ? response.data.message : 'Added successfully';
               commit('SET_LOADING', false);
-              commit('SET_RESPONSE', res);
-              setTimeout(()=> {
-                commit('CLEAR_RESPONSE')
-              }, 8000)
+              toast.success(message);
               dispatch('getAllTransactions', transaction);
             }
           } catch(error) {
-            const errRes = { message: error.message, status: false }
+            const message = error.response.data.message ? error.response.data.message : error.message;
             commit('SET_LOADING', false);
-            commit('SET_RESPONSE', errRes);
-            setTimeout(()=> {
-              commit('CLEAR_RESPONSE')
-            }, 8000)
+            toast.error(message);
             console.error(error);
           }
 
         },
+
         async deleteTransaction({ commit, dispatch }, id) {
           try {
             commit('SET_LOADING', true);
-            const response = await api.delete(`/transactions/:${id}`);
-            if(response) {
+            const response = await api.delete(`/transactions/${id}`);
+            if(response && response.status == 200) {
+              const message = response.data.message ? response.data.message : 'Deleted successfully';
               commit('SET_LOADING', false);
+              toast.success(message);
               dispatch('getAllTransactions');
             }
           } catch (error) {
+            const message = error.response.data.message ? error.response.data.message : error.message;
             commit('SET_LOADING', false);
+            toast.error(message);
             console.error(error);
           }
         },
-        async updateTransactions({ dispatch, commit }, data) {
+        async updateTransactions({ dispatch, commit }, transaction) {
+          const payload = {
+            narration: transaction.narration,
+            amount: transaction.amount,
+            category: transaction.category,
+          }
           try {
             commit('SET_LOADING', true);
-            const response = await api.put(`/transactions/:${data.id}`, data);
+            const response = await api.put(`/transactions/${transaction._id}`, payload);
             if(response) {
+              const message = response.data.message ? response.data.message : 'Updated successfully';
               commit('SET_LOADING', false);
+              toast.success(message);
               dispatch('getAllTransactions');
             }
           } catch (error) {
+            const message = error.response.data.message ? error.response.data.message : error.message;
             commit('SET_LOADING', false);
+            toast.error(message);
             console.error(error);
           }
         }

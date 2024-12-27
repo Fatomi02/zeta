@@ -20,7 +20,7 @@
                         placeholder="Search through the budget with the title"></AppInput>
                 </div>
                 <div class="w-full">
-                    <AppInput type="select" :selectArray="durationArray" v-model="search.duration" name="duration"
+                    <AppInput type="select" :selectArray="['Weekly', 'Monthly']" v-model="search.duration" name="duration"
                         id="duration" placeholder="Select a duration"></AppInput>
                 </div>
             </div>
@@ -43,7 +43,7 @@
                     <div class="flex justify-end relative">
                         <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer"
                             src="@/assets/icons/action.svg" alt="action">
-                        <div v-if="budget.isOpen" :class="index === budgets.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
+                        <div v-if="budget.isOpen" :class="index === budgets.length - 1 && index > 1 ? 'top-[-120px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
                             <div @click="toggleModal(budget, 'view')"
                                 class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
                             <div @click="toggleModal(budget, 'edit')"
@@ -68,55 +68,31 @@
             </div>
         </div>
     </div>
-      <!-- Add Modal -->
+      <!-- Add Modal & Edit -->
     <transition name="fade-right">
-        <AppModal :isOpen="addModalIsOpen" position="left">
-            <form @submit.prevent="addBudget"
+        <AppModal :isOpen="addEditModalIsOpen" position="left">
+            <form @submit.prevent="editModal ? updateBudget() : addBudget()"
                 class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="flex flex-col gap-2">
-                    <h1 class="text-3xl">Add New Budget</h1>
-                    <span>Add new budget to keep track of your spending.</span>
+                    <h1 class="text-3xl">{{ editModal ? 'Edit Your Budget' : 'Add New Budget'}}</h1>
+                    <span>{{ editModal ? 'Edit your budget to keep track of your spending and stay up-to-date.' : 'Add new budget to keep track of your spending.'}}</span>
                 </div>
                 <div class="flex flex-col gap-7">
                     <AppInput label="Title" required name="title" id="title" v-model="formData.title"
                         placeholder="Enter budget title"></AppInput>
-                    <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="formData.amount"
+                    <AppInput label="Amount" required type="number" name="amount" id="amount" v-model="formData.total_amount"
                         placeholder="Enter budget amount"></AppInput>
-                    <AppInput label="Duration" required type="select" :selectArray="durationArray"
+                    <AppInput label="Duration" required type="select" :selectArray="['Weekly', 'Monthly']"
                         v-model="formData.duration" name="duration" id="duration" placeholder="Select a duration">
                     </AppInput>
                 </div>
                 <div class="flex justify-between gap-6 mt-4">
                     <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                    <AppBtn :disabled="!isFormValid" type="submit">Add Budget</AppBtn>
+                    <AppBtn :disabled="!isFormValid" type="submit">{{ editModal ? 'Update' : 'Add Budget'}}</AppBtn>
                 </div>
             </form>
         </AppModal>
     </transition> 
-       <!-- Edit Modal -->
-    <transition name="fade-right">
-        <AppModal :isOpen="editModalIsOpen" position="left">
-            <form @submit.prevent="updateBudget" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
-                <div class="flex flex-col gap-2">
-                    <h1 class="text-3xl">Edit Your Budget</h1>
-                    <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
-                </div>
-                <div class="flex flex-col gap-7">
-                    <AppInput label="Title" required name="title" id="title" v-model="editBudgetData.title"
-                        placeholder="Enter budget title"></AppInput>
-                    <AppInput label="Amount" required type="number" name="amount" id="amount"
-                        v-model="editBudgetData.total_amount" placeholder="Enter budget amount"></AppInput>
-                    <AppInput label="Duration" required type="select" :selectArray="durationArray"
-                        v-model="editBudgetData.duration" name="duration" id="duration" placeholder="Select a duration">
-                    </AppInput>
-                </div>
-                <div class="flex justify-between gap-4">
-                    <AppBtn variant="danger" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
-                    <AppBtn type="submit">Update</AppBtn>
-                </div>
-            </form>
-        </AppModal>
-    </transition>
         <!-- View Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
@@ -159,6 +135,10 @@
                                 hour12: true,
                                 }) }}</span>
                         </div>
+                        <div class="flex flex-col gap-2">
+                            <h2 class="text-xl">Budget Id</h2>
+                            <span>{{ viewBudgetData._id }}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="flex justify-center gap-4">
@@ -195,35 +175,28 @@ onMounted(() => {
         behavior: "smooth",
     });
 })
-const durationArray = ref(["Weekly", "Monthly"]);
-
+//refs
 const store = useStore();
-const addModalIsOpen = ref(false);
 const active = ref();
-const initialFormData = ref({
-    title: '',
-    amount: '',
-    duration: '',
-});
-let formData = ref({
-    title: '',
-    amount: '',
-    duration: '',
-});
+const deleteId = ref();
+const viewBudgetData = ref();
+const viewModalIsOpen = ref(false);
+const addEditModalIsOpen = ref(false);
+const deleteModalIsOpen = ref(false);
+const editModal = ref(false);
+const initialFormData = ref({title: '', total_amount: '', duration: '', });
+let formData = ref();
+const search = ref({title: '', duration: '' });
+
+//computed
+const budgets = computed(() => store.getters['allBudgets']);
 
 const isFormValid = computed(() => {
     return (
         formData.value.title &&
-        formData.value.amount && formData.value.duration
+        formData.value.total_amount && formData.value.duration
     );
 })
-
-const budgets = computed(() => store.getters['allBudgets']);
-
-const search = ref({
-    title: '',
-    duration: ''
-});
 
 const filteredBudget = computed(() => {
     return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) && 
@@ -232,23 +205,19 @@ const filteredBudget = computed(() => {
 
 const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 
-const viewBudgetData = ref();
-const editBudgetData = ref();
-const viewModalIsOpen = ref(false);
-const editModalIsOpen = ref(false);
-const deleteId = ref();
-const deleteModalIsOpen = ref(false);
-
+//functions
 const toggleModal = (data, modal) => {
     if (modal === 'edit') {
-        editBudgetData.value = data;
-        editModalIsOpen.value = !editModalIsOpen.value;
+        formData.value = data;
+        editModal.value = true;
+        addEditModalIsOpen.value = !addEditModalIsOpen.value
     } else if (modal === 'view') {
         viewBudgetData.value = data;
         viewModalIsOpen.value = !viewModalIsOpen.value;
     } else if (modal === 'add') {
+        editModal.value = false;
         formData.value = { ...initialFormData }
-        addModalIsOpen.value = !addModalIsOpen.value
+        addEditModalIsOpen.value = !addEditModalIsOpen.value
     } else if (modal === 'delete') {
         deleteId.value = data;
         deleteModalIsOpen.value = !deleteModalIsOpen.value
@@ -257,12 +226,19 @@ const toggleModal = (data, modal) => {
 
 const addBudget = () => {
     store.dispatch('addBudget', formData.value)
-    formData.value = { ...initialFormData }
-    addModalIsOpen.value = !addModalIsOpen.value
+    formData.value = null
+    addEditModalIsOpen.value = !addEditModalIsOpen.value
 }
 
 const updateBudget = () => {
-    store.dispatch('updateBudget', editBudgetData.value);
+    store.dispatch('updateBudget', formData.value);
+    formData.value = null;
+    addEditModalIsOpen.value = !addEditModalIsOpen.value;
+}
+
+const deleteBudget = () => {
+    deleteModalIsOpen.value = !deleteModalIsOpen.value
+    store.dispatch('deleteBudget', deleteId.value)
 }
 
 const openMenu = (item) => {
@@ -279,12 +255,6 @@ const closeMenu = () => {
         active.value.isOpen = false;
     }
 }
-
-const deleteBudget = () => {
-    deleteModalIsOpen.value = !deleteModalIsOpen.value
-    store.dispatch('deleteBudget', deleteId.value)
-}
-
 </script>
 
 <style scoped>
@@ -304,5 +274,4 @@ const deleteBudget = () => {
     box-shadow: 0px 16px 32px -4px #14141430;
     z-index: 9;
 }
-
 </style>

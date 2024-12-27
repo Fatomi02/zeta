@@ -1,5 +1,8 @@
 import api from '../api/api';
 import router from '@/router';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
 
 export default{
   state: {
@@ -9,10 +12,6 @@ export default{
     token: localStorage.getItem('authToken') || null,
     isLoading: null,
     fetchAllIsLoading: null,
-    response: {
-      message: '',
-      status: null
-    }
   },
   mutations: {
     SET_USER(state, user) {
@@ -35,40 +34,23 @@ export default{
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
     },
-    SET_RESPONSE(state, data) {
-      state.response.message = data.message;
-      state.response.status = data.status;
-    },
-    CLEAR_RESPONSE(state) {
-      state.response = {
-              message: '',
-              status: null
-      }
-    }
   },
   actions: {
     async login({ commit }, credentials) {
       try {
         commit('SET_LOADING', true)
         const response = await api.post('/login', credentials);
-        const res = {...response.data, status: true};
         if (response && response.data && response.data.token) {
           commit('SET_LOADING', false)
           commit('SET_TOKEN', response.data.token);
           commit('SET_USER', response.data.data.name);
-          commit('SET_RESPONSE', res);
-          setTimeout(()=> {
-            commit('CLEAR_RESPONSE')
-          }, 8000)
+          toast.success(response.data.message);
           router.push('/dashboard');
         }
       } catch (error) {
-        commit('SET_LOADING', false)
-        const res = {...error.response.data, status: false};
-        commit('SET_RESPONSE', res);
-        setTimeout(()=> {
-          commit('CLEAR_RESPONSE')
-        }, 8000)
+        const message = error.response.data.message ? error.response.data.message : error.message;
+        commit('SET_LOADING', false);
+        toast.error(message);
         console.error("Login error:", error);
       }
     },
@@ -76,25 +58,16 @@ export default{
       try {
         commit('SET_LOADING', true)
         const response = await api.post('/register', userDetails);
-        const res = {...response.data, status: true};
         if (response && response.data) {
-          commit('SET_LOADING', false)
-          commit('SET_RESPONSE', res);
-          commit('SET_TOKEN', response.data.token);
-          commit('SET_USER', response.data.data.name);
-          setTimeout(()=> {
-            commit('CLEAR_RESPONSE')
-          }, 8000)
-          router.push('/dashboard');
+          commit('SET_LOADING', false);
+          toast.success(response.data.message);
+          router.push('/login');
         }
       }
     catch (error) {
-      commit('SET_LOADING', false)
-      const res = {...error.response.data, status: false};
-      commit('SET_RESPONSE', res);
-      setTimeout(()=> {
-        commit('CLEAR_RESPONSE')
-      }, 8000)
+      commit('SET_LOADING', false);
+      const message = error.response.data.message ? error.response.data.message : error.message;
+      toast.error(message);
       console.error('Signup failed', error);
     }
     },

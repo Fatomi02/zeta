@@ -20,7 +20,7 @@
                         placeholder="Search through the transaction with narration"></AppInput>
                 </div>
                 <div class="w-full">
-                    <AppInput type="select" :selectArray="categoryArray" v-model="search.category" name="categorySearch"
+                    <AppInput type="select" :selectArray="['Income', 'Spending']" v-model="search.category" name="categorySearch"
                         id="categorySearch" placeholder="Select a category"></AppInput>
                 </div>
             </div>
@@ -71,19 +71,21 @@
             </div>
         </div>
     </div>
-     <!-- Add Modal -->
+     <!-- Add & Edit Modal -->
     <transition name="fade-right">
-        <AppModal :isOpen="addModalIsOpen" position="left">
-            <form @submit.prevent="addTransaction"
+        <AppModal :isOpen="addEditModalIsOpen" position="left">
+            <form @submit.prevent="editModal ? updateTransaction() : addTransaction()"
                 class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="flex flex-col gap-2">
-                    <h1 class="text-3xl">Add New Transaction</h1>
-                    <span>Add new transaction to keep track of your spending.</span>
+                    <h1 class="text-3xl">{{ editModal ? 'Edit Transaction' : 'Add New Transaction'}}</h1>
+                    <span>{{ editModal ? 'Edit this transaction to stay up-to-date with your spending.' : 'Add new transaction to keep track of your spending.'}}</span>
                 </div>
                 <div class="flex flex-col gap-7">
+                    <AppInput label="Budget Id" :optional="true" name="budgetId" id="budgetId"
+                        v-model="formData.budget_id" placeholder="Enter budget id if linked to a budget"></AppInput>
                     <AppInput label="Transaction Amount" required type="number" name="amount" id="amount"
                         v-model="formData.amount" placeholder="Enter transaction amount"></AppInput>
-                    <AppInput label="Category" required type="select" :selectArray="categoryArray"
+                    <AppInput label="Category" required type="select" :selectArray="['Income', 'Spending']"
                         v-model="formData.category" name="category" id="category" placeholder="Select a category">
                     </AppInput>
                     <AppInput label="Narration" required type="textarea" name="narration" id="narration"
@@ -91,31 +93,7 @@
                 </div>
                 <div class="flex justify-between gap-6">
                     <AppBtn variant="danger" @click="toggleModal(null, 'add')">Cancel</AppBtn>
-                    <AppBtn :disabled="!isFormValid" type="submit">Add Transaction</AppBtn>
-                </div>
-            </form>
-        </AppModal>
-    </transition>
-    <!-- Edit Modal -->
-    <transition name="fade-right">
-        <AppModal :isOpen="editModalIsOpen" position="left">
-            <form @submit.prevent="updateTransaction" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
-                <div class="flex flex-col gap-2">
-                    <h1 class="text-3xl">Edit Your Budget</h1>
-                    <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
-                </div>
-                <div class="flex flex-col gap-7">
-                    <AppInput label="Amount" required type="number" name="amount" id="amount"
-                        v-model="editTransactionData.amount" placeholder="Enter transaction amount"></AppInput>
-                    <AppInput label="Duration" required type="select" :selectArray="categoryArray"
-                        v-model="editTransactionData.category" name="category" id="category"
-                        placeholder="Select a category"></AppInput>
-                    <AppInput label="Narration" required type="textarea" name="narration" id="narration"
-                        v-model="editTransactionData.narration" placeholder="Enter a narration"></AppInput>
-                </div>
-                <div class="flex justify-between gap-4">
-                    <AppBtn variant="danger" @click="toggleModal(null, 'edit')">Cancel</AppBtn>
-                    <AppBtn type="submit">Update</AppBtn>
+                    <AppBtn :disabled="!isFormValid" type="submit">{{ editModal ? 'Update' : 'Add Transaction'}}</AppBtn>
                 </div>
             </form>
         </AppModal>
@@ -191,34 +169,29 @@ import AppModal from '@/components/AppModal.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
 
-const categoryArray = ref(["Income", "Spending"]);
+onMounted(() => {
+    store.dispatch('getAllTransactions');
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+    });
+})
 
 const store = useStore();
-const addModalIsOpen = ref(false);
 const active = ref();
-const initialFormData = ref({
-    amount: '',
-    category: '',
-    narration: '',
-});
-let formData = ref({
-    amount: '',
-    category: '',
-    narration: '',
-});
+let formData = ref();
 const viewTransactionData = ref();
-const editTransactionData = ref();
-const viewModalIsOpen = ref(false);
-const editModalIsOpen = ref(false);
 const deleteId = ref();
+const addEditModalIsOpen = ref(false);
+const viewModalIsOpen = ref(false);
+const editModal = ref(false);
 const deleteModalIsOpen = ref(false);
+const initialFormData = ref({ amount: '', category: '', narration: '', budget_id: ''});
+const search = ref({ narration: '', category: '' });
 
 const transactions = computed(() => store.getters['allTransactions']);
 
-const search = ref({
-    narration: '',
-    category: ''
-});
+const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 
 const isFormValid = computed(() => {
     return (
@@ -228,37 +201,45 @@ const isFormValid = computed(() => {
 })
 
 const filteredTransaction = computed(() => {
-    return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) && item.category.toLowerCase().includes(search.value.category.toLowerCase())))
+    return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) && 
+           item.category.toLowerCase().includes(search.value.category.toLowerCase())))
 })
 
 
 const toggleModal = (data, modal) => {
     if (modal === 'edit') {
-        editTransactionData.value = data;
-        editModalIsOpen.value = !editModalIsOpen.value;
+        formData.value = data;
+        editModal.value = true;
+        addEditModalIsOpen.value = !addEditModalIsOpen.value
     } else if (modal === 'view') {
         viewTransactionData.value = data;
         viewModalIsOpen.value = !viewModalIsOpen.value;
     } else if (modal === 'add') {
-        formData.value = { ...initialFormData }
-        addModalIsOpen.value = !addModalIsOpen.value
+        editModal.value = false;
+        formData.value = { ...initialFormData };
+        addEditModalIsOpen.value = !addEditModalIsOpen.value;
     } else if (modal === 'delete') {
         deleteId.value = data;
-        deleteModalIsOpen.value = !deleteModalIsOpen.value
+        deleteModalIsOpen.value = !deleteModalIsOpen.value;
     }
 }
 
 const addTransaction = () => {
-    store.dispatch('addTransaction', formData.value)
-    formData.value = { ...initialFormData }
-    addModalIsOpen.value = !addModalIsOpen.value
+    store.dispatch('addTransaction', formData.value);
+    formData.value = { ...initialFormData };
+    addEditModalIsOpen.value = !addEditModalIsOpen.value;
 }
 
 const updateTransaction = () => {
-    store.dispatch('updateTransaction', editTransactionData.value);
+    store.dispatch('updateTransactions', formData.value);
+    formData.value = null;
+    addEditModalIsOpen.value = !addEditModalIsOpen.value
 }
 
-const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
+const deleteTransaction = () => {
+    deleteModalIsOpen.value = !deleteModalIsOpen.value
+    store.dispatch('deleteTransaction', deleteId.value)
+}
 
 const openMenu = (item) => {
     active.value = transactions.value.filter((item) => item.isOpen)[0];
@@ -274,19 +255,6 @@ const closeMenu = () => {
         active.value.isOpen = false;
     }
 }
-
-const deleteTransaction = () => {
-    deleteModalIsOpen.value = !deleteModalIsOpen.value
-    store.dispatch('deleteTransaction', deleteId.value)
-}
-
-onMounted(() => {
-    store.dispatch('getAllTransactions');
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-    });
-})
 
 </script>
 

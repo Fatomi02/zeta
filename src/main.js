@@ -5,6 +5,8 @@ import router from './router'
 import authModule from './store/auth';
 import budgetModule from './store/budget';
 import transactionModule from './store/transaction';
+import Toast, { POSITION } from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 
 const store = createStore({
     modules: {
@@ -16,4 +18,7 @@ const store = createStore({
 
 const app = createApp(App)
 
-app.use(router).use(store).mount('#app')
+app.use(router).use(store).use(Toast, {
+    position: POSITION.TOP_RIGHT,
+    timeout: 5000,
+  }).mount('#app')

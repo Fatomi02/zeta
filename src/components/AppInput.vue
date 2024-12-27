@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
-    <label class="text-dark-grey" :for="id">{{ label }}</label>
+    <label class="text-dark-grey" :for="id">{{ label }} <span>{{ optional ? '(Optional)' : '' }}</span></label>
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
@@ -39,6 +39,10 @@ const props = defineProps({
   type: {
     type: String,
     default: "text",
+  },
+  optional: {
+    type: Boolean,
+    default: false,
   },
   name: {
     type: String,
