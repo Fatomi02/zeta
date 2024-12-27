@@ -208,7 +208,7 @@ const filteredTransaction = computed(() => {
 
 const toggleModal = (data, modal) => {
     if (modal === 'edit') {
-        formData.value = data;
+        formData.value = { ...data };
         editModal.value = true;
         addEditModalIsOpen.value = !addEditModalIsOpen.value
     } else if (modal === 'view') {
@@ -232,7 +232,7 @@ const addTransaction = () => {
 
 const updateTransaction = () => {
     store.dispatch('updateTransactions', formData.value);
-    formData.value = null;
+    formData.value = { ...initialFormData };
     addEditModalIsOpen.value = !addEditModalIsOpen.value
 }
 

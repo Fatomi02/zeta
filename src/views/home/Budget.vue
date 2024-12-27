@@ -208,7 +208,7 @@ const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 //functions
 const toggleModal = (data, modal) => {
     if (modal === 'edit') {
-        formData.value = data;
+        formData.value = { ...data };
         editModal.value = true;
         addEditModalIsOpen.value = !addEditModalIsOpen.value
     } else if (modal === 'view') {
@@ -226,13 +226,13 @@ const toggleModal = (data, modal) => {
 
 const addBudget = () => {
     store.dispatch('addBudget', formData.value)
-    formData.value = null
+    formData.value = { ...initialFormData }
     addEditModalIsOpen.value = !addEditModalIsOpen.value
 }
 
 const updateBudget = () => {
     store.dispatch('updateBudget', formData.value);
-    formData.value = null;
+    formData.value = { ...initialFormData }
     addEditModalIsOpen.value = !addEditModalIsOpen.value;
 }
 

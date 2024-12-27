@@ -48,7 +48,7 @@ export default{
           router.push('/dashboard');
         }
       } catch (error) {
-        const message = error.response.data.message ? error.response.data.message : error.message;
+        const message = error.response?.data?.message ? error.response?.data?.message : error.message;
         commit('SET_LOADING', false);
         toast.error(message);
         console.error("Login error:", error);
@@ -66,7 +66,7 @@ export default{
       }
     catch (error) {
       commit('SET_LOADING', false);
-      const message = error.response.data.message ? error.response.data.message : error.message;
+      const message = error.response?.data?.message ? error.response?.data?.message : error.message;
       toast.error(message);
       console.error('Signup failed', error);
     }

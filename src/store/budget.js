@@ -24,7 +24,7 @@ export default {
             }
           }
           catch (error) {
-            const message = error.response.data.message ? error.response.data.message : error.message;
+            const message = error.response?.data?.message ? error.response?.data?.message : error.message;
             commit('SET_FETCH_LOADING', false)
             toast.error(message);
             console.error("Login error:", error);
@@ -47,7 +47,7 @@ export default {
               dispatch('getAllBudget');
             }
           } catch (error) {
-            const message = error.response.data.message ? error.response.data.message : error.message;
+            const message = error.response?.data?.message ? error.response?.data?.message : error.message;
             commit('SET_LOADING', false);
             toast.error(message);
             console.error(error);
@@ -65,7 +65,7 @@ export default {
               dispatch('getAllBudget');
             }
           } catch (error) {
-            const message = error.response.data.message ? error.response.data.message : error.message;
+            const message = error.response?.data?.message ? error.response?.data?.message : error.message;
             commit('SET_LOADING', false);
             toast.error(message);
             console.error(error);
@@ -88,7 +88,7 @@ export default {
               dispatch('getAllBudget');
             }
           } catch (error) {
-            const message = error.response.data.message ? error.response.data.message : error.message;
+            const message = error.response?.data?.message ? error.response?.data?.message : error.message;
             commit('SET_LOADING', false);
             toast.error(message);
             console.error(error);
