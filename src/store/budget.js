@@ -20,7 +20,12 @@ export default {
             }
           }
           catch (error) {
+            const errRes = { message: error.message, status: false }
             commit('SET_FETCH_LOADING', false)
+            commit('SET_RESPONSE', errRes);
+            setTimeout(()=> {
+              commit('CLEAR_RESPONSE')
+            }, 8000);
             console.error("Login error:", error);
           }
         },
@@ -28,18 +33,28 @@ export default {
           const payload = {
             title: budget.title,
             total_amount: budget.amount,
-            duration: budget.duration.toLowerCase()
+            duration: budget.duration.toLowerCase(),
           }
           commit('SET_LOADING', true)
           try {
             const response = await api.post('/budgets', payload);
+            const res = {...response.data, status: true};
             if (response && response.data) {
-              dispatch('getAllBudget');
               commit('SET_LOADING', false);
+              dispatch('getAllBudget');
+              commit('SET_RESPONSE', res);
+              setTimeout(()=> {
+                commit('CLEAR_RESPONSE')
+              }, 8000)
             }
           } catch (error) {
+            const errRes = { message: error.message, status: false }
             console.error(error);
             commit('SET_LOADING', false);
+            commit('SET_RESPONSE', errRes);
+            setTimeout(()=> {
+              commit('CLEAR_RESPONSE')
+            }, 8000)
           }
         },
         async deleteBudget({ dispatch, commit }, id) {

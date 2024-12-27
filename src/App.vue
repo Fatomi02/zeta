@@ -1,5 +1,5 @@
 <template>
-<div class="bg-partial-white h-screen scroll-container">
+<div class="bg-partial-white">
     <div v-if="isLoading" class="loader_overlay">
         <span class="loader"></span>
     </div>

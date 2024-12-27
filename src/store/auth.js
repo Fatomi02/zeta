@@ -55,7 +55,7 @@ export default{
         if (response && response.data && response.data.token) {
           commit('SET_LOADING', false)
           commit('SET_TOKEN', response.data.token);
-          // commit('SET_USER', response.data.user.username);
+          commit('SET_USER', response.data.data.name);
           commit('SET_RESPONSE', res);
           setTimeout(()=> {
             commit('CLEAR_RESPONSE')
@@ -81,7 +81,7 @@ export default{
           commit('SET_LOADING', false)
           commit('SET_RESPONSE', res);
           commit('SET_TOKEN', response.data.token);
-          // commit('SET_USER', response.data.user.username);
+          commit('SET_USER', response.data.data.name);
           setTimeout(()=> {
             commit('CLEAR_RESPONSE')
           }, 8000)

@@ -22,7 +22,12 @@ export default {
             }
           }
           catch (error) {
+            const errRes = { message: error.message, status: false }
             commit('SET_FETCH_LOADING', false)
+            commit('SET_RESPONSE', errRes);
+            setTimeout(()=> {
+              commit('CLEAR_RESPONSE')
+            }, 8000);
             console.error("Login error:", error);
           }
         },
@@ -35,12 +40,22 @@ export default {
           commit('SET_LOADING', true);
           try {
             const response = await api.post('/transactions', payload);
+            const res = {...response.data, status: true};
             if(response && response.data) {
               commit('SET_LOADING', false);
+              commit('SET_RESPONSE', res);
+              setTimeout(()=> {
+                commit('CLEAR_RESPONSE')
+              }, 8000)
               dispatch('getAllTransactions', transaction);
             }
           } catch(error) {
+            const errRes = { message: error.message, status: false }
             commit('SET_LOADING', false);
+            commit('SET_RESPONSE', errRes);
+            setTimeout(()=> {
+              commit('CLEAR_RESPONSE')
+            }, 8000)
             console.error(error);
           }
 
