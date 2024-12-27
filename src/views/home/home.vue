@@ -32,7 +32,7 @@
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-3 pb-4">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-3">
             <div class="p-6 flex flex-col gap-4 bg-white card">
                 <div class="flex justify-between items-center">
                     <h4>Recent Transactions</h4>

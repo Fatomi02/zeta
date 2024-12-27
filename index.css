@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,7 +11,7 @@
   padding: 0;
   box-sizing: border-box;
   list-style: none;
-  color: #FFFFFF;
+  color: #ffffff;
   font-family: "Rubik", serif;
 }
 
@@ -19,8 +19,10 @@ span {
   color: #333333;
 }
 
-h1, h2, h4 {
-  color: #3498DB;
+h1,
+h2,
+h4 {
+  color: #3498db;
 }
 
 .logo {
@@ -48,10 +50,6 @@ h1, h2, h4 {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.scroll-container::-webkit-scrollbar {
-  display: none;
 }
 
 .fade-right-enter-active,
@@ -102,41 +100,40 @@ h1, h2, h4 {
   width: 64px;
   height: 64px;
   position: relative;
-  background-image:
-    linear-gradient(#3498DB 16px, transparent 0) ,
-    linear-gradient(#2C3E50 16px, transparent 0) ,
-    linear-gradient(#2C3E50 16px, transparent 0) ,
-    linear-gradient(#3498DB 16px, transparent 0);
+  background-image: linear-gradient(#3498db 16px, transparent 0),
+    linear-gradient(#2c3e50 16px, transparent 0),
+    linear-gradient(#2c3e50 16px, transparent 0),
+    linear-gradient(#3498db 16px, transparent 0);
   background-repeat: no-repeat;
   background-size: 16px 16px;
-  background-position: left top , left bottom , right top , right bottom;
+  background-position: left top, left bottom, right top, right bottom;
   animation: rotate 1s linear infinite;
 }
 @keyframes rotate {
   0% {
     width: 64px;
     height: 64px;
-    transform: rotate(0deg)
+    transform: rotate(0deg);
   }
   50% {
     width: 30px;
     height: 30px;
-    transform: rotate(180deg)
+    transform: rotate(180deg);
   }
   100% {
     width: 64px;
     height: 64px;
-    transform: rotate(360deg)
+    transform: rotate(360deg);
   }
 }
-
 
 @media only screen and (max-width: 640px) {
   * {
     font-size: 14px;
   }
 
-  input, textarea {
+  input,
+  textarea {
     font-size: 16px;
   }
 }

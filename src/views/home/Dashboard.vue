@@ -3,11 +3,11 @@
     <transition name="fade-in">
         <div v-if="isVisible" class="flex flex-col h-screen w-full lg:flex-row">
             <SideNav></SideNav>
-            <div class="flex flex-col w-full h-auto">
+            <div class="flex flex-col w-full">
                 <div class="hidden w-full lg:block">
                     <NavBar />
                 </div>
-                <div class="lg:px-8 lg:py-12 py-6 px-4 w-full h-full overflow-auto scroll-container">
+                <div class="lg:px-8 lg:py-6 py-4 px-4 w-full lg:h-full lg:overflow-y-auto">
                     <RouterView></RouterView>
                 </div>
             </div>

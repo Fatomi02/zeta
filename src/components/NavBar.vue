@@ -1,5 +1,5 @@
 <template>
-    <div @click="toggleDropdown" class="flex justify-end px-8 py-5 bg-deep-blue">
+    <div @click="toggleDropdown" class="flex justify-end px-8 py-5 bg-deep-blue overflow-hidden">
         <button @click="showDropdown = !showDropdown" ref="showDropdownBox" class="border p-2 cursor-pointer flex items-center gap-3 rounded-lg relative border-light-blue">
             <div class="flex gap-2 items-center capitalize">
                 <div class="bg-light-blue h-7 w-7 flex justify-center items-center uppercase rounded-md">

@@ -8,11 +8,9 @@ export default {
     mutations: {
       setTransactions(state, budgets) {
         state.transactions = budgets;
+      }
       },
-        removeTransaction(state, id) {
-          state.transactions = state.transactions.filter(transaction => transaction._id !== id);
-        }
-      },
+
       actions: {
         async getAllTransactions({commit}) {
           commit('SET_FETCH_LOADING', true)
@@ -47,10 +45,34 @@ export default {
           }
 
         },
-        removeTransaction({ commit }, id) {
-          commit('removeTransaction', id);
+        async deleteTransaction({ commit, dispatch }, id) {
+          try {
+            commit('SET_LOADING', true);
+            const response = await api.delete(`/transactions/:${id}`);
+            if(response) {
+              commit('SET_LOADING', false);
+              dispatch('getAllTransactions');
+            }
+          } catch (error) {
+            commit('SET_LOADING', false);
+            console.error(error);
+          }
+        },
+        async updateTransactions({ dispatch, commit }, data) {
+          try {
+            commit('SET_LOADING', true);
+            const response = await api.put(`/transactions/:${data.id}`, data);
+            if(response) {
+              commit('SET_LOADING', false);
+              dispatch('getAllTransactions');
+            }
+          } catch (error) {
+            commit('SET_LOADING', false);
+            console.error(error);
+          }
         }
       },
+
       getters: {
         allTransactions(state) {
           return state.transactions.slice().reverse();

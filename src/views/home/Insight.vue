@@ -44,11 +44,11 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col bg-white rounded-[20px] p-4 gap-4">
+            <div class="flex flex-col bg-white text-dark-grey rounded-[20px] p-4 gap-4">
                 Budget Chart
                 <AppChart :data="chartBudgetData" :options="chartBudgetOptions" />
             </div>
-            <div class="flex flex-col bg-white rounded-[20px] p-4 gap-4">
+            <div class="flex flex-col bg-white text-dark-grey rounded-[20px] p-4 gap-4">
                 Total Income against Total Money Spent
                 <AppChart :data="chartTransactionData" :options="chartTransactionOptions" />
             </div>

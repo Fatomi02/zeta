@@ -1,12 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div @click="closeMenu" class="flex flex-col h-full gap-6">
+    <div @click="closeMenu" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
             <h1 class="font-medium text-2xl md:text-3xl">Transaction Management</h1>
             <span>Welcome! Easily create, edit, and delete transactions to manage your finances and keep track of your
                 spending.</span>
         </div>
-        <div class="flex flex-col mb-4 gap-6 h-full lg:gap-10">
+        <div class="flex flex-col mb-4 gap-4 lg:gap-8">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-semibold">Transaction</h2>
                 <AppBtn @click="toggleModal(null, 'add')">
@@ -16,7 +16,7 @@
             </div>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
                 <div class="w-full">
-                    <AppInput type="search" name="titleSearch" id="titleSearch" v-model="search.narration"
+                    <AppInput type="search" name="narrationSearch" id="narrationSearch" v-model="search.narration"
                         placeholder="Search through the transaction with narration"></AppInput>
                 </div>
                 <div class="w-full">
@@ -46,7 +46,7 @@
                     <div class="flex justify-end relative">
                         <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer"
                             src="@/assets/icons/action.svg" alt="action">
-                        <div v-if="transaction.isOpen" :class="index === transactions.length - 1 && index > 2 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
+                        <div v-if="transaction.isOpen" :class="index === transactions.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
                             <div @click="toggleModal(transaction, 'view')"
                                 class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
                             <div @click="toggleModal(transaction, 'edit')"
@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div v-else-if="filteredTransaction.length === 0 && !isLoading"
-                class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
                 No transaction
                 <AppBtn @click="toggleModal(null, 'add')">
                     <img src="@/assets/icons/Add.svg" alt="add">
@@ -71,6 +71,7 @@
             </div>
         </div>
     </div>
+     <!-- Add Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="addModalIsOpen" position="left">
             <form @submit.prevent="addTransaction"
@@ -95,9 +96,10 @@
             </form>
         </AppModal>
     </transition>
+    <!-- Edit Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="editModalIsOpen" position="left">
-            <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
+            <form @submit.prevent="updateTransaction" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="flex flex-col gap-2">
                     <h1 class="text-3xl">Edit Your Budget</h1>
                     <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
@@ -118,6 +120,7 @@
             </form>
         </AppModal>
     </transition>
+    <!-- View Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
             <div class="w-[90%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
@@ -167,6 +170,7 @@
             </div>
         </AppModal>
     </transition>
+    <!-- Delete Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="deleteModalIsOpen">
             <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex text-dark-grey flex-col gap-4">
@@ -250,6 +254,10 @@ const addTransaction = () => {
     addModalIsOpen.value = !addModalIsOpen.value
 }
 
+const updateTransaction = () => {
+    store.dispatch('updateTransaction', editTransactionData.value);
+}
+
 const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 
 const openMenu = (item) => {
@@ -269,7 +277,7 @@ const closeMenu = () => {
 
 const deleteTransaction = () => {
     deleteModalIsOpen.value = !deleteModalIsOpen.value
-    store.dispatch('removeTransaction', deleteId.value)
+    store.dispatch('deleteTransaction', deleteId.value)
 }
 
 onMounted(() => {

@@ -5,9 +5,6 @@ export default {
         budgets: []
     },
     mutations: {
-        removeBudget(state, id) {
-          state.budgets = state.budgets.filter(budget => budget._id !== id);
-        },
         setBudgets(state, budgets) {
           state.budgets = budgets;
         }
@@ -45,10 +42,32 @@ export default {
             commit('SET_LOADING', false);
           }
         },
-        removeBudget({ commit }, id) {
-          console.log(id)
-          commit('removeBudget', id);
+        async deleteBudget({ dispatch, commit }, id) {
+          try {
+            commit('SET_LOADING', true);
+            const response = await api.delete(`budgets/:${id}`);
+            if(response) {
+              commit('SET_LOADING', false);
+              dispatch('getAllBudget');
+            }
+          } catch (error) {
+            commit('SET_LOADING', false);
+            console.error(error);
+          }
         },
+        async updateBudget({ dispatch, commit }, data) {
+          try {
+            commit('SET_LOADING', true);
+            const response = await api.put(`/budgets/:${data.id}`, data);
+            if(response) {
+              commit('SET_LOADING', false);
+              dispatch('getAllBudget');
+            }
+          } catch (error) {
+            commit('SET_LOADING', false);
+            console.error(error);
+          }
+        }
       },
       getters: {
         allBudgets(state) {

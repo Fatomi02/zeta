@@ -1,12 +1,12 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-    <div @click="closeMenu" class="flex flex-col gap-6 h-full">
+    <div @click="closeMenu" class="flex flex-col gap-6">
         <div class="flex flex-col gap-2">
             <h1 class="font-medium text-2xl md:text-3xl">Budget Management</h1>
             <span>Welcome! Easily create, edit, and delete budgets to manage your finances and keep track of your
                 spending.</span>
         </div>
-        <div class="flex flex-col mb-4 gap-6 h-full lg:gap-10">
+        <div class="flex flex-col mb-4 gap-4 lg:gap-8">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-semibold">Budget</h2>
                 <AppBtn @click="toggleModal(null, 'add')">
@@ -17,7 +17,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-2 w-full">
                 <div class="w-full">
                     <AppInput type="search" name="budgetSearch" id="budgetSearch" v-model="search.title"
-                        placeholder="Search through the budget"></AppInput>
+                        placeholder="Search through the budget with the title"></AppInput>
                 </div>
                 <div class="w-full">
                     <AppInput type="select" :selectArray="durationArray" v-model="search.duration" name="duration"
@@ -25,9 +25,9 @@
                 </div>
             </div>
             <h2 class="font-medium pl-2 lg:my-[-20px]">{{ filteredBudget.length }} total budget</h2>
-            <div v-if="budgets.length > 0 && !isLoading" class="flex flex-col gap-4 pb-4 h-full">
+            <div v-if="budgets.length > 0 && !isLoading" class="flex flex-col gap-4">
                 <div v-for="(budget, index) in filteredBudget" :key="index"
-                    class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
+                    class="w-full py-3 px-5 lg:p-6 xl:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
                     <div class="flex flex-col items-start gap-1 capitalize">
                         <h4 class="text-[12px]">Title</h4>
                         <div class="w-full truncate capitalize">{{ budget.title }}</div>
@@ -43,7 +43,7 @@
                     <div class="flex justify-end relative">
                         <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer"
                             src="@/assets/icons/action.svg" alt="action">
-                        <div v-if="budget.isOpen" :class="index === budgets.length - 1 && index > 2 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
+                        <div v-if="budget.isOpen" :class="index === budgets.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'" class="item-menu w-[150px] lg:w-[200px]">
                             <div @click="toggleModal(budget, 'view')"
                                 class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
                             <div @click="toggleModal(budget, 'edit')"
@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div v-else-if="budgets.length === 0 && !isLoading"
-                class="w-full h-full flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
                 No budget
                 <AppBtn @click="toggleModal(null, 'add')">
                     <img src="@/assets/icons/Add.svg" alt="add">
@@ -68,6 +68,7 @@
             </div>
         </div>
     </div>
+      <!-- Add Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="addModalIsOpen" position="left">
             <form @submit.prevent="addBudget"
@@ -91,10 +92,11 @@
                 </div>
             </form>
         </AppModal>
-    </transition>
+    </transition> 
+       <!-- Edit Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="editModalIsOpen" position="left">
-            <form @submit.prevent="" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
+            <form @submit.prevent="updateBudget" class="h-screen w-[100%] lg:w-[600px] bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="flex flex-col gap-2">
                     <h1 class="text-3xl">Edit Your Budget</h1>
                     <span>Edit your budget to keep track of your spending and stay up-to-date.</span>
@@ -115,6 +117,7 @@
             </form>
         </AppModal>
     </transition>
+        <!-- View Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="viewModalIsOpen">
             <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
@@ -164,6 +167,7 @@
             </div>
         </AppModal>
     </transition>
+      <!-- Delete Modal -->
     <transition name="fade-right">
         <AppModal :isOpen="deleteModalIsOpen">
             <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex text-dark-grey flex-col gap-4">
@@ -222,7 +226,8 @@ const search = ref({
 });
 
 const filteredBudget = computed(() => {
-    return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) && item.duration.toLowerCase().includes(search.value.duration.toLowerCase())))
+    return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) && 
+           item.duration.toLowerCase().includes(search.value.duration.toLowerCase())))
 })
 
 const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
@@ -256,6 +261,10 @@ const addBudget = () => {
     addModalIsOpen.value = !addModalIsOpen.value
 }
 
+const updateBudget = () => {
+    store.dispatch('updateBudget', editBudgetData.value);
+}
+
 const openMenu = (item) => {
     active.value = budgets.value.filter((item) => item.isOpen)[0];
     if (active.value) {
@@ -273,7 +282,7 @@ const closeMenu = () => {
 
 const deleteBudget = () => {
     deleteModalIsOpen.value = !deleteModalIsOpen.value
-    store.dispatch('removeBudget', deleteId.value)
+    store.dispatch('deleteBudget', deleteId.value)
 }
 
 </script>
@@ -295,4 +304,5 @@ const deleteBudget = () => {
     box-shadow: 0px 16px 32px -4px #14141430;
     z-index: 9;
 }
+
 </style>

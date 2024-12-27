@@ -30,7 +30,7 @@
             </div>
         </div>
     </div>
-    <div class="py-3 lg:hidden bg-navy-blue border-0 px-4 flex items-center justify-between sticky top-0">
+    <div class="py-3 lg:hidden  bg-navy-blue border-0 px-4 flex items-center justify-between sticky top-0 z-10">
         <h1 class="text-4xl text-center font-extrabold text-white logo">FinCore</h1>
         <img @click="toggleMenu" class="w-8 h-8" src="@/assets/icons/hamburger.svg" alt="hamburger">
     </div>
