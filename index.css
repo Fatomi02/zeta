@@ -29,6 +29,11 @@ h4 {
   font-family: "Archivo Black", serif;
 }
 
+.big_card {
+  border-radius: 8px;
+  box-shadow: 0 1px 1px #000;
+}
+
 .modal_overlay {
   position: fixed;
   top: 0;

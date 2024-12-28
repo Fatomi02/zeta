@@ -5,7 +5,7 @@
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
       <div v-if="type === 'search' && !inputValue" class="relative">
-        <img class="absolute cursor-pointer top-[-34px] lg:top-[-38px] right-4" src="@/assets/icons/Search o.svg" alt="search">
+        <img class="absolute cursor-pointer top-[-34px] xl:top-[-38px] right-4" src="@/assets/icons/Search o.svg" alt="search">
       </div>
     <div v-if="type === 'password'" class="relative">
       <img v-if="showPassword" @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px]" src="@/assets/icons/hidden.svg"
@@ -17,7 +17,7 @@
       :placeholder="placeholder" v-model="inputValue"></textarea>
     <div @click.prevent="toggleDropdown" ref="dropdownContainer" v-if="type === 'select'" class="relative m-0 p-0">
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
-      <img class="absolute cursor-pointer top-3 lg:top-4 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
+      <img class="absolute cursor-pointer top-3 xl:top-4 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
         <div @click="selectItem('')" class="py-3 px-4 hover:bg-light-grey cursor-pointer text-dark-grey">--Select--</div>
         <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-dark-grey px-4 hover:bg-light-grey cursor-pointer"
@@ -134,6 +134,11 @@ input:hover {
   cursor: pointer;
 }
 
+input[type="search"] {
+  border: none !important;
+  box-shadow: 0 1px 1px #000;
+}
+
 input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
@@ -179,7 +184,7 @@ input[type="checkbox"]:checked::after {
   z-index: 99999;
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 1280px) {
   input,
 textarea {
   padding: 8px 20px 8px 12px;

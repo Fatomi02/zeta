@@ -80,16 +80,13 @@
                     </div>
                     <div v-if="recentTransactions.length > 0 && !isLoading" class="flex flex-col gap-4">
                         <div class="grid grid-cols-3 md:grid-cols-4 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
-                            <div class="w-full">Narration</div>
                             <div class="w-full">Amount</div>
                             <div class="w-full hidden md:block">Category</div>
+                            <div class="w-full">Narration</div>
                             <div></div>
                         </div>
                         <div v-for="(transaction, index) in recentTransactions" :key="index">
                             <div class="grid grid-cols-3 md:grid-cols-4 gap-4 py-3 items-center px-4 rounded-lg">
-                                <div class="text-deep-blue pr-4 w-full truncate capitalize">
-                                    {{ transaction.narration }}
-                                </div>
                                 <div class="text-green-400 pr-4 w-full truncate" :class="transaction.category !== 'Income'
                                     ? 'text-red-500'
                                     : 'text-green-400'
@@ -97,12 +94,15 @@
                                     #{{ transaction.amount.toLocaleString() }}
                                 </div>
                                 <div class="md:flex gap-2 items-center text-deep-blue hidden">
-                                    <div class="h-[12px] w-[12px] rounded-full" :class="transaction.category !== 'Income'
+                                    <div class="md:h-[12px] md:w-[12px] w-2 h-2 rounded-full" :class="transaction.category !== 'Income'
                                         ? 'bg-red-500'
                                         : 'bg-green-400'
                                         "></div>
                                     <span class="truncate capitalize">{{ transaction.category }}</span>
 
+                                </div>
+                                <div class="text-deep-blue pr-4 w-full truncate capitalize flex">
+                                    {{ transaction.narration }}
                                 </div>
                                 <button @click="toggleModal(transaction, 'transaction')"
                                     class="text-light-blue text-right hover:opacity-80">
@@ -355,10 +355,6 @@ const chartTransactionOptions = {
 <style scoped>
 .card {
     background: #95c6dd;
-    border-radius: 8px;
-    box-shadow: 0 1px 1px #000;
-}
-.big_card {
     border-radius: 8px;
     box-shadow: 0 1px 1px #000;
 }
