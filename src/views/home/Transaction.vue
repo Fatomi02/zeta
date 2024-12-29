@@ -47,20 +47,20 @@
                 <div v-if="filteredTransaction.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
                     <div v-for="(transaction, index) in filteredTransaction" :key="index"
                         class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
+                        <div class="hidden lg:flex flex-col items-start gap-1 capitalize">
+                            <h4 class="text-[12px]">Narration</h4>
+                            <div class="truncate w-full">{{ transaction.narration }}</div>
+                        </div>
                         <div class="flex w-full flex-col items-start gap-1">
                             <h4 class="text-[12px]">Amount</h4>
                             <div class="w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
                                 ? 'text-red-400'
                                 : 'text-green-400'
-                                ">#{{ transaction.amount.toLocaleString() }}</div>
+                                ">${{ transaction.amount.toLocaleString() }}</div>
                         </div>
                         <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
                             <h4 class="text-[12px]">Category</h4>
                             {{ transaction.category }}
-                        </div>
-                        <div class="hidden lg:flex flex-col items-start gap-1 capitalize">
-                            <h4 class="text-[12px]">Narration</h4>
-                            <div class="truncate w-full">{{ transaction.narration }}</div>
                         </div>
                         <div class="flex justify-end relative">
                             <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer"
@@ -77,43 +77,43 @@
                             </div>
                         </div>
                     </div>
-                    <div v-if="filteredTransaction.length && !search.narration || search.category" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
+                    <div v-if="filteredTransaction.length && !search.narration && !search.category" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
                             <AppPagination :totalItems="transactions.length" :currentPage="currentPage" @pageChange="handlePageChange" />
                     </div>
                 </div>
-                <div v-if="filteredTransaction.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
+                <div v-if="filteredTransaction.length > 0 && !isLoading && isTableView" class="flex flex-col">
                     <div
                         class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
                         <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
+                        <div class="pr-4 lg:pr-6 w-full">Narration</div>
                         <div class="pr-4 lg:pr-6 w-full">Amount</div>
                         <div class="pr-4 lg:pr-6 w-full hidden md:block">Category</div>
-                        <div class="pr-4 lg:pr-6 w-full">Narration</div>
                         <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block">Date</div>
                         <div></div>
                     </div>
                     <div v-for="(transaction, index) in filteredTransaction" :key="index">
                         <div
-                            class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-3 px-4 rounded-lg">
+                            class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-4 px-4 lg:hover:bg-partial-white cursor-pointer">
                             <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
                                 {{ transaction._id }}
+                            </div>
+                            <div
+                                class="flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate capitalize">
+                                {{ transaction.narration }}
                             </div>
                             <div class="pr-4 lg:pr-6 w-full truncate capitalize" :class="transaction.category.toLowerCase() !== 'income'
                                 ? 'text-red-500'
                                 : 'text-green-400'
                                 ">
-                                #{{ transaction.amount.toLocaleString() }}
+                                {{ transaction.category.toLowerCase() !== 'income' ?  '-' : '+'}}${{ transaction.amount.toLocaleString() }}
                             </div>
                             <div
                                 class="text-deep-blue pr-4 lg:pr-6 w-full overflow-hidden truncate hidden md:flex gap-2 items-center">
-                                <div class="md:h-[12px] md:w-[12px] w-2 h-2 rounded-full" :class="transaction.category !== 'Income'
+                                <div class="md:h-[12px] md:w-[12px] w-2 h-2 rounded-full" :class="transaction.category.toLowerCase() !== 'income'
                                     ? 'bg-red-500'
                                     : 'bg-green-400'
                                     "></div>
                                 {{ transaction.category }}
-                            </div>
-                            <div
-                                class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate capitalize">
-                                {{ transaction.narration }}
                             </div>
                             <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block text-deep-blue">
                                 {{ new Date(transaction.createdAt).toLocaleString("en-US", {
@@ -195,21 +195,24 @@
             <div class="w-[90%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="grid grid-cols-1 lg:grid-cols-2">
                     <div class="flex flex-col gap-4">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Budget Amount</h2>
-                            <span>{{ viewTransactionData.amount.toLocaleString() }}</span>
+                            <span :class="viewTransactionData.category.toLowerCase() !== 'income'
+                                    ? 'text-red-500'
+                                    : 'text-green-400'
+                                    ">${{ viewTransactionData.amount.toLocaleString() }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
-                            <h2 class="text-xl">Duration</h2>
+                        <div class="flex flex-col gap-1">
+                            <h2 class="text-xl">Category</h2>
                             <span class="capitalize">{{ viewTransactionData.category }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Narration</h2>
                             <span class="capitalize">{{ viewTransactionData.narration }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col mt-4 lg:mt-0 gap-4">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Time Created</h2>
                             <span>{{ new Date(viewTransactionData.createdAt).toLocaleString("en-US", {
                                 month: "long",
@@ -220,7 +223,7 @@
                                 hour12: true,
                             }) }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Last Time Updated</h2>
                             <span>{{ new Date(viewTransactionData.updatedAt).toLocaleString("en-US", {
                                 month: "long",

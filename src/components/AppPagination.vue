@@ -1,6 +1,6 @@
 <template>
     <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
-        class="px-2 lg:px-3 py-1 rounded disabled:bg-light-grey text-white bg-light-blue">
+        class="px-2 lg:px-3 py-1 rounded disabled:bg-grey text-white bg-light-blue">
         Previous
     </button>
     <div class="flex items-center gap-1">
@@ -11,7 +11,7 @@
         </button>
     </div>
     <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages"
-        class="px-2 lg:px-3 py-1 rounded disabled:opacity-50 text-white bg-light-blue">
+        class="px-2 lg:px-3 py-1 rounded disabled:bg-grey text-white bg-light-blue">
         Next
     </button>
 </template>

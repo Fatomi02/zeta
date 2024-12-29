@@ -1,7 +1,6 @@
 import Budget from '@/views/home/Budget.vue';
 import Home from '@/views/home/home.vue';
 import Dashboard from '@/views/home/Dashboard.vue';
-import Insight from '@/views/home/Insight.vue';
 import Transaction from '@/views/home/Transaction.vue';
 import Login from '@/views/Login.vue'
 import Signin from '@/views/Signup.vue';
@@ -28,10 +27,6 @@ const routes = [
       {
         path: '/dashboard/transactions',
         component: Transaction,
-      },
-      {
-        path: '/dashboard/financial-insights',
-        component: Insight,
       },
     ]
    },

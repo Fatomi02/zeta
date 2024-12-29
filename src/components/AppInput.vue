@@ -8,9 +8,9 @@
         <img class="absolute cursor-pointer top-[-34px] xl:top-[-38px] right-4" src="@/assets/icons/Search o.svg" alt="search">
       </div>
     <div v-if="type === 'password'" class="relative">
-      <img v-if="showPassword" @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px]" src="@/assets/icons/hidden.svg"
+      <img v-if="showPassword" @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-35px] xl:top-[-38px]" src="@/assets/icons/hidden.svg"
         alt="">
-      <img v-else @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-38px] w-[20px] h-[20px]" src="@/assets/icons/open eye.svg"
+      <img v-else @click="toggleVisibility" class="absolute cursor-pointer right-5 top-[-35px] xl:top-[-38px] w-[20px] h-[20px]" src="@/assets/icons/open eye.svg"
         alt="">
     </div>
     <textarea rows="4" :required="required" v-if="type === 'textarea'" :name="name" :id="id"
@@ -128,8 +128,8 @@ textarea {
   color: #333333;
 }
 
-input:hover {
-  box-shadow: 0 2px 4px #3498DB;
+input:focus {
+  box-shadow: 0 1px 1px #3498DB;
   border: 1px solid #2C81BA;
   cursor: pointer;
 }

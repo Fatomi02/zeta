@@ -12,7 +12,7 @@ export default {
         'navy-blue': '#2C3E50',
         'cyan': '#A6DDEF',
         'partial-white': '#F0F8FF',
-        'grey': '#6C757D'
+        'grey': '#E5E5E5'
       },
     },
   },

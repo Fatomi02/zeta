@@ -46,8 +46,7 @@ const handleClick = (event) => {
 }
 
 .primary:hover {
-  background-color: #2C81BA;
-  box-shadow: 0 2px 4px #3498DB;
+  box-shadow: 0 2px 4px -1px #3498DB;
 }
 
 .danger {
@@ -61,6 +60,6 @@ const handleClick = (event) => {
 }
 
 .danger:hover {
-  box-shadow: 0 2px 4px rgb(184, 22, 22);
+  box-shadow: 0 2px 4px -1px rgb(184, 22, 22);
 }
 </style>

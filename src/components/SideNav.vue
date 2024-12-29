@@ -21,12 +21,6 @@
                     <img class="h-6 w-6" src="@/assets/icons/transaction.svg" alt="">
                     Transactions
                 </router-link>
-                <router-link to="/dashboard/financial-insights"
-                    class="py-4 px-5 w-full font-medium flex items-center gap-2 text-white"
-                    exact-active-class="active_link">
-                    <img class="h-6 w-6" src="@/assets/icons/insight.svg" alt="">
-                    Financial Insights
-                </router-link>
             </div>
         </div>
     </div>
@@ -67,12 +61,6 @@
                             exact-active-class="active_link" @click="toggleMenu">
                             <img class="h-6 w-6" src="@/assets/icons/transaction.svg" alt="">
                             Transactions
-                        </router-link>
-                        <router-link to="/dashboard/financial-insights"
-                            class="py-4 px-5 w-full font-medium flex items-center gap-2 rounded-[30px] text-white"
-                            exact-active-class="active_link" @click="toggleMenu">
-                            <img class="h-6 w-6" src="@/assets/icons/insight.svg" alt="">
-                            Financial Insights
                         </router-link>
                     </div>
                 </div>

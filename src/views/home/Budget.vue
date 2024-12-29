@@ -54,7 +54,7 @@
                         </div>
                         <div class="flex flex-col items-start gap-1">
                             <h4 class="text-[12px]">Total Amount</h4>
-                            <div class="w-full truncate"> #{{ budget.total_amount.toLocaleString() }}</div>
+                            <div class="w-full truncate"> ${{ budget.total_amount.toLocaleString() }}</div>
                         </div>
                         <div class="hidden lg:flex flex-col items-start w-full truncate gap-1 capitalize">
                             <h4 class="text-[12px]">Duration</h4>
@@ -79,7 +79,7 @@
                         <AppPagination :totalItems="budgets.length" :currentPage="currentPage" @pageChange="handlePageChange" />
                     </div>
                 </div>
-                <div v-if="filteredBudget.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
+                <div v-if="filteredBudget.length > 0 && !isLoading && isTableView" class="flex flex-col">
                     <div
                         class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
                         <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
@@ -91,7 +91,7 @@
                     </div>
                     <div v-for="(budget, index) in filteredBudget" :key="index">
                         <div
-                            class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-3 px-4 rounded-lg">
+                            class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4 lg:hover:bg-partial-white cursor-pointer">
                             <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
                                 {{ budget._id }}
                             </div>
@@ -99,7 +99,7 @@
                                 {{ budget.title }}
                             </div>
                             <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate">
-                                #{{ budget.total_amount.toLocaleString() }}
+                                ${{ budget.total_amount.toLocaleString() }}
                             </div>
                             <div
                                 class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate hidden capitalize">
@@ -183,21 +183,21 @@
             <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
                 <div class="grid grid-cols-1 lg:grid-cols-2">
                     <div class="flex flex-col gap-4">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Title</h2>
                             <span class="capitalize">{{ viewBudgetData.title }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Budget Amount</h2>
-                            <span>{{ viewBudgetData.total_amount.toLocaleString() }}</span>
+                            <span>${{ viewBudgetData.total_amount.toLocaleString() }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Duration</h2>
                             <span class="capitalize">{{ viewBudgetData.duration }}</span>
                         </div>
                     </div>
                     <div class="flex flex-col mt-4 lg:mt-0 gap-4">
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Time Created</h2>
                             <span>{{ new Date(viewBudgetData.createdAt).toLocaleString("en-US", {
                                 month: "long",
@@ -208,7 +208,7 @@
                                 hour12: true,
                             }) }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Last Time Updated</h2>
                             <span>{{ new Date(viewBudgetData.updatedAt).toLocaleString("en-US", {
                                 month: "long",
@@ -219,7 +219,7 @@
                                 hour12: true,
                             }) }}</span>
                         </div>
-                        <div class="flex flex-col gap-2">
+                        <div class="flex flex-col gap-1">
                             <h2 class="text-xl">Budget Id</h2>
                             <span>{{ viewBudgetData._id }}</span>
                         </div>
