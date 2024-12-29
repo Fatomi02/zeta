@@ -6,12 +6,17 @@ const toast = useToast();
 
 export default {
     state: {
-        budgets: []
+        budgets: [],
+        pageSize: 10,
+        currentPage: 1,
     },
     mutations: {
         setBudgets(state, budgets) {
           state.budgets = budgets;
-        }
+        },
+        setCurrentBudgetPage(state, page) {
+          state.currentPage = page;
+        },
       },
       actions: {
         async getAllBudget({commit}) {
@@ -102,6 +107,14 @@ export default {
 
         recentBudgets(state) {
           return state.budgets.slice().reverse().slice(0, 5);
-        }
+        },
+        paginatedBudgets(state) {
+          const start = (state.currentPage - 1) * state.pageSize;
+          const end = state.currentPage * state.pageSize;
+          return state.budgets.slice().reverse().slice(start, end);
+        },
+        totalPages(state) {
+          return Math.ceil(state.budgets.length / state.pageSize);
+        },
       }
 }

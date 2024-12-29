@@ -6,12 +6,17 @@ const toast = useToast();
 export default {
     state: {
         transactions: [
-        ]
+        ],
+        pageSize: 10,
+        currentPage: 1,
     },
     mutations: {
       setTransactions(state, budgets) {
         state.transactions = budgets;
-      }
+      },
+      setCurrentTransactionPage(state, page) {
+        state.currentPage = page;
+      },
       },
 
       actions: {
@@ -104,6 +109,14 @@ export default {
         },
         recentTransactions(state) {
           return state.transactions.slice().reverse().slice(0, 5);
-        }
+        },
+        paginatedTransactions(state) {
+          const start = (state.currentPage - 1) * state.pageSize;
+          const end = state.currentPage * state.pageSize;
+          return state.transactions.slice().reverse().slice(start, end);
+        },
+        totalTransactionPage(state) {
+          return Math.ceil(state.transactions.length / state.pageSize);
+        },
       }
 }

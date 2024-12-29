@@ -9,9 +9,9 @@
                         finances and keep track of your
                         spending.</span>
                 </div>
-                <button @click="toggleModal(null, 'add')"
+                <button @click="redirectToSummary"
                     class="flex items-center bg-white rounded-lg py-[6px] px-3 text-[14px] text-[#0D3051]">
-                    Create a budget <img class="inline-block ml-1" src="@/assets/icons/arrow_diagonal_blue.svg"
+                    Go to Dashboard <img class="inline-block ml-1" src="@/assets/icons/arrow_diagonal_blue.svg"
                         alt=""></button>
             </div>
         </div>
@@ -41,10 +41,11 @@
                     </div>
                 </div>
             </div>
-            <h2 v-if="search.title || search.duration" class="font-medium pl-2 lg:my-[-20px]">{{ filteredBudget.length
+            <h2 v-if="search.title || search.duration" class="font-medium pl-2 lg:my-[-15px]">{{ filteredBudget.length
                 }} filtered budget</h2>
-            <div class="flex flex-col gap-4 lg:gap-6" :class="isTableView && !isLoading && budgets.length ? 'p-3 big_card bg-white': ''">
-                <div v-if="budgets.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-4 lg:gap-6 mb-6"
+                :class="isTableView && !isLoading && filteredBudget.length ? 'p-3 big_card bg-white' : ''">
+                <div v-if="filteredBudget.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
                     <div v-for="(budget, index) in filteredBudget" :key="index"
                         class="w-full py-3 px-5 lg:p-5 xl:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
@@ -63,7 +64,7 @@
                             <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer"
                                 src="@/assets/icons/action.svg" alt="action">
                             <div v-if="budget.isOpen"
-                                :class="index === budgets.length - 1 && index > 1 ? 'top-[-120px]' : 'top-10'"
+                                :class="index === filteredBudget.length - 1 && index > 1 ? 'top-[-120px]' : 'top-10'"
                                 class="item-menu w-[150px] lg:w-[200px]">
                                 <div @click="toggleModal(budget, 'view')"
                                     class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
@@ -74,61 +75,67 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="filteredBudget.length && !search.title && !search.duration" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
+                        <AppPagination :totalItems="budgets.length" :currentPage="currentPage" @pageChange="handlePageChange" />
+                    </div>
                 </div>
-                <div v-if="budgets.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
+                <div v-if="filteredBudget.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
                     <div
-                    class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
-                    <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
-                    <div class="pr-4 lg:pr-6 w-full">Title</div>
-                    <div class="pr-4 lg:pr-6 w-full">Amount</div>
-                    <div class="pr-4 lg:pr-6 w-full hidden md:block">Duration</div>
-                    <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block">Date</div>
-                    <div></div>
-                </div>
-                <div v-for="(budget, index) in filteredBudget" :key="index">
-                    <div class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-3 px-4 rounded-lg">
-                        <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
-                            {{ budget._id }}
-                        </div>
-                        <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate capitalize">
-                            {{ budget.title }}
-                        </div>
-                        <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate">
-                            #{{ budget.total_amount.toLocaleString() }}
-                        </div>
+                        class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
+                        <div class="pr-4 lg:pr-6 w-full">Title</div>
+                        <div class="pr-4 lg:pr-6 w-full">Amount</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Duration</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block">Date</div>
+                        <div></div>
+                    </div>
+                    <div v-for="(budget, index) in filteredBudget" :key="index">
                         <div
-                            class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate hidden capitalize">
-                            {{ budget.duration }}
-                        </div>
-                        <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block text-deep-blue">{{ new Date(budget.createdAt).toLocaleString("en-US", {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }) }}</div>
-                        <button @click="toggleModal(budget, 'budget')"
-                            class="flex justify-end relative">
-                            <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer h-6"
-                                src="@/assets/icons/menu.svg" alt="action">
-                            <div v-if="budget.isOpen"
-                                :class="index === budgets.length - 1 ? 'bottom-0' : 'top-0'"
-                                class="item-menu w-[100px] right-4 lg:w-[200px]">
-                                <div @click="toggleModal(budget, 'view')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">View</div>
-                                <div @click="toggleModal(budget, 'edit')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">Edit</div>
-                                <div @click.stop.prevent="toggleModal(budget._id, 'delete')"
-                                    class="px-6 py-2 text-red-800 hover:bg-red-500 text-start">Delete</div>
+                            class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-3 px-4 rounded-lg">
+                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
+                                {{ budget._id }}
                             </div>
-                        </button>
-                    </div>
-                    <div v-if="index !== filteredBudget.length - 1" class="h-[1px] w-full bg-gray-300">
+                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate capitalize">
+                                {{ budget.title }}
+                            </div>
+                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate">
+                                #{{ budget.total_amount.toLocaleString() }}
+                            </div>
+                            <div
+                                class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate hidden capitalize">
+                                {{ budget.duration }}
+                            </div>
+                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block text-deep-blue">
+                                {{ new Date(budget.createdAt).toLocaleString("en-US", {
+                                    month: "long",
+                                    day: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    hour12: true,
+                                }) }}</div>
+                            <button @click="toggleModal(budget, 'budget')" class="flex justify-end relative">
+                                <img @click.stop.prevent="openMenu(budget)" class="cursor-pointer h-6"
+                                    src="@/assets/icons/menu.svg" alt="action">
+                                <div v-if="budget.isOpen" :class="index === filteredBudget.length - 1 ? 'bottom-0' : 'top-0'"
+                                    class="item-menu w-[100px] right-4 lg:w-[200px]">
+                                    <div @click="toggleModal(budget, 'view')"
+                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">View</div>
+                                    <div @click="toggleModal(budget, 'edit')"
+                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">Edit</div>
+                                    <div @click.stop.prevent="toggleModal(budget._id, 'delete')"
+                                        class="px-6 py-2 text-red-800 hover:bg-red-500 text-start">Delete</div>
+                                </div>
+                            </button>
+                        </div>
+                        <div v-if="index !== filteredBudget.length - 1" class="h-[1px] w-full bg-gray-300">
+                        </div>
+                        <div v-if="index === filteredBudget.length - 1 && !search.title && !search.duration" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
+                            <AppPagination :totalItems="budgets.length" :currentPage="currentPage" @pageChange="handlePageChange" />
+                        </div>
                     </div>
                 </div>
-                </div>
-                <div v-else-if="budgets.length === 0 && !isLoading"
+                <div v-else-if="filteredBudget.length === 0 && !isLoading"
                     class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
                     No budget
                     <AppBtn @click="toggleModal(null, 'add')">
@@ -243,8 +250,10 @@ import AppBtn from '@/components/AppBtn.vue';
 import AppInput from '@/components/AppInput.vue';
 import AppModal from '@/components/AppModal.vue';
 import DashboardCard from '@/components/DashboardCard.vue';
+import AppPagination from '@/components/AppPagination.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 onMounted(() => {
     store.dispatch('getAllBudget');
@@ -255,6 +264,7 @@ onMounted(() => {
 })
 //refs
 const store = useStore();
+const router = useRouter()
 const active = ref();
 const deleteId = ref();
 const viewBudgetData = ref();
@@ -267,8 +277,15 @@ const initialFormData = ref({ title: '', total_amount: '', duration: '', });
 let formData = ref();
 const search = ref({ title: '', duration: '' });
 
+const paginatedBudgets = computed(() => store.getters.paginatedBudgets);
+const currentPage = computed(() => store.state.budget.currentPage);
+
+function handlePageChange(page) {
+  store.commit('setCurrentBudgetPage', page);
+}
+
 //computed
-const budgets = computed(() => store.getters['allBudgets']);
+const budgets = computed(() => store.getters.allBudgets);
 
 const isFormValid = computed(() => {
     return (
@@ -278,8 +295,13 @@ const isFormValid = computed(() => {
 })
 
 const filteredBudget = computed(() => {
-    return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) &&
+    if(search.value.title || search.value.duration) {
+        return budgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) &&
         item.duration.toLowerCase().includes(search.value.duration.toLowerCase())))
+    } else {
+        return paginatedBudgets.value.filter((item) => (item.title.toLowerCase().includes(search.value.title.toLowerCase()) &&
+        item.duration.toLowerCase().includes(search.value.duration.toLowerCase())))
+    }
 })
 
 const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
@@ -322,7 +344,7 @@ const deleteBudget = () => {
 }
 
 const openMenu = (item) => {
-    active.value = budgets.value.filter((item) => item.isOpen)[0];
+    active.value = filteredBudget.value.filter((item) => item.isOpen)[0];
     if (active.value) {
         active.value.isOpen = false;
     }
@@ -330,10 +352,14 @@ const openMenu = (item) => {
 }
 
 const closeMenu = () => {
-    active.value = budgets.value.filter((item) => item.isOpen)[0];
+    active.value = filteredBudget.value.filter((item) => item.isOpen)[0];
     if (active.value) {
         active.value.isOpen = false;
     }
+}
+
+const redirectToSummary = () => {
+    router.push('/dashboard');
 }
 </script>
 

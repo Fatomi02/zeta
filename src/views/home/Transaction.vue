@@ -9,9 +9,9 @@
                         finances and keep track of your
                         spending..</span>
                 </div>
-                <button @click="toggleModal(null, 'add')"
+                <button @click="redirectToSummary"
                     class="flex items-center bg-white rounded-lg py-[6px] px-3 text-[14px] text-[#0D3051]">
-                    Create a transaction <img class="inline-block ml-1" src="@/assets/icons/arrow_diagonal_blue.svg"
+                    Go to Dashboard <img class="inline-block ml-1" src="@/assets/icons/arrow_diagonal_blue.svg"
                         alt=""></button>
             </div>
         </div>
@@ -41,10 +41,10 @@
                     </div>
                 </div>
             </div>
-            <h2 v-if="search.narration || search.category" class="font-medium pl-2 lg:my-[-20px]">{{
+            <h2 v-if="search.narration || search.category" class="font-medium pl-2 lg:my-[-15px]">{{
                 filteredTransaction.length }} filtered transaction</h2>
-            <div class="flex flex-col gap-4 lg:gap-6" :class="isTableView && !isLoading && transactions.length ? 'p-3 big_card bg-white': ''">
-                <div v-if="filteredTransaction.length > 0 && !isLoading && !isTableView" class="flex flex-col pb-4 gap-4">
+            <div class="flex flex-col gap-4 lg:gap-6 mb-6" :class="isTableView && !isLoading && filteredTransaction.length ? 'p-3 big_card bg-white': ''">
+                <div v-if="filteredTransaction.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
                     <div v-for="(transaction, index) in filteredTransaction" :key="index"
                         class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
                         <div class="flex w-full flex-col items-start gap-1">
@@ -66,7 +66,7 @@
                             <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer"
                                 src="@/assets/icons/action.svg" alt="action">
                             <div v-if="transaction.isOpen"
-                                :class="index === transactions.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'"
+                                :class="index === filteredTransaction.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'"
                                 class="item-menu w-[150px] lg:w-[200px]">
                                 <div @click="toggleModal(transaction, 'view')"
                                     class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
@@ -77,8 +77,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="filteredTransaction.length && !search.narration || search.category" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
+                            <AppPagination :totalItems="transactions.length" :currentPage="currentPage" @pageChange="handlePageChange" />
+                    </div>
                 </div>
-                <div v-if="transactions.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
+                <div v-if="filteredTransaction.length > 0 && !isLoading && isTableView" class="flex flex-col gap-2">
                     <div
                         class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
                         <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
@@ -125,7 +128,7 @@
                                 <img @click.stop.prevent="openMenu(transaction)" class="cursor-pointer h-6"
                                     src="@/assets/icons/menu.svg" alt="action">
                                 <div v-if="transaction.isOpen"
-                                    :class="index === transactions.length - 1 ? 'bottom-0' : 'top-0'"
+                                    :class="index === filteredTransaction.length - 1 ? 'bottom-0' : 'top-0'"
                                     class="item-menu w-[100px] right-4 lg:w-[200px]">
                                     <div @click="toggleModal(transaction, 'view')"
                                         class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">View</div>
@@ -137,6 +140,9 @@
                             </button>
                         </div>
                         <div v-if="index !== filteredTransaction.length - 1 && isTableView" class="h-[1px] w-full bg-gray-300">
+                        </div>
+                        <div v-if="index === filteredTransaction.length - 1 && !search.narration && !search.category" class="border-t border-t-gray-300 p-3 flex justify-between items-center">
+                            <AppPagination :totalItems="transactions.length" :currentPage="currentPage" @pageChange="handlePageChange" />
                         </div>
                     </div>
                 </div>
@@ -252,8 +258,10 @@ import AppBtn from '@/components/AppBtn.vue';
 import AppInput from '@/components/AppInput.vue';
 import AppModal from '@/components/AppModal.vue';
 import DashboardCard from '@/components/DashboardCard.vue';
+import AppPagination from '@/components/AppPagination.vue';
 import { computed, onMounted, ref } from 'vue';
 import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
 onMounted(() => {
     store.dispatch('getAllTransactions');
@@ -264,6 +272,7 @@ onMounted(() => {
 })
 
 const store = useStore();
+const router = useRouter()
 const active = ref();
 let formData = ref();
 const viewTransactionData = ref();
@@ -276,7 +285,15 @@ const deleteModalIsOpen = ref(false);
 const initialFormData = ref({ amount: '', category: '', narration: '', budget_id: '' });
 const search = ref({ narration: '', category: '' });
 
-const transactions = computed(() => store.getters['allTransactions']);
+const transactions = computed(() => store.getters.allTransactions);
+
+const paginatedTransactions = computed(() => store.getters.paginatedTransactions);
+const currentPage = computed(() => store.state.transaction.currentPage);
+
+function handlePageChange(page) {
+  store.commit('setCurrentTransactionPage', page);
+}
+
 
 const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 
@@ -288,8 +305,14 @@ const isFormValid = computed(() => {
 })
 
 const filteredTransaction = computed(() => {
-    return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) &&
+    if(search.value.narration || search.value.category) {
+        return transactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) &&
         item.category.toLowerCase().includes(search.value.category.toLowerCase())))
+    } else {
+        return paginatedTransactions.value.filter((item) => (item.narration.toLowerCase().includes(search.value.narration.toLowerCase()) &&
+        item.category.toLowerCase().includes(search.value.category.toLowerCase())))
+    }
+
 })
 
 
@@ -330,7 +353,7 @@ const deleteTransaction = () => {
 }
 
 const openMenu = (item) => {
-    active.value = transactions.value.filter((item) => item.isOpen)[0];
+    active.value = filteredTransaction.value.filter((item) => item.isOpen)[0];
     if (active.value) {
         active.value.isOpen = false;
     }
@@ -338,10 +361,14 @@ const openMenu = (item) => {
 }
 
 const closeMenu = () => {
-    active.value = transactions.value.filter((item) => item.isOpen)[0];
+    active.value = filteredTransaction.value.filter((item) => item.isOpen)[0];
     if (active.value) {
         active.value.isOpen = false;
     }
+}
+
+const redirectToSummary = () => {
+    router.push('/dashboard');
 }
 
 </script>
