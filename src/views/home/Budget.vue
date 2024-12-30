@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div @click="closeMenu" class="flex flex-col h-full gap-6">
-        <div class="p-6 flex flex-col md:flex-row xl:items-center rounded-2xl bg-navy-blue">
+        <div class="p-6 flex flex-col md:flex-row xl:items-center rounded-2xl bg-blue">
             <div class="flex flex-col items-start gap-4">
                 <div class="flex flex-col gap-1">
-                    <h2 class="text-2xl lg:text-3xl font-medium text-partial-blue">Budget Management</h2>
+                    <h2 class="text-2xl lg:text-3xl font-medium text-white">Budget Management</h2>
                     <span class="text-light-grey">Welcome! Easily create, edit, and delete budgets to manage your
                         finances and keep track of your
                         spending.</span>
@@ -47,16 +47,16 @@
                 :class="isTableView && !isLoading && filteredBudget.length ? 'p-3 big_card bg-white' : ''">
                 <div v-if="filteredBudget.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
                     <div v-for="(budget, index) in filteredBudget" :key="index"
-                        class="w-full py-3 px-5 lg:p-5 xl:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue border border-cyan rounded-2xl">
+                        class="w-full py-3 px-5 lg:p-5 xl:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-blue border border-cyan rounded-2xl">
                         <div class="flex flex-col items-start gap-1 capitalize">
                             <h4 class="text-[12px]">Title</h4>
-                            <div class="w-full truncate capitalize">{{ budget.title }}</div>
+                            <div class="w-full truncate capitalize text-light-grey">{{ budget.title }}</div>
                         </div>
                         <div class="flex flex-col items-start gap-1">
                             <h4 class="text-[12px]">Total Amount</h4>
-                            <div class="w-full truncate"> ${{ budget.total_amount.toLocaleString() }}</div>
+                            <div class="w-full truncate text-light-grey"> ${{ budget.total_amount.toLocaleString() }}</div>
                         </div>
-                        <div class="hidden lg:flex flex-col items-start w-full truncate gap-1 capitalize">
+                        <div class="hidden lg:flex flex-col items-start w-full truncate gap-1 capitalize text-light-grey">
                             <h4 class="text-[12px]">Duration</h4>
                             {{ budget.duration }}
                         </div>
@@ -67,9 +67,9 @@
                                 :class="index === filteredBudget.length - 1 && index > 1 ? 'top-[-120px]' : 'top-10'"
                                 class="item-menu w-[150px] lg:w-[200px]">
                                 <div @click="toggleModal(budget, 'view')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
+                                    class="px-6 py-2 text-deep-blue hover:bg-blue">View</div>
                                 <div @click="toggleModal(budget, 'edit')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
+                                    class="px-6 py-2 text-deep-blue hover:bg-blue">Edit</div>
                                 <div @click.stop.prevent="toggleModal(budget._id, 'delete')"
                                     class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
                             </div>
@@ -81,31 +81,31 @@
                 </div>
                 <div v-if="filteredBudget.length > 0 && !isLoading && isTableView" class="flex flex-col">
                     <div
-                        class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
-                        <div class="pr-4 lg:pr-6 w-full">Title</div>
-                        <div class="pr-4 lg:pr-6 w-full">Amount</div>
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Duration</div>
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block">Date</div>
+                        class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-blue py-3 px-4 rounded-lg">
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block text-white">Id</div>
+                        <div class="pr-4 lg:pr-6 w-full text-white">Title</div>
+                        <div class="pr-4 lg:pr-6 w-full text-white">Amount</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block text-white">Duration</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block text-white">Date</div>
                         <div></div>
                     </div>
                     <div v-for="(budget, index) in filteredBudget" :key="index">
                         <div
                             class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 p-4 lg:hover:bg-partial-white cursor-pointer">
-                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
+                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block">
                                 {{ budget._id }}
                             </div>
-                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate capitalize">
+                            <div class="pr-4 lg:pr-6 w-full truncate capitalize">
                                 {{ budget.title }}
                             </div>
-                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate">
+                            <div class="pr-4 lg:pr-6 w-full truncate">
                                 ${{ budget.total_amount.toLocaleString() }}
                             </div>
                             <div
-                                class="md:flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate hidden capitalize">
+                                class="md:flex gap-2 items-center pr-4 lg:pr-6 w-full truncate hidden capitalize">
                                 {{ budget.duration }}
                             </div>
-                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block text-deep-blue">
+                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block">
                                 {{ new Date(budget.createdAt).toLocaleString("en-US", {
                                     month: "long",
                                     day: "2-digit",
@@ -120,11 +120,11 @@
                                 <div v-if="budget.isOpen" :class="index === filteredBudget.length - 1 ? 'bottom-0' : 'top-0'"
                                     class="item-menu w-[100px] right-4 lg:w-[200px]">
                                     <div @click="toggleModal(budget, 'view')"
-                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">View</div>
+                                        class="px-6 py-2 hover:bg-blue text-start">View</div>
                                     <div @click="toggleModal(budget, 'edit')"
-                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">Edit</div>
+                                        class="px-6 py-2 hover:bg-blue text-start">Edit</div>
                                     <div @click.stop.prevent="toggleModal(budget._id, 'delete')"
-                                        class="px-6 py-2 text-red-800 hover:bg-red-500 text-start">Delete</div>
+                                        class="px-6 py-2 text-red-600 hover:bg-red-400 text-start">Delete</div>
                                 </div>
                             </button>
                         </div>
@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div v-else-if="filteredBudget.length === 0 && !isLoading"
-                    class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                    class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-lg shadow">
                     No budget
                     <AppBtn @click="toggleModal(null, 'add')">
                         <img src="@/assets/icons/Add.svg" alt="add">

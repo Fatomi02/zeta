@@ -4,14 +4,16 @@ export default {
   theme: {
     extend: {
       colors: {
+        'dark-green': '#082414',
         'dark-grey': '#333333',
-        'light-grey': '#F5F5F5',
+        'light-grey': '#fafafa',
         'primary': '#2C81BA',
-        'light-blue': '#3498DB',
+        'blue': '#386cf4',
         'deep-blue': '#34495E',
-        'navy-blue': '#2C3E50',
+        'navy-blue': '#020C3A',
         'cyan': '#A6DDEF',
         'partial-white': '#F0F8FF',
+        'white': '#fffcfc',
         'grey': '#E5E5E5'
       },
     },

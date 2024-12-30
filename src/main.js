@@ -5,6 +5,7 @@ import router from './router'
 import authModule from './store/auth';
 import budgetModule from './store/budget';
 import transactionModule from './store/transaction';
+import insightModule from './store/insight'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 
@@ -12,7 +13,8 @@ const store = createStore({
     modules: {
         auth: authModule,
         budget: budgetModule,
-        transaction: transactionModule
+        transaction: transactionModule,
+        insight: insightModule
     }
 })
 

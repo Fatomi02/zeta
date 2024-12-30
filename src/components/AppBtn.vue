@@ -41,12 +41,12 @@ const handleClick = (event) => {
 
 <style scoped>
 .primary {
-    background: #3498DB;
+    background: #386cf4;
     color: white;
 }
 
 .primary:hover {
-  box-shadow: 0 2px 4px -1px #3498DB;
+  box-shadow: 0 2px 4px -1px #386cf4;
 }
 
 .danger {

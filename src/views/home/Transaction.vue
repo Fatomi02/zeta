@@ -1,10 +1,10 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
     <div @click="closeMenu" class="flex flex-col gap-6 h-full">
-        <div class="p-6 flex flex-col md:flex-row xl:items-center rounded-2xl bg-navy-blue">
+        <div class="p-6 flex flex-col md:flex-row xl:items-center rounded-2xl bg-blue">
             <div class="flex flex-col items-start gap-4">
                 <div class="flex flex-col gap-1">
-                    <h2 class="text-2xl lg:text-3xl font-medium text-partial-blue">Transaction Management</h2>
+                    <h2 class="text-2xl lg:text-3xl font-medium text-white">Transaction Management</h2>
                     <span class="text-light-grey">Welcome! Easily create, edit, and delete transactions to manage your
                         finances and keep track of your
                         spending..</span>
@@ -46,20 +46,20 @@
             <div class="flex flex-col gap-4 lg:gap-6 mb-6" :class="isTableView && !isLoading && filteredTransaction.length ? 'p-3 big_card bg-white': ''">
                 <div v-if="filteredTransaction.length > 0 && !isLoading && !isTableView" class="flex flex-col gap-4">
                     <div v-for="(transaction, index) in filteredTransaction" :key="index"
-                        class="w-full py-4 px-6 lg:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-deep-blue rounded-2xl">
+                        class="w-full py-3 px-5 lg:p-5 xl:p-8 grid grid-cols-3 item lg:grid-cols-4 gap-4 justify-between bg-blue border border-cyan rounded-2xl">
                         <div class="hidden lg:flex flex-col items-start gap-1 capitalize">
-                            <h4 class="text-[12px]">Narration</h4>
-                            <div class="truncate w-full">{{ transaction.narration }}</div>
+                            <h4 class="text-[12px] font-semibold">Narration</h4>
+                            <div class="truncate w-full text-light-grey">{{ transaction.narration }}</div>
                         </div>
                         <div class="flex w-full flex-col items-start gap-1">
-                            <h4 class="text-[12px]">Amount</h4>
-                            <div class="w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
+                            <h4 class="text-[12px] font-semibold">Amount</h4>
+                            <div class="w-full truncate font-semibold" :class="transaction.category.toLowerCase() !== 'income'
                                 ? 'text-red-400'
                                 : 'text-green-400'
                                 ">${{ transaction.amount.toLocaleString() }}</div>
                         </div>
-                        <div class="flex truncate w-full flex-col items-start gap-1 capitalize">
-                            <h4 class="text-[12px]">Category</h4>
+                        <div class="flex truncate w-full flex-col items-start gap-1 capitalize text-light-grey">
+                            <h4 class="text-[12px] font-semibold">Category</h4>
                             {{ transaction.category }}
                         </div>
                         <div class="flex justify-end relative">
@@ -69,9 +69,9 @@
                                 :class="index === filteredTransaction.length - 1 && index > 1 ? 'top-[-110px]' : 'top-10'"
                                 class="item-menu w-[150px] lg:w-[200px]">
                                 <div @click="toggleModal(transaction, 'view')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue">View</div>
+                                    class="px-6 py-2 text-deep-blue hover:bg-blue">View</div>
                                 <div @click="toggleModal(transaction, 'edit')"
-                                    class="px-6 py-2 text-deep-blue hover:bg-light-blue">Edit</div>
+                                    class="px-6 py-2 text-deep-blue hover:bg-blue">Edit</div>
                                 <div @click.stop.prevent="toggleModal(transaction._id, 'delete')"
                                     class="px-6 py-2 text-red-800 hover:bg-red-500">Delete</div>
                             </div>
@@ -83,22 +83,22 @@
                 </div>
                 <div v-if="filteredTransaction.length > 0 && !isLoading && isTableView" class="flex flex-col">
                     <div
-                        class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-deep-blue py-3 px-4 rounded-lg">
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Id</div>
-                        <div class="pr-4 lg:pr-6 w-full">Narration</div>
-                        <div class="pr-4 lg:pr-6 w-full">Amount</div>
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block">Category</div>
-                        <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block">Date</div>
+                        class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 bg-blue py-3 px-4 rounded-lg">
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block text-white">Id</div>
+                        <div class="pr-4 lg:pr-6 w-full text-white">Narration</div>
+                        <div class="pr-4 lg:pr-6 w-full text-white">Amount</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block text-white">Category</div>
+                        <div class="pr-4 lg:pr-6 w-full hidden md:block lg:hidden xl:block text-white">Date</div>
                         <div></div>
                     </div>
                     <div v-for="(transaction, index) in filteredTransaction" :key="index">
                         <div
                             class="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-5 xl:grid-cols-6 gap-4 py-4 px-4 lg:hover:bg-partial-white cursor-pointer">
-                            <div class="text-deep-blue pr-4 lg:pr-6 w-full truncate hidden md:block">
+                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block">
                                 {{ transaction._id }}
                             </div>
                             <div
-                                class="flex gap-2 items-center pr-4 lg:pr-6 text-deep-blue w-full truncate capitalize">
+                                class="flex gap-2 items-center pr-4 lg:pr-6w-full truncate capitalize">
                                 {{ transaction.narration }}
                             </div>
                             <div class="pr-4 lg:pr-6 w-full truncate capitalize" :class="transaction.category.toLowerCase() !== 'income'
@@ -115,7 +115,7 @@
                                     "></div>
                                 {{ transaction.category }}
                             </div>
-                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block text-deep-blue">
+                            <div class="pr-4 lg:pr-6 w-full truncate hidden md:block lg:hidden xl:block">
                                 {{ new Date(transaction.createdAt).toLocaleString("en-US", {
                                     month: "long",
                                     day: "2-digit",
@@ -131,11 +131,11 @@
                                     :class="index === filteredTransaction.length - 1 ? 'bottom-0' : 'top-0'"
                                     class="item-menu w-[100px] right-4 lg:w-[200px]">
                                     <div @click="toggleModal(transaction, 'view')"
-                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">View</div>
+                                        class="px-6 py-2 hover:bg-blue text-start">View</div>
                                     <div @click="toggleModal(transaction, 'edit')"
-                                        class="px-6 py-2 text-deep-blue hover:bg-light-blue text-start">Edit</div>
+                                        class="px-6 py-2 hover:bg-blue text-start">Edit</div>
                                     <div @click.stop.prevent="toggleModal(transaction._id, 'delete')"
-                                        class="px-6 py-2 text-red-800 hover:bg-red-500 text-start">Delete</div>
+                                        class="px-6 py-2 text-red-600 hover:bg-red-400 text-start">Delete</div>
                                 </div>
                             </button>
                         </div>
@@ -147,7 +147,7 @@
                     </div>
                 </div>
                 <div v-else-if="filteredTransaction.length === 0 && !isLoading"
-                    class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-md">
+                    class="w-full h-[250px] flex flex-col gap-4 bg-white items-center justify-center text-light-blue text-xl rounded-lg shadow">
                     No transaction
                     <AppBtn @click="toggleModal(null, 'add')">
                         <img src="@/assets/icons/Add.svg" alt="add">

@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
-    <label class="text-dark-grey" :for="id">{{ label }} <span>{{ optional ? '(Optional)' : '' }}</span></label>
+    <labe class="font-medium" :for="id">{{ label }} <span>{{ optional ? '(Optional)' : '' }}</span></labe>
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />
@@ -19,8 +19,8 @@
       <input :name="name" :id="id" :required="required" :placeholder="placeholder" readonly v-model="inputValue">
       <img class="absolute cursor-pointer top-3 xl:top-4 right-4" src="@/assets/icons/dropdown.svg" alt="dropdown">
       <div v-if="showDropdown" class="dropdown_box">
-        <div @click="selectItem('')" class="py-3 px-4 hover:bg-light-grey cursor-pointer text-dark-grey">--Select--</div>
-        <div v-for="(item, index) in selectArray" :key="index" class="py-3 text-dark-grey px-4 hover:bg-light-grey cursor-pointer"
+        <div @click="selectItem('')" class="py-3 px-4 hover:bg-light-grey cursor-pointer">--Select--</div>
+        <div v-for="(item, index) in selectArray" :key="index" class="py-3 px-4 hover:bg-light-grey cursor-pointer"
           @click="selectItem(item)">
           {{ item }}
         </div>
@@ -136,7 +136,7 @@ input:focus {
 
 input[type="search"] {
   border: none !important;
-  box-shadow: 0 1px 1px #000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05)
 }
 
 input[type="checkbox"] {

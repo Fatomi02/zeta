@@ -7,7 +7,7 @@
                 <div class="hidden w-full lg:block">
                     <NavBar />
                 </div>
-                <div class="lg:px-8 lg:py-6 pb-6 py-4 px-4 w-full lg:h-full lg:overflow-y-auto bg-light-grey">
+                <div class="lg:px-8 lg:py-6 pb-6 py-4 px-4 w-full lg:h-full lg:overflow-y-auto bg-[#f1f3ff]">
                     <RouterView></RouterView>
                 </div>
             </div>

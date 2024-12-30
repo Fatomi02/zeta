@@ -1,13 +1,13 @@
 <template>
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 items-center rounded-2xl bg-white big_card">
-            <div class="border-r h-full border-r-light-grey flex items-center justify-center p-4 xl:py-6 xl:px-4">
-                <span class="font-semibold text-light-blue">{{ formattedDate }}</span>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 items-center rounded-2xl bg-white shadow">
+            <div class="border-r h-full border-r-grey flex items-center justify-center p-4 xl:py-6 xl:px-4">
+                <span class="font-semibold text-blue">{{ formattedDate }}</span>
             </div>
-            <div class="border-r border-r-light-grey flex flex-col gap-2 p-4 xl:py-6 xl:px-4">
+            <div class="border-r border-r-grey flex flex-col gap-2 p-4 xl:py-6 xl:px-4">
                 <span>{{ type === 'budget' ? 'Total Budgets' : 'Total Transactions' }}</span>
                 <span>{{ data?.length }}</span>
             </div>
-            <div class="border-r border-r-light-grey flex flex-col gap-2 p-4 xl:py-6 xl:px-4">
+            <div class="border-r border-r-grey flex flex-col gap-2 p-4 xl:py-6 xl:px-4">
                 <span>{{ type === 'budget' ? 'Total Monthly Budgets' : 'Total Income' }}</span>
                 <span>{{ type === 'budget' ? subData.monthlyBudget?.length : subData.income.length }}</span>
             </div>

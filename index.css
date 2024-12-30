@@ -11,7 +11,7 @@
   padding: 0;
   box-sizing: border-box;
   list-style: none;
-  color: #ffffff;
+  color: #141414;
   font-family: "Rubik", serif;
 }
 
@@ -20,9 +20,12 @@ span {
 }
 
 h1,
-h2,
+h2{
+  color: #386cf4;
+}
+
 h4 {
-  color: #3498db;
+  color: white;
 }
 
 .logo {
@@ -31,7 +34,7 @@ h4 {
 
 .big_card {
   border-radius: 8px;
-  box-shadow: 0 1px 1px #000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05)
 }
 
 .modal_overlay {
@@ -113,6 +116,10 @@ h4 {
   background-size: 16px 16px;
   background-position: left top, left bottom, right top, right bottom;
   animation: rotate 1s linear infinite;
+}
+
+.shadow {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05)
 }
 @keyframes rotate {
   0% {
