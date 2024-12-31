@@ -236,7 +236,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center gap-4">
+                <div class="flex justify-end gap-4">
                     <AppBtn @click="toggleModal(null, 'view')">Close</AppBtn>
                 </div>
             </div>
