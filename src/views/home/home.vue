@@ -12,7 +12,7 @@
                             </div>
                             My Balance
                         </div>
-                        <div class="md:text-3xl text-white text-xl font-semibold w-full truncate">#100,000</div>
+                        <div class="md:text-3xl text-white text-xl font-semibold w-full truncate">${{ summaryData.totalIncome - summaryData.totalExpenses }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 lg:col-span-2">
@@ -25,7 +25,7 @@
                             </div>
                             Total Income
                         </div>
-                        <div class="md:text-3xl text-white text-xl font-semibold w-full truncate">#100,000</div>
+                        <div class="md:text-3xl text-green-500 text-xl font-semibold w-full truncate">+${{ summaryData.totalIncome }}</div>
                     </div>
                 </div>
                 <div class="card">
@@ -37,7 +37,7 @@
                             </div>
                             Total Expense
                         </div>
-                        <div class="md:text-3xl text-xl font-semibold text-white w-full truncate">#100,000</div>
+                        <div class="md:text-3xl text-xl font-semibold w-full truncate text-red-600">-${{ summaryData.totalExpenses }}</div>
                     </div>
                 </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="flex flex-col big_card xl:order-1 items-center bg-white rounded-[20px] p-4 gap-4">
                     <AppChart type="bar" :data="barData" :options="barOptions" />
                 </div>
-                <div class="flex flex-col big_card xl:order-1 items-center graph rounded-[20px] p-4 gap-4">
+                <div class="flex flex-col big_card xl:order-1 items-center graph rounded-[20px] p-4 gap-4 bg-[#386cf4]">
                     <div class="w-full text-start text-white">Top Spending Categories</div>
                     <AppChart :data="chartTransactionData" :options="chartTransactionOptions" type="pie" />
                 </div>
@@ -296,24 +296,36 @@ const isLoading = computed(() => store.state.auth.fetchAllIsLoading)
 
 onMounted(() => {
     store.dispatch('getInsight');
+    store.dispatch('getMonthlyInsight');
     store.dispatch('getAllBudget');
     store.dispatch('getAllTransactions');
     window.scrollTo({
         top: 0,
         behavior: "smooth",
     });
-})
+});
 
-const chartTransactionData = {
-    labels: ["Food", "Transport","Entertainment", "Utilities", "Others"],
+const summaryData = computed(()=> store.getters.insight);
+const monthlyData = computed(()=> store.getters.monthlyInsight);
+
+const labels = computed(() =>
+      summaryData.value?.topSpendingCategories?.map(item => item[0]) || []
+    );
+    const data = computed(() =>
+      summaryData.value?.topSpendingCategories?.map(item => item[1]) || []
+    );
+
+const chartTransactionData = computed(()=> {
+    return {
+    labels: labels.value,
     datasets: [
         {
-            label: 'Transaction',
-            data: [15, 25, 30, 25, 15],
-            backgroundColor: ["green", "red", "blue", "yellow", "orange"]
+            data: data.value,
+            backgroundColor: ["green"] //backend will return a color in the array list
         }
     ]
 }
+})
 
 
 const chartTransactionOptions = {
@@ -332,21 +344,34 @@ const chartTransactionOptions = {
     }
 }
 
-const barData = {
-  labels: ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
-  datasets: [
-    {
-      label: "Income",
-      data: [500, 600, 700, 500, 600, 700, 500, 600, 700, 500, 600, 700, ],
-      backgroundColor: "green",
-    },
-    {
-      label: "Expense",
-      data: [300, 400, 500, 300, 400, 500, 300, 400, 500, 300, 400, 500, ],
-      backgroundColor: "red",
-    },
-  ],
-};
+const barData = computed(() => {
+  const data = {
+    labels: ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    datasets: [
+      {
+        label: "Income",
+        data: Array(12).fill(0),
+        backgroundColor: "green",
+      },
+      {
+        label: "Expense",
+        data: Array(12).fill(0),
+        backgroundColor: "red",
+      },
+    ],
+  };
+
+  Object.entries(monthlyData.value).forEach(([key, value]) => {
+    const [month] = key.split(" ");
+    const monthIndex = data.labels.findIndex((label) => label.startsWith(month.slice(0, 3)));
+    if (monthIndex !== -1) {
+      data.datasets[0].data[monthIndex] = value.income || 0;
+      data.datasets[1].data[monthIndex] = value.expenses || 0;
+    }
+  });
+
+  return data;
+});
 
 const barOptions = {
   responsive: true,
@@ -368,9 +393,5 @@ const barOptions = {
 .card:hover {
     transform: translate(4px);
     box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
-}
-
-.graph {
-    background: #386cf4;
 }
 </style>
