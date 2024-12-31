@@ -17,7 +17,7 @@ export default {
         async getInsight({commit}) {
           commit('SET_LOADING', true)
           try {
-            const response = await api.get('/insights/monthly');
+            const response = await api.get('/insights/summary');
             console.log(response, 'res')
             if(response && response.data && response.status == 200) {
               commit('setInsight', response.data);

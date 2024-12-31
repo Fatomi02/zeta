@@ -47,7 +47,7 @@
                     <AppChart type="bar" :data="barData" :options="barOptions" />
                 </div>
                 <div class="flex flex-col big_card xl:order-1 items-center graph rounded-[20px] p-4 gap-4">
-                    <div class="w-full text-start text-white">Total Income against Total Expense</div>
+                    <div class="w-full text-start text-white">Top Spending Categories</div>
                     <AppChart :data="chartTransactionData" :options="chartTransactionOptions" type="pie" />
                 </div>
             </div>
@@ -305,12 +305,12 @@ onMounted(() => {
 })
 
 const chartTransactionData = {
-    labels: ["Income", "Spending"],
+    labels: ["Food", "Transport","Entertainment", "Utilities", "Others"],
     datasets: [
         {
             label: 'Transaction',
-            data: [60, 40],
-            backgroundColor: ["green", "red"]
+            data: [15, 25, 30, 25, 15],
+            backgroundColor: ["green", "red", "blue", "yellow", "orange"]
         }
     ]
 }
