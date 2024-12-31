@@ -59,7 +59,6 @@ onBeforeUnmount(() => {
 <style scoped>
 canvas {
   height: 350px !important;
-  width: 100% !important;
 }
 
 @media only screen and (max-width: 640px) {
