@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col gap-1" :class="{ 'checkbox': type === 'checkbox' }">
-    <labe class="font-medium" :for="id">{{ label }} <span>{{ optional ? '(Optional)' : '' }}</span></labe>
+    <label class="font-medium" :for="id">{{ label }} <span>{{ optional ? '(Optional)' : '' }}</span></label>
     <input v-if="type !== 'select' && type !== 'textarea'" :type="showPassword ? 'text' : type" :name="name" :id="id"
       :placeholder="placeholder" :minlength="type === 'password' ? min : undefined" :required=required
       v-model="inputValue" autocomplete />

@@ -118,5 +118,15 @@ export default {
         totalTransactionPage(state) {
           return Math.ceil(state.transactions.length / state.pageSize);
         },
+        totalIncome(state) {
+          return state.transactions
+            .filter(transaction => transaction.category.toLowerCase() === "income")
+            .reduce((total, transaction) => total + transaction.amount, 0);
+        },
+        totalExpense(state) {
+          return state.transactions
+            .filter(transaction => transaction.category.toLowerCase() === "spending")
+            .reduce((total, transaction) => total + transaction.amount, 0);
+        },
       }
 }

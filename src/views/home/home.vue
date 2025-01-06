@@ -12,7 +12,7 @@
                             </div>
                             My Balance
                         </div>
-                        <div class="md:text-3xl text-white text-xl font-semibold w-full truncate">${{ summaryData.totalIncome - summaryData.totalExpenses }}</div>
+                        <div class="md:text-3xl text-white text-xl font-semibold w-full truncate">${{ totalIncome - totalExpense }}</div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4 lg:col-span-2">
@@ -25,7 +25,7 @@
                             </div>
                             Total Income
                         </div>
-                        <div class="md:text-3xl text-green-500 text-xl font-semibold w-full truncate">+${{ summaryData.totalIncome }}</div>
+                        <div class="md:text-3xl text-green-500 text-xl font-semibold w-full truncate">+${{ totalIncome }}</div>
                     </div>
                 </div>
                 <div class="card">
@@ -37,7 +37,7 @@
                             </div>
                             Total Expense
                         </div>
-                        <div class="md:text-3xl text-xl font-semibold w-full truncate text-red-600">-${{ summaryData.totalExpenses }}</div>
+                        <div class="md:text-3xl text-xl font-semibold w-full truncate text-red-600">-${{ totalExpense }}</div>
                     </div>
                 </div>
                 </div>
@@ -272,6 +272,9 @@ const viewBudgetModalIsOpen = ref(false);
 const viewTransactionModalIsOpen = ref(false);
 const recentTransactions = computed(() => store.getters["recentTransactions"]);
 const recentBudgets = computed(() => store.getters["recentBudgets"]);
+
+const totalIncome = computed(()=> store.getters.totalIncome); // the data the backend provided was correct so i had to calculate and display myself
+const totalExpense = computed(()=> store.getters.totalExpense); // the data the backend provided was correct so i had to calculate and display myself
 
 const goToTransactions = () => {
     router.push("/dashboard/transactions");
