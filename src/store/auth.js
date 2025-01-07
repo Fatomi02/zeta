@@ -76,4 +76,9 @@ export default{
       window.location.href = '/login'
     },
   },
+  getters: {
+    isLoading(state) {
+      return state.isLoading;
+    },
+  }
 };

@@ -9,18 +9,10 @@
 <script setup>
 import { defineProps } from 'vue';
 
-const props = defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-  position: {
-    type: String,
-    default: 'center'
-  }
+defineProps({
+  isOpen: { type: Boolean, required: true },
+  position: { type: String, default: 'center' }
 });
-
-
 </script>
 
 <style scoped>

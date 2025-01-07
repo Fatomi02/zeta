@@ -2,7 +2,7 @@
     <div @click="toggleDropdown" class="flex justify-end px-8 py-5 bg-white border-b border-b-[#f5f5f5]">
         <button @click="showDropdown = !showDropdown" ref="showDropdownBox" class="border p-2 cursor-pointer flex items-center gap-3 rounded-lg relative border-blue">
             <div class="flex gap-2 items-center capitalize">
-                <div class="bg-blue h-7 w-7 flex justify-center items-center uppercase rounded-md">
+                <div class="bg-blue h-7 w-7 flex justify-center items-center uppercase text-white rounded-md">
                     {{ user?.name ? user?.name?.slice(0, 1) :  'U'}}
                 </div>
                 {{ user?.name ? user?.name : 'Unknown User' }}
@@ -10,11 +10,7 @@
             <img src="@/assets/icons/dropdown.svg" alt="dropdown">
 
             <div v-if="showDropdown" class="dropdown_box">
-                <div class="py-3 text-dark-grey px-5 hover:bg-light-grey cursor-pointer flex gap-3 items-center">
-                    <img src="@/assets/icons/User.svg" alt="User">
-                    My Profile
-                </div>
-                <div @click="logout" class="py-3 text-red-500 px-5 hover:bg-light-grey cursor-pointer flex gap-3 items-center">
+                <div @click="logout" class="py-3 text-error px-5 hover:bg-light-grey cursor-pointer flex gap-3 items-center">
                     <img src="@/assets/icons/Logout.svg" alt="Logout">
                     Log Out
                 </div>

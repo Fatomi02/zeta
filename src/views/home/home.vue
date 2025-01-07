@@ -32,12 +32,12 @@
                     <div class="md:p-6 p-4 flex flex-col gap-2 md:gap-4">
                         <div class="flex flex-col gap-2 md:text-lg text-light-grey">
                             <div
-                                class="md:w-16 md:h-16 w-12 h-12 flex items-center justify-center bg-red-600 rounded-2xl shadow">
+                                class="md:w-16 md:h-16 w-12 h-12 flex items-center justify-center bg-error rounded-2xl shadow">
                                 <img class="md:w-8 md:h-8 w-6 h-6" src="@/assets/icons/expense.svg" alt="wallet">
                             </div>
                             Total Expense
                         </div>
-                        <div class="md:text-3xl text-xl font-semibold w-full truncate text-red-600">-${{ totalExpense }}</div>
+                        <div class="md:text-3xl text-xl font-semibold w-full truncate text-error">-${{ totalExpense }}</div>
                     </div>
                 </div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="flex flex-col big_card xl:order-1 items-center bg-white rounded-[20px] p-4 gap-4">
                     <AppChart type="bar" :data="barData" :options="barOptions" />
                 </div>
-                <div class="flex flex-col big_card xl:order-1 items-center graph rounded-[20px] p-4 gap-4 bg-[#386cf4]">
+                <div class="flex flex-col big_card xl:order-1 items-center graph rounded-[20px] p-4 gap-4 bg-blue">
                     <div class="w-full text-start text-white">Top Spending Categories</div>
                     <AppChart :data="chartTransactionData" :options="chartTransactionOptions" type="pie" />
                 </div>
@@ -73,7 +73,7 @@
                                     {{ transaction.narration }}
                                 </div>
                                 <div class="text-green-400 pr-4 w-full truncate" :class="transaction.category.toLowerCase() !== 'income'
-                                    ? 'text-red-500'
+                                    ? 'text-error'
                                     : 'text-green-400'
                                     ">
                                     {{ transaction.category.toLowerCase() !== 'income' ? '-' : '+' }}${{
@@ -81,13 +81,13 @@
                                 </div>
                                 <div class="md:flex gap-2 items-center hidden">
                                     <div class="md:h-[12px] md:w-[12px] w-2 h-2 rounded-full" :class="transaction.category.toLowerCase() !== 'income'
-                                        ? 'bg-red-500'
+                                        ? 'bg-error'
                                         : 'bg-green-400'
                                         "></div>
                                     <span class="truncate capitalize">{{ transaction.category }}</span>
 
                                 </div>
-                                <button @click="toggleModal(transaction, 'transaction')"
+                                <button @click="toggleModal({data: transaction, modal: 'transaction'})"
                                     class="text-right text-blue hover:opacity-80">
                                     View
                                 </button>
@@ -132,7 +132,7 @@
                                 <div class="md:flex gap-2 items-center pr-4 lg:pr-6w-full truncate hidden capitalize">
                                     {{ budget.duration }}
                                 </div>
-                                <button @click="toggleModal(budget, 'budget')"
+                                <button @click="toggleModal({data: budget, modal: 'budget'})"
                                     class="text-blue text-right hover:opacity-80">
                                     View
                                 </button>
@@ -154,113 +154,13 @@
             </div>
         </div>
     </div>
-    <transition name="fade-right">
-        <AppModal :isOpen="viewBudgetModalIsOpen">
-            <div class="w-[96%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2">
-                    <div class="flex flex-col gap-4">
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Title</h2>
-                            <span class="capitalize">{{ viewBudgetData.title }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Budget Amount</h2>
-                            <span>${{ viewBudgetData.total_amount.toLocaleString() }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Duration</h2>
-                            <span class="capitalize">{{ viewBudgetData.duration }}</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col mt-4 lg:mt-0 gap-4">
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Time Created</h2>
-                            <span>{{ new Date(viewBudgetData.createdAt).toLocaleString("en-US", {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }) }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Last Time Updated</h2>
-                            <span>{{ new Date(viewBudgetData.updatedAt).toLocaleString("en-US", {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center gap-1">
-                    <AppBtn @click="toggleModal(null, 'budget')">Close</AppBtn>
-                </div>
-            </div>
-        </AppModal>
-    </transition>
-    <transition name="fade-right">
-        <AppModal :isOpen="viewTransactionModalIsOpen">
-            <div class="w-[90%] lg:w-[600px] rounded-3xl bg-white py-10 px-8 flex flex-col gap-10">
-                <div class="grid grid-cols-1 lg:grid-cols-2">
-                    <div class="flex flex-col gap-4">
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Budget Amount</h2>
-                            <span :class="viewTransactionData.category.toLowerCase() !== 'income'
-                                ? 'text-red-500'
-                                : 'text-green-400'
-                                ">${{ viewTransactionData.amount.toLocaleString() }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Category</h2>
-                            <span class="capitalize">{{ viewTransactionData.category }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Narration</h2>
-                            <span class="capitalize">{{ viewTransactionData.narration }}</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col mt-4 lg:mt-0 gap-4">
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Time Created</h2>
-                            <span>{{ new Date(viewTransactionData.createdAt).toLocaleString("en-US", {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }) }}</span>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <h2 class="text-xl">Last Time Updated</h2>
-                            <span>{{ new Date(viewTransactionData.updatedAt).toLocaleString("en-US", {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                            }) }}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex justify-center gap-4">
-                    <AppBtn @click="toggleModal(null, 'transaction')">Close</AppBtn>
-                </div>
-            </div>
-        </AppModal>
-    </transition>
+    <ViewModal :data="viewBudgetData" :viewModalIsOpen="viewBudgetModalIsOpen" @toggleModal="toggleModal" type="budget" />
+    <ViewModal :data="viewTransactionData" :viewModalIsOpen="viewTransactionModalIsOpen" @toggleModal="toggleModal" type="transaction" />
 </template>
 
 <script setup>
 import AppChart from "@/components/AppChart.vue";
-import AppBtn from "@/components/AppBtn.vue";
-import AppModal from "@/components/AppModal.vue";
+import ViewModal from "@/components/ViewModal.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
@@ -284,14 +184,19 @@ const goToBudgets = () => {
     router.push("/dashboard/budgets");
 };
 
-const toggleModal = (data, type) => {
-    if (type === 'budget') {
-        viewBudgetData.value = data;
+const toggleModal = ({data, modal}) => {
+    if (modal === 'budget' || modal === 'viewBudget') {
         viewBudgetModalIsOpen.value = !viewBudgetModalIsOpen.value;
+        viewBudgetData.value = data;
     }
-    else {
-        viewTransactionData.value = data;
-        viewTransactionModalIsOpen.value = !viewTransactionModalIsOpen.value;
+    else if (modal === 'transaction' || modal === 'viewTransaction') {
+        if(data) {
+            viewTransactionModalIsOpen.value = !viewTransactionModalIsOpen.value;
+            viewTransactionData.value = data;
+        } else {
+            viewTransactionModalIsOpen.value = !viewTransactionModalIsOpen.value;
+        }
+
     }
 }
 
@@ -386,7 +291,7 @@ const barOptions = {
 
 <style scoped>
 .card {
-    background: #386cf4;
+    background: #3f75b3;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     cursor: pointer;

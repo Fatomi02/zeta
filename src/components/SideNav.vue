@@ -1,28 +1,29 @@
 <template>
-    <div class="h-screen hidden lg:block min-w-[330px] bg-white border-r border-[#f5f5f5]">
+    <div class="h-screen hidden lg:flex flex-col justify-between min-w-[330px] bg-white border-r border-[#f5f5f5]">
         <div class="p-8 flex flex-col mt-[50px] gap-10">
-            <h1 class="text-4xl text-center font-extrabold">FinCore</h1>
+            <h1 class="text-4xl text-center font-semibold">FinCore</h1>
             <div class="flex flex-col gap-5">
-                <router-link to="/dashboard/home"
-                    class="py-4 px-5 w-full flex font-medium items-center gap-2"
+                <router-link to="/dashboard/home" class="py-4 px-5 w-full flex items-center gap-2"
                     exact-active-class="active_link">
                     <img class="h-6 w-6" src="@/assets/icons/Home.svg" alt="">
                     Dashboard
                 </router-link>
-                <router-link to="/dashboard/budgets"
-                    class="py-4 px-5 w-full flex font-medium items-center gap-2"
+                <router-link to="/dashboard/budgets" class="py-4 px-5 w-full flex items-center gap-2"
                     exact-active-class="active_link">
                     <img class="h-6 w-6" src="@/assets/icons/budget.svg" alt="">
                     Budgets
                 </router-link>
-                <router-link to="/dashboard/transactions"
-                    class="py-4 px-5 w-full font-medium flex items-center gap-2"
+                <router-link to="/dashboard/transactions" class="py-4 px-5 w-full flex items-center gap-2"
                     exact-active-class="active_link">
                     <img class="h-6 w-6" src="@/assets/icons/transaction.svg" alt="">
                     Transactions
                 </router-link>
             </div>
         </div>
+        <button @click="logout" class="flex items-start w-full gap-2 p-6 text-error">
+            <img src="@/assets/icons/Logout.svg" alt="Logout">
+            Log Out
+        </button>
     </div>
     <div class="py-3 lg:hidden  bg-white border-0 px-4 flex items-center justify-between sticky top-0 z-10">
         <h1 class="text-4xl text-center font-extrabold logo">FinCore</h1>
@@ -34,7 +35,8 @@
                 <div class="p-6 flex flex-col gap-10">
                     <h1 class="text-4xl text-center font-extrabold">FinCore</h1>
                     <div class="flex gap-4 items-center">
-                        <div class="w-[60px] h-[60px] rounded-full text-xl bg-blue text-white flex justify-center items-center">
+                        <div
+                            class="w-[60px] h-[60px] rounded-full text-xl bg-blue text-white flex justify-center items-center">
                             {{ user?.name ? user?.name.slice(0, 1) : 'U' }}
                         </div>
                         <div class="flex flex-col gap-1">
@@ -64,12 +66,10 @@
                         </router-link>
                     </div>
                 </div>
-                <div class="flex items-start w-full p-6">
-                    <AppBtn variant="" @click="logout">
+                <button @click="logout" class="flex items-start w-full gap-2 p-6 text-error">
                     <img src="@/assets/icons/Logout.svg" alt="Logout">
                     Log Out
-                </AppBtn>
-                </div>
+                </button>
             </div>
         </div>
     </transition>
@@ -79,7 +79,6 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { useStore } from 'vuex';
-import AppBtn from './AppBtn.vue';
 const store = useStore();
 
 const isOpen = ref(false);
@@ -96,8 +95,8 @@ const logout = () => {
 
 <style scoped>
 .active_link {
-    background: #386cf4;
-    font-weight: 600;
+    background: #3f75b3;
+    font-weight: 500;
     color: white;
     border-radius: 16px;
 }

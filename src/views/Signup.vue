@@ -9,22 +9,20 @@
     <div class="flex justify-center lg:w-1/2 w-[90%] h-screen items-center">
       <transition name="fade-right">
         <div v-if="isVisible" class="flex flex-col gap-8 w-full lg:w-auto">
-          <h1 class="lg:text-[50px] text-[40px] logo">FinCore</h1>
+          <h1 class="lg:text-[50px] text-[40px] font-bold">FinCore</h1>
         <div  class="flex flex-col gap-6 w-full lg:w-[400px] xl:w-[500px]">
           <div class="flex flex-col gap-2">
-            <h1 class="text-3xl font-bold">Sign Up</h1>
-            <span>Enter your details to join us.</span>
+            <h1 class="text-3xl font-semibold">Sign Up</h1>
+            <span>Enter your details to sign up.</span>
           </div>
           <form class="flex flex-col gap-6" @submit.prevent="signUp">
-            <AppInput label="User Name" type="text" required v-model="userName" name="userName" id="userName"
-            placeholder="Enter a user name" />
+            <AppInput label="Username" type="text" required v-model="userName" name="userName" id="userName"
+            placeholder="Enter a username" />
             <AppInput label="Email address" required type="email" v-model="email" name="email" id="email"
               placeholder="Enter your email address" />
             <AppInput label="Password" required type="password" :min="8" v-model="password" name="password"
-              id="password" placeholder="min 8 chars" />
-            <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox"
-              id="checkbox" placeholder="min 8 chars" />
-            <AppBtn :disabled=!isFormValid type="submit" variant="primary">Join us</AppBtn>
+              id="password" placeholder="min of 8 characters" />
+            <AppBtn :disabled=!isFormValid type="submit" variant="primary">Sign up</AppBtn>
           </form>
           <div class="text-dark-grey w-full">
             Don't have an account? <a class="underline text-light-blue" href="/login">Log in</a>
@@ -45,7 +43,6 @@ import AppBtn from "@/components/AppBtn.vue";
 const userName = ref('');
 const email = ref('');
 const password = ref('');
-const checkbox = ref(false);
 const store = useStore();
 
 const isVisible = ref(false);
@@ -81,7 +78,4 @@ const signUp = () => {
 </script>
 
 <style scoped>
-.logo {
-  font-weight: 800;
-}
 </style>

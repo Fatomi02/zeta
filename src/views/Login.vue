@@ -12,16 +12,14 @@
           <h1 class="lg:text-[50px] text-[40px] logo">FinCore</h1>
         <div  class="flex flex-col gap-6 w-full lg:w-[400px] xl:w-[500px]">
           <div class="flex flex-col gap-2">
-            <h1 class="text-3xl font-bold">Log In</h1>
+            <h1 class="text-3xl font-semibold">Log In</h1>
             <span>Enter your email & password to login</span>
           </div>
           <form class="flex flex-col gap-6" @submit.prevent="login">
             <AppInput label="Email address" required type="email" v-model="email" name="email" id="email"
               placeholder="Enter your email address" />
             <AppInput label="Password" required type="password" :min="8" v-model="password" name="password"
-              id="password" placeholder="min 8 chars" />
-            <AppInput label="I agree to the Terms & Privacy" type="checkbox" v-model="checkbox" name="checkbox"
-              id="checkbox" placeholder="min 8 chars" />
+              id="password" placeholder="min of 8 characters" />
             <AppBtn :disabled=!isFormValid type="submit" variant="primary">Log in</AppBtn>
           </form>
           <div class="text-dark-grey w-full">
@@ -43,7 +41,6 @@ const store = useStore();
 import { computed, onMounted, ref } from 'vue';
 const email = ref('');
 const password = ref('');
-const checkbox = ref(false);
 const isVisible = ref(false);
 
 onMounted(() => {
@@ -71,6 +68,6 @@ const login = () => {
 
 <style scoped>
 .logo {
-  font-weight: 900;
+  font-weight: 600;
 }
 </style>
